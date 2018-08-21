@@ -1,0 +1,16 @@
+{
+  "name": "gitmoji-changelog",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Tools for generating changelog based on gitmoji convention https://gitmoji.carloscuesta.me/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
+  },
+  "author": "Yvonnick FRIN (https://github.com/frinyvonnick)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
+  },
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme"
+}
