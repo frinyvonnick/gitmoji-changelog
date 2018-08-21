@@ -1,7 +1,7 @@
 {
   "name": "@gitmoji-changelog/core",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "description": "Core tool that transform raw commits into a nice json structure",
   "repository": {
     "type": "git",
