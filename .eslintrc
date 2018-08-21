@@ -1,0 +1,12 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb-base/legacy",
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "semi": 0,
+    "comma-dangle": ["error", "always-multiline"],
+  }
+}
