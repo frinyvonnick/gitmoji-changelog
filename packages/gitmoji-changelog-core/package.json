@@ -1,0 +1,16 @@
+{
+  "name": "@gitmoji-changelog/core",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "description": "Core tool that transform raw commits into a nice json structure",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
+  },
+  "author": "Yvonnick FRIN (https://github.com/frinyvonnick)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
+  },
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme"
+}

@@ -12,5 +12,16 @@
   "bugs": {
     "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
   },
-  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme"
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.5.0",
+    "lerna": "^2.11.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
