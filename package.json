@@ -15,9 +15,11 @@
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "scripts": {
     "test": "jest",
-    "lint": "eslint packages/**/*.js"
+    "lint": "eslint packages/**/*.js",
+    "build": "lerna run build --stream"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.6",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.4.0",
