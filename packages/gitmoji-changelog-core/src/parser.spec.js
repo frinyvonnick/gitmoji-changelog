@@ -2,7 +2,8 @@ import { parseCommit } from './parser.js'
 
 describe('commits parser', () => {
   it('should parse a single commit', () => {
-    const commit = `c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
+    const commit = `
+c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
 2018-08-28T10:06:00+02:00
 :sparkles: Implements brand new feature
 Waouh this is awesome
@@ -17,7 +18,8 @@ Waouh this is awesome
   })
 
   it('should parse a single commit without a body', () => {
-    const commit = `c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
+    const commit = `
+c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
 2018-08-28T10:06:00+02:00
 :sparkles: Implements brand new feature
 
@@ -31,7 +33,8 @@ Waouh this is awesome
   })
 
   it('should parse a single commit without a subject', () => {
-    const commit = `c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
+    const commit = `
+c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
 2018-08-28T10:06:00+02:00
 
 

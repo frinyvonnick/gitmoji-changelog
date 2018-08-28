@@ -11,7 +11,7 @@ Object.keys(_parser).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get: function get() {
+    get: function () {
       return _parser[key];
     }
   });
@@ -31,15 +31,15 @@ var _concatStream2 = _interopRequireDefault(_concatStream);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b';
+const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b';
 
 function changelog() {
-  return new Promise(function (resolve) {
+  return new Promise(resolve => {
     (0, _gitRawCommits2.default)({
       format: COMMIT_FORMAT
-    }).pipe(_through2.default.obj(function (data, enc, next) {
+    }).pipe(_through2.default.obj((data, enc, next) => {
       next(null, (0, _parser.parseCommit)(data.toString()));
-    })).pipe((0, _concatStream2.default)(function (data) {
+    })).pipe((0, _concatStream2.default)(data => {
       resolve(JSON.stringify(data));
     }));
   });

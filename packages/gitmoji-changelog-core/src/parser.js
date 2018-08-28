@@ -2,7 +2,7 @@ import splitLines from 'split-lines'
 
 export function parseCommit(commit) {
   const lines = splitLines(commit)
-  const [hash, date, subject, ...body] = lines.splice(0, lines.length - 1)
+  const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
 
   return {
     hash,
