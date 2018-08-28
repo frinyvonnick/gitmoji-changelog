@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
-import gitRawCommits from 'git-raw-commits'
+const gitRawCommits = require('git-raw-commits')
 
-import { changelog } from './index'
+const { changelog } = require('./index')
 
 describe('changelog', () => {
   beforeAll(() => {

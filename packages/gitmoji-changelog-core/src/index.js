@@ -1,12 +1,12 @@
-import gitRawCommits from 'git-raw-commits'
-import through from 'through2'
-import concat from 'concat-stream'
+const gitRawCommits = require('git-raw-commits')
+const through = require('through2')
+const concat = require('concat-stream')
 
-import { parseCommit } from './parser'
+const { parseCommit } = require('./parser')
 
 const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
 
-export function changelog() {
+function changelog() {
   return new Promise((resolve) => {
     gitRawCommits({
       format: COMMIT_FORMAT,
@@ -18,4 +18,6 @@ export function changelog() {
   })
 }
 
-export * from './parser'
+module.exports = {
+  changelog,
+}

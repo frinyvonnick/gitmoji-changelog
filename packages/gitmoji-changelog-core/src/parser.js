@@ -1,6 +1,6 @@
-import splitLines from 'split-lines'
+const splitLines = require('split-lines')
 
-export function parseCommit(commit) {
+function parseCommit(commit) {
   const lines = splitLines(commit)
   const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
 
@@ -10,4 +10,8 @@ export function parseCommit(commit) {
     subject,
     body: body.join('\n'),
   }
+}
+
+module.exports = {
+  parseCommit,
 }

@@ -1,9 +1,9 @@
 #! /usr/bin/env node
-import fs from 'fs'
-import { changelog } from '@gitmoji-changelog/core'
-import { convert } from '@gitmoji-changelog/markdown'
+const fs = require('fs')
+const { changelog } = require('@gitmoji-changelog/core')
+const { convert } = require('@gitmoji-changelog/markdown')
 
-export async function main() {
+async function main() {
   try {
     const changes = await changelog()
     fs.writeFileSync('./CHANGELOG.md', convert(changes))
@@ -13,3 +13,7 @@ export async function main() {
 }
 
 main()
+
+module.exports = {
+  main,
+}
