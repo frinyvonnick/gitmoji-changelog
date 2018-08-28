@@ -1,10 +1,12 @@
 {
-  "parser": "babel-eslint",
   "extends": "airbnb-base/legacy",
   "env": {
     "jest": true,
     "node": true,
     "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   },
   "rules": {
     "semi": 0,
