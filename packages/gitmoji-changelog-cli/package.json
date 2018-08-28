@@ -22,5 +22,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@gitmoji-changelog/core": "0.0.1"
+  }
 }

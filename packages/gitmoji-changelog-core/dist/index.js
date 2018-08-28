@@ -105,9 +105,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.parseCommit = parseCommit;
-exports.parse = parse;
-
-var _fp = require('lodash/fp');
 
 var _splitLines = require('split-lines');
 
@@ -133,10 +130,6 @@ function parseCommit(commit) {
     subject: subject,
     body: body.join('\n')
   };
-}
-
-function parse(commits) {
-  return (0, _fp.flow)((0, _fp.split)('-hash-\n'), _fp.compact, (0, _fp.map)(parseCommit))(commits);
 }
 'use strict';
 
@@ -171,20 +164,5 @@ describe('commits parser', function () {
       subject: '',
       body: ''
     });
-  });
-
-  it('should parse multiple commits', function () {
-    var commits = '-hash-\nc40ee8669ba7ea5151adc2942fa8a7fc98d9e23f\n2018-08-28T10:06:00+02:00\n:sparkles: Upgrade brand new feature\nWaouh this is awesome 2\n\n-hash-\nc40ee8669ba7ea5151adc2942fa8a7fc98d9e23d\n2018-08-28T10:05:00+02:00\n:sparkles: Implements brand new feature\nWaouh this is awesome\n\n';
-    expect((0, _parser.parse)(commits)).toEqual([{
-      hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-      date: '2018-08-28T10:06:00+02:00',
-      subject: ':sparkles: Upgrade brand new feature',
-      body: 'Waouh this is awesome 2\n'
-    }, {
-      hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23d',
-      date: '2018-08-28T10:05:00+02:00',
-      subject: ':sparkles: Implements brand new feature',
-      body: 'Waouh this is awesome\n'
-    }]);
   });
 });
