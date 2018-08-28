@@ -23,6 +23,7 @@
     "babel-cli": "^6.26.0"
   },
   "dependencies": {
-    "@gitmoji-changelog/core": "0.0.1"
+    "@gitmoji-changelog/core": "0.0.1",
+    "@gitmoji-changelog/markdown": "0.0.1"
   }
 }
