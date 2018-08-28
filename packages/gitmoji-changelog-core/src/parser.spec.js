@@ -1,4 +1,4 @@
-import { parse, parseCommit } from './index.js'
+import { parse, parseCommit } from './parser.js'
 
 describe('commits parser', () => {
   it('should parse a single commit', () => {
