@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "src/index.js",
   "description": "Core tool that transform raw commits into a nice json structure",
+  "engines" : {
+    "node" : ">=10"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"

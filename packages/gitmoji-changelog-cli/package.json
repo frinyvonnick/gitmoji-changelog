@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Gitmoji Changelog CLI",
   "main": "src/index.js",
+  "engines" : {
+    "node" : ">=10"
+  },
   "bin": {
     "gitmoji-changelog": "./src/index.js"
   },

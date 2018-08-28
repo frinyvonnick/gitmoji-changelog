@@ -1,11 +1,14 @@
 {
   "name": "@gitmoji-changelog/markdown",
   "version": "0.0.1",
+  "description": "Gitmoji Changelog markdown formatter",
   "main": "src/index.js",
   "bin": {
     "gitmoji-changelog": "./src/index.js"
   },
-  "description": "Gitmoji Changelog markdown formatter",
+  "engines" : {
+    "node" : ">=10"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
