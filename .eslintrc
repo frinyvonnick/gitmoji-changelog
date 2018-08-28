@@ -8,6 +8,6 @@
   },
   "rules": {
     "semi": 0,
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["error", "always-multiline"]
   }
 }
