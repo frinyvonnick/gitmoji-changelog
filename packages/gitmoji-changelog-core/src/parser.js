@@ -1,10 +1,3 @@
-import {
-  flow,
-  split,
-  compact,
-  map,
-} from 'lodash/fp'
-
 import splitLines from 'split-lines'
 
 export function parseCommit(commit) {
@@ -17,12 +10,4 @@ export function parseCommit(commit) {
     subject,
     body: body.join('\n'),
   }
-}
-
-export function parse(commits) {
-  return flow(
-    split('-hash-\n'),
-    compact,
-    map(parseCommit),
-  )(commits)
 }
