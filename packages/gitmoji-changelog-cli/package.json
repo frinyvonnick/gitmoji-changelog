@@ -1,11 +1,14 @@
 {
   "name": "@gitmoji-changelog/cli",
   "version": "0.0.1",
-  "main": "dist/index.js",
-  "bin": {
-    "gitmoji-changelog": "./dist/index.js"
-  },
   "description": "Gitmoji Changelog CLI",
+  "main": "src/index.js",
+  "bin": {
+    "gitmoji-changelog": "./src/index.js"
+  },
+  "engine": {
+    "node": 10
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
@@ -16,12 +19,6 @@
     "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
   },
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
-  "scripts": {
-    "build": "babel src --out-dir dist --ignore spec.js"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0"
-  },
   "dependencies": {
     "@gitmoji-changelog/core": "0.0.1",
     "@gitmoji-changelog/markdown": "0.0.1"

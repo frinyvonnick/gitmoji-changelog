@@ -1,9 +1,9 @@
 {
   "name": "@gitmoji-changelog/markdown",
   "version": "0.0.1",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "bin": {
-    "gitmoji-changelog": "./dist/index.js"
+    "gitmoji-changelog": "./src/index.js"
   },
   "description": "Gitmoji Changelog markdown formatter",
   "repository": {
@@ -15,12 +15,5 @@
   "bugs": {
     "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
   },
-  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
-  "scripts": {
-    "build": "babel src --out-dir dist --ignore spec.js"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0"
-  },
-  "dependencies": {}
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme"
 }
