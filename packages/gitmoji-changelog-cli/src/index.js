@@ -1,6 +1,8 @@
 #! /usr/bin/env node
-export function main() {
+import { changelog } from '@gitmoji-changelog/core'
 
+export function main() {
+  changelog()
 }
 
 main()
