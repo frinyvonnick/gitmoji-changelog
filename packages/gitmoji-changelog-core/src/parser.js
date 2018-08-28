@@ -1,3 +1,5 @@
+'use strict'
+
 const splitLines = require('split-lines')
 
 function parseCommit(commit) {

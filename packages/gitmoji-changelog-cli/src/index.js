@@ -1,4 +1,7 @@
 #! /usr/bin/env node
+
+'use strict'
+
 const fs = require('fs')
 const { changelog } = require('@gitmoji-changelog/core')
 const { convert } = require('@gitmoji-changelog/markdown')

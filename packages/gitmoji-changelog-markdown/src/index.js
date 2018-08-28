@@ -1,3 +1,5 @@
+'use strict'
+
 function convert(json) {
   const commits = JSON.parse(json)
 
