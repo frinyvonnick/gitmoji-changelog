@@ -20,7 +20,10 @@
     "babel-cli": "^6.26.0"
   },
   "dependencies": {
+    "concat-stream": "^1.6.2",
+    "git-raw-commits": "^2.0.0",
     "lodash": "^4.17.10",
-    "split-lines": "^2.0.0"
+    "split-lines": "^2.0.0",
+    "through2": "^2.0.3"
   }
 }
