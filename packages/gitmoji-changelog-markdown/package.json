@@ -1,0 +1,26 @@
+{
+  "name": "@gitmoji-changelog/markdown",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "bin": {
+    "gitmoji-changelog": "./dist/index.js"
+  },
+  "description": "Gitmoji Changelog markdown formatter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
+  },
+  "author": "Yvonnick FRIN (https://github.com/frinyvonnick)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
+  },
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
+  "scripts": {
+    "build": "babel src --out-dir dist --ignore spec.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  },
+  "dependencies": {}
+}
