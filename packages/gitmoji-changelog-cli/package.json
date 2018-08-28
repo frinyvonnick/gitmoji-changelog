@@ -9,9 +9,6 @@
   "bin": {
     "gitmoji-changelog": "./src/index.js"
   },
-  "engine": {
-    "node": 10
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
