@@ -1,5 +1,5 @@
-const { changelog } = require('@gitmoji-changelog/core');
-const { main } = require('./index');
+const { changelog } = require('@gitmoji-changelog/core')
+const { main } = require('./index')
 
 console.error = jest.fn()
 

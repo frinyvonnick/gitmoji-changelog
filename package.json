@@ -15,7 +15,7 @@
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "scripts": {
     "test": "jest",
-    "lint": "eslint packages/**/*.js"
+    "lint": "eslint packages/**/src"
   },
   "devDependencies": {
     "eslint": "^5.4.0",

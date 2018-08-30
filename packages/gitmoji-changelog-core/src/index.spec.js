@@ -34,4 +34,4 @@ Waouh this is awesome 2
   })
 })
 
-jest.mock('git-raw-commits');
+jest.mock('git-raw-commits')
