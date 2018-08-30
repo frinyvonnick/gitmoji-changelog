@@ -21,6 +21,7 @@
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "dependencies": {
     "@gitmoji-changelog/core": "0.0.1",
-    "@gitmoji-changelog/markdown": "0.0.1"
+    "@gitmoji-changelog/markdown": "0.0.1",
+    "yargs": "^12.0.1"
   }
 }
