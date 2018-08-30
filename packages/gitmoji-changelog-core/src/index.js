@@ -1,5 +1,3 @@
-'use strict'
-
 const gitRawCommits = require('git-raw-commits')
 const through = require('through2')
 const concat = require('concat-stream')
