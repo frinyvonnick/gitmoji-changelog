@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
-import gitRawCommits from 'git-raw-commits'
+const gitRawCommits = require('git-raw-commits')
 
-import { changelog } from './index'
+const { changelog } = require('./index')
 
 describe('changelog', () => {
   beforeAll(() => {
@@ -34,4 +34,4 @@ Waouh this is awesome 2
   })
 })
 
-jest.mock('git-raw-commits');
+jest.mock('git-raw-commits')

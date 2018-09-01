@@ -1,4 +1,4 @@
-import { parseCommit } from './parser.js'
+const { parseCommit } = require('./parser.js')
 
 describe('commits parser', () => {
   it('should parse a single commit', () => {

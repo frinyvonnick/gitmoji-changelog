@@ -15,13 +15,9 @@
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "scripts": {
     "test": "jest",
-    "lint": "eslint packages/**/*.js",
-    "build": "lerna run build --stream"
+    "lint": "eslint packages/**/src"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.6",
-    "babel-preset-env": "^1.7.0",
     "eslint": "^5.4.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "jest": "^23.5.0",

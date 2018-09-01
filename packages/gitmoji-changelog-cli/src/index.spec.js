@@ -1,5 +1,5 @@
-import { changelog } from '@gitmoji-changelog/core';
-import { main } from './index'
+const { changelog } = require('@gitmoji-changelog/core')
+const { main } = require('./index')
 
 console.error = jest.fn()
 
@@ -15,4 +15,6 @@ describe('cli', () => {
   })
 })
 
-jest.mock('@gitmoji-changelog/core')
+jest.mock('@gitmoji-changelog/core', () => ({
+  changelog: jest.fn(),
+}))

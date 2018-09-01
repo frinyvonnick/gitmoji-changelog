@@ -1,8 +1,11 @@
 {
   "name": "@gitmoji-changelog/core",
   "version": "0.0.1",
-  "main": "dist/index.js",
   "description": "Core tool that transform raw commits into a nice json structure",
+  "main": "src/index.js",
+  "engines" : {
+    "node" : ">=10"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
@@ -13,12 +16,6 @@
     "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
   },
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
-  "scripts": {
-    "build": "babel src --out-dir dist --ignore spec.js"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0"
-  },
   "dependencies": {
     "concat-stream": "^1.6.2",
     "git-raw-commits": "^2.0.0",

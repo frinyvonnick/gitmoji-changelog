@@ -1,4 +1,4 @@
-import { convert } from './index'
+const { convert } = require('./index')
 
 describe('Markdown converter', () => {
   it('should convert json changelog into markdown', () => {
