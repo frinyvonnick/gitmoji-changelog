@@ -1,15 +1,15 @@
 const { changelog } = require('@gitmoji-changelog/core')
-const { main } = require('./index')
+const { main } = require('./cli')
 
 console.error = jest.fn()
 
 describe('cli', () => {
-  it('should throw an error if not a git project', () => {
+  it('should throw an error if not a git project', async () => {
     changelog.mockImplementationOnce(() => {
       throw new Error()
     })
 
-    main()
+    await main()
 
     expect(console.error).toHaveBeenCalledWith('Cannot find a git repository in current path.')
   })

@@ -1,5 +1,15 @@
 # Changelog
 
+- Merge branch 'master' into refactor/remove-babel (0e650182544bd4e16cccbdd42e6f1e36b320095c)
+- :green_heart: Ignore node_modules in linter (802c0f7dc29508876c6b4d178bbcc8274ee308b5)
+- :wrench: missing package.json to update (32e0d943c2b4d06b610b17748486d3cc1e4f3a5a)
+- :sparkles: add 'use strict' (4df1b8c92e04902698e13041664642ae16c4c3b4)
+- :fire: remove bad property in package.json (dfe9aa9ebaca0003f2a403fee8bdd8d612512dee)
+- :wrench: add engines attribute to node 10 in package.json (e93603e071062aac50a126f85121e5ee6ff427aa)
+- :recycle: refactor code to native node 10 (1213a06adf517cf57867a1d7c380c5c2e1936b67)
+- :wrench: remove .babelrc and change eslint to remove babel parser (379d1854991d4d974a50179f6b72a7e83fa674f9)
+- :heavy_minus_sign: remove babel dependencies (f3a2a5cff11d4e0835ae74e70b74acdd8379347b)
+- :sparkles: Convert changelog to markdown (b165f695f4c1a49ff16a5f03918545bfb36cf367)
 - :sparkles: Generate markdown first draft function (10c6d3e20b82f5a0f6ce5cd372899e6519bc2412)
 - :tada: Intialize markdown project (a4a12bb4f7133e7e5e40436da4c884f135abf03d)
 - :sparkles: Generate changelog JSON file (86ca3eaefb18fd9c9b6bb4256ed2f6fa711aef59)

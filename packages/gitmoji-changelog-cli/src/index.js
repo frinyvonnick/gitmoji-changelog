@@ -1,20 +1,15 @@
 #! /usr/bin/env node
 
-const fs = require('fs')
-const { changelog } = require('@gitmoji-changelog/core')
-const { convert } = require('@gitmoji-changelog/markdown')
+const yargs = require('yargs')
+const { main } = require('./cli')
 
-async function main() {
-  try {
-    const changes = await changelog()
-    fs.writeFileSync('./CHANGELOG.md', convert(changes))
-  } catch (e) {
-    console.error('Cannot find a git repository in current path.')
-  }
-}
+const args = yargs
+  .option('format', {
+    alias: 'f',
+    default: 'markdown',
+    description: 'changelog output format',
+    choices: ['json', 'markdown'],
+  })
+  .parse()
 
-main()
-
-module.exports = {
-  main,
-}
+main(args)
