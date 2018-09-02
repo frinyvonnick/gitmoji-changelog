@@ -9,7 +9,7 @@ async function main({ format } = {}) {
     switch (format) {
       case 'json':
         fs.writeFileSync('./CHANGELOG.json', changes)
-        break;
+        break
       case 'markdown':
       default: {
         fs.writeFileSync('./CHANGELOG.md', convert(changes))
