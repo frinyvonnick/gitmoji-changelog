@@ -36,6 +36,7 @@ describe('Markdown converter', () => {
 ## next
 
 - :sparkles: Upgrade brand new feature (c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)
+
 `)
   })
 })
