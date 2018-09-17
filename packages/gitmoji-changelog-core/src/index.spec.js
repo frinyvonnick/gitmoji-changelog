@@ -20,34 +20,7 @@ const recycleCommit = {
 
 describe('changelog', () => {
   beforeEach(() => {
-    gitRawCommits.mockImplementationOnce(() => {
-      const stream = require('stream')
-      const readable = new stream.Readable()
-      const {
-        hash,
-        date,
-        subject,
-        body,
-      } = recycleCommit
-      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
-      readable.push(null)
-      readable.emit('close')
-      return readable
-    })
-    gitRawCommits.mockImplementationOnce(() => {
-      const stream = require('stream')
-      const readable = new stream.Readable()
-      const {
-        hash,
-        date,
-        subject,
-        body,
-      } = sparklesCommit
-      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
-      readable.push(null)
-      readable.emit('close')
-      return readable
-    })
+    mockCommits()
   })
 
   it('should generate changelog in json format for next release', async () => {
@@ -58,8 +31,14 @@ describe('changelog', () => {
     expect(result).toEqual([
       {
         version: 'next',
-        commits: [
-          expect.objectContaining(recycleCommit),
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              expect.objectContaining(recycleCommit),
+            ],
+          },
         ],
       },
     ])
@@ -73,42 +52,26 @@ describe('changelog', () => {
     expect(result).toEqual([
       {
         version: 'v1.0.0',
-        commits: [
-          expect.objectContaining(sparklesCommit),
-        ],
-      },
-      {
-        version: 'next',
-        commits: [
-          expect.objectContaining(recycleCommit),
-        ],
-      },
-    ])
-  })
-
-
-  it('should add group on commits', async () => {
-    gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
-
-    const result = await generateChangelog()
-
-    expect(result).toEqual([
-      {
-        version: 'v1.0.0',
-        commits: [
-          expect.objectContaining({
-            ...sparklesCommit,
+        groups: [
+          {
             group: 'added',
-          }),
+            label: 'Added',
+            commits: [
+              expect.objectContaining(sparklesCommit),
+            ],
+          },
         ],
       },
       {
         version: 'next',
-        commits: [
-          expect.objectContaining({
-            ...recycleCommit,
+        groups: [
+          {
             group: 'changed',
-          }),
+            label: 'Changed',
+            commits: [
+              expect.objectContaining(recycleCommit),
+            ],
+          },
         ],
       },
     ])
@@ -117,3 +80,34 @@ describe('changelog', () => {
 
 jest.mock('git-raw-commits')
 jest.mock('git-semver-tags')
+
+function mockCommits() {
+  gitRawCommits.mockImplementationOnce(() => {
+    const stream = require('stream')
+    const readable = new stream.Readable()
+    const {
+      hash,
+      date,
+      subject,
+      body,
+    } = recycleCommit
+    readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+    readable.push(null)
+    readable.emit('close')
+    return readable
+  })
+  gitRawCommits.mockImplementationOnce(() => {
+    const stream = require('stream')
+    const readable = new stream.Readable()
+    const {
+      hash,
+      date,
+      subject,
+      body,
+    } = sparklesCommit
+    readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+    readable.push(null)
+    readable.emit('close')
+    return readable
+  })
+}

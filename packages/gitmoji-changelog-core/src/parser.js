@@ -3,7 +3,9 @@ const mapping = require('./mapping')
 
 function parseSubject(subject) {
   if (!subject) return {}
-  const [, emoji, message] = subject.match(/:(\w*):(.*)/)
+  const matches = subject.match(/:(\w*):(.*)/)
+  if (!matches) return {}
+  const [, emoji, message] = matches
 
   return {
     emoji,
@@ -13,9 +15,10 @@ function parseSubject(subject) {
 
 function getCommitGroup(emoji) {
   let group = 'misc'
-  Object.keys(mapping).forEach((groupKey) => {
-    if (mapping[groupKey].includes(emoji)) {
-      group = groupKey
+
+  mapping.forEach(type => {
+    if (type.emojis.includes(emoji)) {
+      group = type.group
     }
   })
 

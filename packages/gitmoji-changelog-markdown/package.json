@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "dependencies": {
-    "handlebars": "^4.0.12"
+    "handlebars": "^4.0.12",
+    "lodash": "^4.17.11"
   }
 }
