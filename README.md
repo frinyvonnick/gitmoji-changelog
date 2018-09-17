@@ -34,18 +34,20 @@ gitmoji-changelog
 **Core:**
 - [x] Transform raw commits in json structure
 - [x] Write changelog file
-- [ ] Handle incremental writing of changelog files
-- [ ] Generate changelog for the next release
-- [ ] Add templating system for changelog in markdown (#7)
+- [x] Generate changelog for the next release
+- [x] Add templating system for changelog in markdown (#7)
+- [ ] Sort commits by emojis type and date (order defined in mapping file)
+- [ ] Add tag's date on version
 
 **Templating:**
-- [ ] Group commits by changelog types (#2)
+- [x] Group commits by changelog types (#2)
 - [ ] Improve markdown template: use emojis in changelog type headings
 - [ ] Improve markdown template: keep tags hierarchy (semver)
 - [ ] Support Github commit links
 
 ### Coming next
 
+- [ ] Handle incremental writing of changelog files
 - [ ] Generate changelog between two tags
 - [ ] CLI options (output file, from, to)
 - [ ] Add a middleware system to custom commits organization (#6)
