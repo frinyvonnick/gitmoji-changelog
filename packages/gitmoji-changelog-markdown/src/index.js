@@ -1,11 +1,15 @@
-function convert(changelog) {
-  const versions = Object.keys(changelog)
+const fs = require('fs')
+const path = require('path')
+const handlebars = require('handlebars')
 
-  return versions.reduce((markdown, version) => {
-    return changelog[version].commits.reduce((commitMarkdown, commit) => {
-      return `${commitMarkdown}- ${commit.subject} (${commit.hash})\n`
-    }, `${markdown}\n## ${version}\n\n`)
-  }, '# Changelog\n')
+const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
+
+function convert(changelog) {
+  const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
+
+  const generateMarkdown = handlebars.compile(template)
+
+  return generateMarkdown({ changelog })
 }
 
 module.exports = {

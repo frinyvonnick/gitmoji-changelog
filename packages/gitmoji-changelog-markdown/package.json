@@ -6,8 +6,8 @@
   "bin": {
     "gitmoji-changelog": "./src/index.js"
   },
-  "engines" : {
-    "node" : ">=10"
+  "engines": {
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/frinyvonnick/gitmoji-changelog/issues"
   },
-  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme"
+  "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
+  "dependencies": {
+    "handlebars": "^4.0.12"
+  }
 }
