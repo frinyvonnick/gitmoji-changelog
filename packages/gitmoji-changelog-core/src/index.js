@@ -26,19 +26,21 @@ function getCommits(from, to) {
 
 async function generateChangelog() {
   let previousTag = ''
-  const result = {}
   const tags = await gitSemverTagsAsync()
 
-  if (tags.length > 0) {
-    await Promise.all(tags.map(async tag => {
-      const commits = await getCommits(previousTag, tag)
+  const result = await Promise.all(tags.map(async tag => {
+    const commits = await getCommits(previousTag, tag)
+    previousTag = tag
+    return {
+      version: tag,
+      commits,
+    }
+  }))
 
-      result[tag] = { commits }
-      previousTag = tag
-    }))
-  }
-
-  result.next = { commits: await getCommits(previousTag) }
+  result.push({
+    version: 'next',
+    commits: await getCommits(previousTag),
+  })
 
   return result
 }
