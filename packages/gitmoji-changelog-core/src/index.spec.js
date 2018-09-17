@@ -1,11 +1,25 @@
 /* eslint-disable global-require */
 const gitRawCommits = require('git-raw-commits')
+const gitSemverTags = require('git-semver-tags')
 
-const { changelog } = require('./index')
+const { generateChangelog } = require('./index')
 
 describe('changelog', () => {
-  beforeAll(() => {
-    gitRawCommits.mockImplementation(() => {
+  beforeEach(() => {
+    gitRawCommits.mockImplementationOnce(() => {
+      const stream = require('stream')
+      const readable = new stream.Readable()
+      readable.push(`
+c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c
+2018-08-28T10:07:00+02:00
+:sparkles: Upgrade brand new feature
+Waouh this is awesome 3
+`)
+      readable.push(null)
+      readable.emit('close')
+      return readable
+    })
+    gitRawCommits.mockImplementationOnce(() => {
       const stream = require('stream')
       const readable = new stream.Readable()
       readable.push(`
@@ -20,18 +34,54 @@ Waouh this is awesome 2
     })
   })
 
-  it('should generate changelog in json format', async () => {
-    const result = await changelog()
+  it('should generate changelog in json format for next release', async () => {
+    gitSemverTags.mockImplementation((cb) => cb(null, []))
 
-    expect(result).toEqual(JSON.stringify([
-      {
-        hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-        date: '2018-08-28T10:06:00+02:00',
-        subject: ':sparkles: Upgrade brand new feature',
-        body: 'Waouh this is awesome 2',
+    const result = await generateChangelog()
+
+    expect(result).toEqual({
+      next: {
+        commits: [
+          {
+            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+            date: '2018-08-28T10:07:00+02:00',
+            subject: ':sparkles: Upgrade brand new feature',
+            body: 'Waouh this is awesome 3',
+          },
+        ],
       },
-    ]))
+    })
+  })
+
+  it('should generate changelog in json format for all tags', async () => {
+    gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
+
+    const result = await generateChangelog()
+
+    expect(result).toEqual({
+      next: {
+        commits: [
+          {
+            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+            date: '2018-08-28T10:07:00+02:00',
+            subject: ':sparkles: Upgrade brand new feature',
+            body: 'Waouh this is awesome 3',
+          },
+        ],
+      },
+      'v1.0.0': {
+        commits: [
+          {
+            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+            date: '2018-08-28T10:06:00+02:00',
+            subject: ':sparkles: Upgrade brand new feature',
+            body: 'Waouh this is awesome 2',
+          },
+        ],
+      },
+    })
   })
 })
 
 jest.mock('git-raw-commits')
+jest.mock('git-semver-tags')

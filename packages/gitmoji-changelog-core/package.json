@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Core tool that transform raw commits into a nice json structure",
   "main": "src/index.js",
-  "engines" : {
-    "node" : ">=10"
+  "engines": {
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "dependencies": {
     "concat-stream": "^1.6.2",
     "git-raw-commits": "^2.0.0",
+    "git-semver-tags": "^2.0.0",
     "split-lines": "^2.0.0",
     "through2": "^2.0.3"
   }

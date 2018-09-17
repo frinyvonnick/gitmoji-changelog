@@ -1,9 +1,11 @@
-function convert(json) {
-  const commits = JSON.parse(json)
+function convert(changelog) {
+  const versions = Object.keys(changelog)
 
-  return commits.reduce((markdown, commit) => {
-    return `${markdown}- ${commit.subject} (${commit.hash})\n`
-  }, '# Changelog\n\n')
+  return versions.reduce((markdown, version) => {
+    return changelog[version].commits.reduce((commitMarkdown, commit) => {
+      return `${commitMarkdown}- ${commit.subject} (${commit.hash})\n`
+    }, `${markdown}\n## ${version}\n\n`)
+  }, '# Changelog\n')
 }
 
 module.exports = {
