@@ -5,6 +5,7 @@ const concat = require('concat-stream')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
+const mapping = require('./mapping')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -24,22 +25,34 @@ function getCommits(from, to) {
   })
 }
 
+function makeGroups(commits) {
+  return mapping
+    .map(({ group, label }) => ({
+      group,
+      label,
+      commits: commits.filter(commit => commit.group === group),
+    }))
+    .filter(group => group.commits.length)
+}
+
 async function generateChangelog() {
   let previousTag = ''
   const tags = await gitSemverTagsAsync()
 
   const result = await Promise.all(tags.map(async tag => {
     const commits = await getCommits(previousTag, tag)
+
     previousTag = tag
     return {
       version: tag,
-      commits,
+      groups: makeGroups(commits),
     }
   }))
 
+  const commits = await getCommits(previousTag)
   result.push({
     version: 'next',
-    commits: await getCommits(previousTag),
+    groups: makeGroups(commits),
   })
 
   return result

@@ -10,6 +10,7 @@
   },
   "rules": {
     "semi": ["error", "never"],
+    "no-use-before-define": ["error", { "functions": false }],
     "comma-dangle": ["error", "always-multiline"],
     "no-console": 0
   }

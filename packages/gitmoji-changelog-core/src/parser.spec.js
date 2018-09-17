@@ -1,49 +1,63 @@
 const { parseCommit } = require('./parser.js')
 
+const sparklesCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  date: '2018-08-28T10:06:00+02:00',
+  subject: ':sparkles: Upgrade brand new feature',
+  body: 'Waouh this is awesome 2',
+}
+
+
 describe('commits parser', () => {
   it('should parse a single commit', () => {
-    const commit = `
-c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
-2018-08-28T10:06:00+02:00
-:sparkles: Implements brand new feature
-Waouh this is awesome
+    const {
+      hash,
+      date,
+      subject,
+      body,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${date}\n${subject}\n${body}\n`
 
-`
-    expect(parseCommit(commit)).toEqual({
-      hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-      date: '2018-08-28T10:06:00+02:00',
-      subject: ':sparkles: Implements brand new feature',
-      body: 'Waouh this is awesome\n',
-    })
+    expect(parseCommit(commit)).toEqual(expect.objectContaining(sparklesCommit))
   })
 
   it('should parse a single commit without a body', () => {
-    const commit = `
-c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
-2018-08-28T10:06:00+02:00
-:sparkles: Implements brand new feature
+    const {
+      hash,
+      date,
+      subject,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${date}\n${subject}\n\n`
 
-`
-    expect(parseCommit(commit)).toEqual({
-      hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-      date: '2018-08-28T10:06:00+02:00',
-      subject: ':sparkles: Implements brand new feature',
+    expect(parseCommit(commit)).toEqual(expect.objectContaining({
+      ...sparklesCommit,
       body: '',
-    })
+    }))
   })
 
   it('should parse a single commit without a subject', () => {
-    const commit = `
-c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
-2018-08-28T10:06:00+02:00
+    const {
+      hash,
+      date,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${date}\n\n`
 
-
-`
-    expect(parseCommit(commit)).toEqual({
-      hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-      date: '2018-08-28T10:06:00+02:00',
+    expect(parseCommit(commit)).toEqual(expect.objectContaining({
+      ...sparklesCommit,
       subject: '',
       body: '',
-    })
+    }))
+  })
+
+  it('should add the group to a commit', () => {
+    const {
+      hash,
+      date,
+      subject,
+      body,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${date}\n${subject}\n${body}\n`
+
+    expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'added' }))
   })
 })
