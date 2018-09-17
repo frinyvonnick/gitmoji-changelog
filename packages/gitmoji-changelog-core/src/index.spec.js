@@ -4,17 +4,32 @@ const gitSemverTags = require('git-semver-tags')
 
 const { generateChangelog } = require('./index')
 
+const sparklesCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  date: '2018-08-28T10:06:00+02:00',
+  subject: ':sparkles: Upgrade brand new feature',
+  body: 'Waouh this is awesome 2',
+}
+
+const recycleCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+  date: '2018-08-28T10:07:00+02:00',
+  subject: ':recycle: Upgrade brand new feature',
+  body: 'Waouh this is awesome 3',
+}
+
 describe('changelog', () => {
   beforeEach(() => {
     gitRawCommits.mockImplementationOnce(() => {
       const stream = require('stream')
       const readable = new stream.Readable()
-      readable.push(`
-c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c
-2018-08-28T10:07:00+02:00
-:sparkles: Upgrade brand new feature
-Waouh this is awesome 3
-`)
+      const {
+        hash,
+        date,
+        subject,
+        body,
+      } = recycleCommit
+      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
       readable.push(null)
       readable.emit('close')
       return readable
@@ -22,12 +37,13 @@ Waouh this is awesome 3
     gitRawCommits.mockImplementationOnce(() => {
       const stream = require('stream')
       const readable = new stream.Readable()
-      readable.push(`
-c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f
-2018-08-28T10:06:00+02:00
-:sparkles: Upgrade brand new feature
-Waouh this is awesome 2
-`)
+      const {
+        hash,
+        date,
+        subject,
+        body,
+      } = sparklesCommit
+      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
       readable.push(null)
       readable.emit('close')
       return readable
@@ -43,12 +59,7 @@ Waouh this is awesome 2
       {
         version: 'next',
         commits: [
-          {
-            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-            date: '2018-08-28T10:07:00+02:00',
-            subject: ':sparkles: Upgrade brand new feature',
-            body: 'Waouh this is awesome 3',
-          },
+          expect.objectContaining(recycleCommit),
         ],
       },
     ])
@@ -63,23 +74,41 @@ Waouh this is awesome 2
       {
         version: 'v1.0.0',
         commits: [
-          {
-            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-            date: '2018-08-28T10:06:00+02:00',
-            subject: ':sparkles: Upgrade brand new feature',
-            body: 'Waouh this is awesome 2',
-          },
+          expect.objectContaining(sparklesCommit),
         ],
       },
       {
         version: 'next',
         commits: [
-          {
-            hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-            date: '2018-08-28T10:07:00+02:00',
-            subject: ':sparkles: Upgrade brand new feature',
-            body: 'Waouh this is awesome 3',
-          },
+          expect.objectContaining(recycleCommit),
+        ],
+      },
+    ])
+  })
+
+
+  it('should add group on commits', async () => {
+    gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
+
+    const result = await generateChangelog()
+
+    expect(result).toEqual([
+      {
+        version: 'v1.0.0',
+        commits: [
+          expect.objectContaining({
+            ...sparklesCommit,
+            group: 'added',
+          }),
+        ],
+      },
+      {
+        version: 'next',
+        commits: [
+          expect.objectContaining({
+            ...recycleCommit,
+            group: 'changed',
+          }),
         ],
       },
     ])
