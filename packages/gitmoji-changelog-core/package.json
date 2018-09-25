@@ -18,8 +18,12 @@
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "dependencies": {
     "concat-stream": "^1.6.2",
+    "get-pkg-repo": "^2.0.0",
     "git-raw-commits": "^2.0.0",
+    "git-remote-origin-url": "^2.0.0",
     "git-semver-tags": "^2.0.0",
+    "normalize-package-data": "^2.4.0",
+    "read-pkg-up": "^4.0.0",
     "split-lines": "^2.0.0",
     "through2": "^2.0.3"
   }

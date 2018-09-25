@@ -5,20 +5,23 @@ const concat = require('concat-stream')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
+const { getGitInfo } = require('./gitInfo')
 const mapping = require('./mapping')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
 
-function getCommits(from, to) {
+async function getCommits(from, to) {
+  const gitInfo = await getGitInfo()
+
   return new Promise((resolve) => {
     gitRawCommits({
       format: COMMIT_FORMAT,
       from,
       to,
     }).pipe(through.obj((data, enc, next) => {
-      next(null, parseCommit(data.toString()))
+      next(null, parseCommit(data.toString(), gitInfo))
     })).pipe(concat(data => {
       resolve(data)
     }))

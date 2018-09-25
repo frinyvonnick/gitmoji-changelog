@@ -7,7 +7,7 @@
 ### {{label}}
 
 {{#each commits}}
-- {{subject}} ({{hash}})
+- {{subject}} ([{{shortHash}}]({{urlHash}}))
 {{/each}}
 
 {{/each}}
