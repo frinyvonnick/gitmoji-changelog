@@ -55,17 +55,17 @@ describe('getGitInfo', () => {
 
 
 describe('getHashUrl', () => {
-  it('should return null if no hash given', async () => {
+  it('should return null if no hash given', () => {
     const result = getHashUrl()
     expect(result).toBeNull()
   })
 
-  it('should return null if no gitInfo given', async () => {
+  it('should return null if no gitInfo given', () => {
     const result = getHashUrl('xxx')
     expect(result).toBeNull()
   })
 
-  it('should return the url of a hash', async () => {
+  it('should return the url of a hash', () => {
     const result = getHashUrl('xxx', {
       browse: () => 'https://github.com/frinyvonnick/gitmoji-changelog',
     })
@@ -74,29 +74,29 @@ describe('getHashUrl', () => {
 })
 
 describe('autolink', () => {
-  it('should return null if no message given', async () => {
+  it('should return null if no message given', () => {
     const result = autolink()
     expect(result).toBeNull()
   })
 
-  it('should return the message if no gitInfo given', async () => {
+  it('should return the message if no gitInfo given', () => {
     const result = autolink('message without gitinfo')
     expect(result).toBe('message without gitinfo')
   })
 
-  it('should return the message if nothing match', async () => {
+  it('should return the message if nothing match', () => {
     const result = autolink('nothing match in this message')
     expect(result).toBe('nothing match in this message')
   })
 
-  it('should autolink one hashtag issue in message', async () => {
+  it('should autolink one hashtag issue in message', () => {
     const result = autolink(':bug: fix issue #123', {
       bugs: () => 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
     expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)')
   })
 
-  it('should autolink severals hashtag issues in message', async () => {
+  it('should autolink severals hashtag issues in message', () => {
     const result = autolink(':bug: fix issue #123 and #456', {
       bugs: () => 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
