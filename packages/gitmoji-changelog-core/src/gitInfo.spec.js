@@ -2,9 +2,9 @@
 const readPkgUp = require('read-pkg-up')
 const gitRemoteOriginUrl = require('git-remote-origin-url')
 
-const { getGitInfo } = require('./gitInfo')
+const { getGitInfo, autolink, getHashUrl } = require('./gitInfo')
 
-describe('gitInfo', () => {
+describe('getGitInfo', () => {
   it('should extract repo info from package.json', async () => {
     readPkgUp.mockImplementationOnce(() => Promise.resolve({
       pkg: {
@@ -50,6 +50,57 @@ describe('gitInfo', () => {
     const result = await getGitInfo()
 
     expect(result).toBeNull()
+  })
+})
+
+
+describe('getHashUrl', () => {
+  it('should return null if no hash given', async () => {
+    const result = getHashUrl()
+    expect(result).toBeNull()
+  })
+
+  it('should return null if no gitInfo given', async () => {
+    const result = getHashUrl('xxx')
+    expect(result).toBeNull()
+  })
+
+  it('should return the url of a hash', async () => {
+    const result = getHashUrl('xxx', {
+      browse: () => 'https://github.com/frinyvonnick/gitmoji-changelog',
+    })
+    expect(result).toBe('https://github.com/frinyvonnick/gitmoji-changelog/commit/xxx')
+  })
+})
+
+describe('autolink', () => {
+  it('should return null if no message given', async () => {
+    const result = autolink()
+    expect(result).toBeNull()
+  })
+
+  it('should return the message if no gitInfo given', async () => {
+    const result = autolink('message without gitinfo')
+    expect(result).toBe('message without gitinfo')
+  })
+
+  it('should return the message if nothing match', async () => {
+    const result = autolink('nothing match in this message')
+    expect(result).toBe('nothing match in this message')
+  })
+
+  it('should autolink one hashtag issue in message', async () => {
+    const result = autolink(':bug: fix issue #123', {
+      bugs: () => 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+    })
+    expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)')
+  })
+
+  it('should autolink severals hashtag issues in message', async () => {
+    const result = autolink(':bug: fix issue #123 and #456', {
+      bugs: () => 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+    })
+    expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [#456](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
   })
 })
 

@@ -4,10 +4,11 @@
 
 ### Added
 
-- :sparkles: Group commits by changelog types (#11) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
-- :sparkles: Use handlebars templating to generate markdown (#10) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))
-- :sparkles: Generate changelog for the next release (#8) ([2d783e4](https://github.com/frinyvonnick/gitmoji-changelog/commit/2d783e44e7d4b84a993237e27b95a5d27532426b))
-- :sparkles: Implement format option (#5) ([9b7287d](https://github.com/frinyvonnick/gitmoji-changelog/commit/9b7287d167637b7a02387cea135d1d7d44a90695))
+- :sparkles: support commit url in changelog ([02c72b0](https://github.com/frinyvonnick/gitmoji-changelog/commit/02c72b0214a8b3219bc69969321de6ba0b663b26))
+- :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
+- :sparkles: Use handlebars templating to generate markdown ([#10](https://github.com/frinyvonnick/gitmoji-changelog/issues/10)) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))
+- :sparkles: Generate changelog for the next release ([#8](https://github.com/frinyvonnick/gitmoji-changelog/issues/8)) ([2d783e4](https://github.com/frinyvonnick/gitmoji-changelog/commit/2d783e44e7d4b84a993237e27b95a5d27532426b))
+- :sparkles: Implement format option ([#5](https://github.com/frinyvonnick/gitmoji-changelog/issues/5)) ([9b7287d](https://github.com/frinyvonnick/gitmoji-changelog/commit/9b7287d167637b7a02387cea135d1d7d44a90695))
 - :sparkles: Convert changelog to markdown ([b165f69](https://github.com/frinyvonnick/gitmoji-changelog/commit/b165f695f4c1a49ff16a5f03918545bfb36cf367))
 - :sparkles: Generate markdown first draft function ([10c6d3e](https://github.com/frinyvonnick/gitmoji-changelog/commit/10c6d3e20b82f5a0f6ce5cd372899e6519bc2412))
 - :tada: Intialize markdown project ([a4a12bb](https://github.com/frinyvonnick/gitmoji-changelog/commit/a4a12bb4f7133e7e5e40436da4c884f135abf03d))
@@ -20,7 +21,7 @@
 
 ### Changed
 
-- :recycle: remove babel to use native node 10 (#3) ([6edd0c4](https://github.com/frinyvonnick/gitmoji-changelog/commit/6edd0c48591e935f3bcd7e73d48733e623f779d9))
+- :recycle: remove babel to use native node 10 ([#3](https://github.com/frinyvonnick/gitmoji-changelog/issues/3)) ([6edd0c4](https://github.com/frinyvonnick/gitmoji-changelog/commit/6edd0c48591e935f3bcd7e73d48733e623f779d9))
 - :truck: move parse functions into parser.js ([e29f239](https://github.com/frinyvonnick/gitmoji-changelog/commit/e29f239dee8dc393caee9d320371e54a37eb90ae))
 - :wrench: Fix main script in core module ([7f091a3](https://github.com/frinyvonnick/gitmoji-changelog/commit/7f091a3900605ee9bc44e793ddbb10a7272112fa))
 - :wrench: Add build script ([efbc04d](https://github.com/frinyvonnick/gitmoji-changelog/commit/efbc04d902ac201b128a8e02692b778eff109b12))
