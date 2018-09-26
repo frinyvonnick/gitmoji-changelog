@@ -37,15 +37,17 @@ function getShortHash(hash, repoInfo) {
   return `[${shortHash}](${repoInfo.repoUrl}/commit/${hash})`
 }
 
+const ISSUE_REGEXP = /#{1}(\d+)/gm
+
 function autolink(message, repoInfo) {
   if (!message) return null
 
   if (isEmpty(repoInfo)) return message
 
-  const matches = message.match(/#{1}(\d+)/gm)
+  const matches = message.match(ISSUE_REGEXP)
   if (!matches) return message
 
-  return message.replace(/#{1}(\d+)/gm, `[#$1](${repoInfo.bugsUrl}/$1)`)
+  return message.replace(ISSUE_REGEXP, `[#$1](${repoInfo.bugsUrl}/$1)`)
 }
 
 module.exports = {

@@ -30,13 +30,14 @@ function parseCommit(commit) {
   const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, message } = parseSubject(subject)
   const group = getCommitGroup(emoji)
+
   return {
     hash,
     date,
+    subject,
     emoji,
+    message,
     group,
-    subject: subject,
-    message: message,
     body: body.join('\n'),
   }
 }

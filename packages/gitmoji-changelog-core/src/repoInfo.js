@@ -27,17 +27,17 @@ async function getRepoInfo() {
 
   // extract repo info from package.json info
   try {
-    const repoInfo = getPkgRepo(packageJson)
+    const repo = getPkgRepo(packageJson)
 
-    if (isEmpty(repoInfo)) return null
+    if (isEmpty(repo)) return null
 
     return {
-      type: repoInfo.type,
-      domain: repoInfo.domain,
-      user: repoInfo.user,
-      project: repoInfo.project,
-      repoUrl: repoInfo.browse(),
-      bugsUrl: repoInfo.bugs(),
+      type: repo.type,
+      domain: repo.domain,
+      user: repo.user,
+      project: repo.project,
+      repoUrl: repo.browse(),
+      bugsUrl: repo.bugs(),
     }
   } catch (e) {
     return null

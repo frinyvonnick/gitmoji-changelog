@@ -12,7 +12,7 @@ const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
 
-async function getCommits(from, to) {
+function getCommits(from, to) {
   return new Promise((resolve) => {
     gitRawCommits({
       format: COMMIT_FORMAT,
