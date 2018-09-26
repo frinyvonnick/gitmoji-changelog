@@ -26,9 +26,9 @@ describe('changelog', () => {
   it('should generate changelog in json format for next release', async () => {
     gitSemverTags.mockImplementation((cb) => cb(null, []))
 
-    const result = await generateChangelog()
+    const { changes } = await generateChangelog()
 
-    expect(result).toEqual([
+    expect(changes).toEqual([
       {
         version: 'next',
         groups: [
@@ -47,9 +47,9 @@ describe('changelog', () => {
   it('should generate changelog in json format for all tags', async () => {
     gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
 
-    const result = await generateChangelog()
+    const { changes } = await generateChangelog()
 
-    expect(result).toEqual([
+    expect(changes).toEqual([
       {
         version: 'v1.0.0',
         groups: [

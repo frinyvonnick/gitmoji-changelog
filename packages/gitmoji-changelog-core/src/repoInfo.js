@@ -4,7 +4,7 @@ const gitRemoteOriginUrl = require('git-remote-origin-url')
 const normalizePackageData = require('normalize-package-data')
 const { isEmpty } = require('lodash')
 
-async function getGitInfo() {
+async function getRepoInfo() {
   // get the closest package.json file
   let packageJson = {}
   try {
@@ -25,35 +25,25 @@ async function getGitInfo() {
     }
   }
 
-  // normalize and extract repo info from package.json info
+  // extract repo info from package.json info
   try {
-    return getPkgRepo(packageJson)
+    const repoInfo = getPkgRepo(packageJson)
+
+    if (isEmpty(repoInfo)) return null
+
+    return {
+      type: repoInfo.type,
+      domain: repoInfo.domain,
+      user: repoInfo.user,
+      project: repoInfo.project,
+      repoUrl: repoInfo.browse(),
+      bugsUrl: repoInfo.bugs(),
+    }
   } catch (e) {
     return null
   }
 }
 
-function getHashUrl(hash, gitInfo) {
-  if (!hash) return null
-
-  if (isEmpty(gitInfo)) return null
-
-  return `${gitInfo.browse()}/commit/${hash}`
-}
-
-function autolink(message, gitInfo) {
-  if (!message) return null
-
-  if (isEmpty(gitInfo)) return message
-
-  const matches = message.match(/#{1}(\d+)/gm)
-  if (!matches) return message
-
-  return message.replace(/#{1}(\d+)/gm, `[#$1](${gitInfo.bugs()}/$1)`)
-}
-
 module.exports = {
-  getGitInfo,
-  getHashUrl,
-  autolink,
+  getRepoInfo,
 }

@@ -1,6 +1,5 @@
 const splitLines = require('split-lines')
 const mapping = require('./mapping')
-const { getHashUrl, autolink } = require('./gitInfo')
 
 function parseSubject(subject) {
   if (!subject) return {}
@@ -26,23 +25,19 @@ function getCommitGroup(emoji) {
   return group
 }
 
-function parseCommit(commit, gitInfo) {
+function parseCommit(commit) {
   const lines = splitLines(commit)
   const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, message } = parseSubject(subject)
   const group = getCommitGroup(emoji)
   return {
     hash,
-    shortHash: hash.slice(0, 7),
-    urlHash: getHashUrl(hash, gitInfo),
     date,
     emoji,
     group,
-    rawSubject: subject,
-    subject: autolink(subject, gitInfo),
-    message: autolink(message, gitInfo),
-    rawBody: body.join('\n'),
-    body: autolink(body.join('\n'), gitInfo),
+    subject: subject,
+    message: message,
+    body: body.join('\n'),
   }
 }
 

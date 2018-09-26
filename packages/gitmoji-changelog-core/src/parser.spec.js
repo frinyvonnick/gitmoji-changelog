@@ -31,7 +31,7 @@ describe('commits parser', () => {
 
     expect(parseCommit(commit)).toEqual(expect.objectContaining({
       ...sparklesCommit,
-      body: null,
+      body: '',
     }))
   })
 
@@ -44,8 +44,8 @@ describe('commits parser', () => {
 
     expect(parseCommit(commit)).toEqual(expect.objectContaining({
       ...sparklesCommit,
-      subject: null,
-      body: null,
+      subject: '',
+      body: '',
     }))
   })
 

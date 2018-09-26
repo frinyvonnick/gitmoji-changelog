@@ -4,6 +4,7 @@
 
 ### Added
 
+- :sparkles: Add autolink to issues in subjects and body ([738e9bd](https://github.com/frinyvonnick/gitmoji-changelog/commit/738e9bd52469d9082a15dca07182e073e12bc769))
 - :sparkles: support commit url in changelog ([02c72b0](https://github.com/frinyvonnick/gitmoji-changelog/commit/02c72b0214a8b3219bc69969321de6ba0b663b26))
 - :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
 - :sparkles: Use handlebars templating to generate markdown ([#10](https://github.com/frinyvonnick/gitmoji-changelog/issues/10)) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))
@@ -31,6 +32,7 @@
 
 ### Removed
 
+- :fire: remove useless async keyword in test file ([1c3fb8d](https://github.com/frinyvonnick/gitmoji-changelog/commit/1c3fb8d5ab6bcee418191e0b0d0e4eaa3edd5547))
 - :fire: remove parsing multiple commit ([73207b7](https://github.com/frinyvonnick/gitmoji-changelog/commit/73207b70d85ad2371def0ec9045e5a6ea46fee8c))
 
 ### Fixed

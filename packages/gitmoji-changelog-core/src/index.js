@@ -5,7 +5,7 @@ const concat = require('concat-stream')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getGitInfo } = require('./gitInfo')
+const { getRepoInfo } = require('./repoInfo')
 const mapping = require('./mapping')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
@@ -13,15 +13,13 @@ const gitSemverTagsAsync = promisify(gitSemverTags)
 const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
 
 async function getCommits(from, to) {
-  const gitInfo = await getGitInfo()
-
   return new Promise((resolve) => {
     gitRawCommits({
       format: COMMIT_FORMAT,
       from,
       to,
     }).pipe(through.obj((data, enc, next) => {
-      next(null, parseCommit(data.toString(), gitInfo))
+      next(null, parseCommit(data.toString()))
     })).pipe(concat(data => {
       resolve(data)
     }))
@@ -39,10 +37,14 @@ function makeGroups(commits) {
 }
 
 async function generateChangelog() {
+  const meta = {
+    repoInfo: await getRepoInfo(),
+  }
+
   let previousTag = ''
   const tags = await gitSemverTagsAsync()
 
-  const result = await Promise.all(tags.map(async tag => {
+  const changes = await Promise.all(tags.map(async tag => {
     const commits = await getCommits(previousTag, tag)
 
     previousTag = tag
@@ -53,12 +55,15 @@ async function generateChangelog() {
   }))
 
   const commits = await getCommits(previousTag)
-  result.push({
+  changes.push({
     version: 'next',
     groups: makeGroups(commits),
   })
 
-  return result
+  return {
+    meta,
+    changes,
+  }
 }
 
 module.exports = {
