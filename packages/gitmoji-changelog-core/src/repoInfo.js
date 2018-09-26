@@ -36,7 +36,7 @@ async function getRepoInfo() {
       domain: repo.domain,
       user: repo.user,
       project: repo.project,
-      repoUrl: repo.browse(),
+      url: repo.browse(),
       bugsUrl: repo.bugs(),
     }
   } catch (e) {

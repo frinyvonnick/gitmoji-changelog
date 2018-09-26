@@ -38,7 +38,7 @@ function makeGroups(commits) {
 
 async function generateChangelog() {
   const meta = {
-    repoInfo: await getRepoInfo(),
+    repository: await getRepoInfo(),
   }
 
   let previousTag = ''

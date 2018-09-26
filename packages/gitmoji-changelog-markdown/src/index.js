@@ -16,10 +16,10 @@ function convert({ meta, changes }) {
       ...group,
       commits: group.commits.map(commit => ({
         ...commit,
-        hash: getShortHash(commit.hash, meta.repoInfo),
-        subject: autolink(commit.subject, meta.repoInfo),
-        message: autolink(commit.message, meta.repoInfo),
-        body: autolink(commit.body, meta.repoInfo),
+        hash: getShortHash(commit.hash, meta.repository),
+        subject: autolink(commit.subject, meta.repository),
+        message: autolink(commit.message, meta.repository),
+        body: autolink(commit.body, meta.repository),
       })),
     })),
   }))
@@ -27,27 +27,27 @@ function convert({ meta, changes }) {
   return generateMarkdown({ changelog })
 }
 
-function getShortHash(hash, repoInfo) {
+function getShortHash(hash, repository) {
   if (!hash) return null
 
   const shortHash = hash.slice(0, 7)
 
-  if (isEmpty(repoInfo)) return shortHash
+  if (isEmpty(repository)) return shortHash
 
-  return `[${shortHash}](${repoInfo.repoUrl}/commit/${hash})`
+  return `[${shortHash}](${repository.url}/commit/${hash})`
 }
 
 const ISSUE_REGEXP = /#{1}(\d+)/gm
 
-function autolink(message, repoInfo) {
+function autolink(message, repository) {
   if (!message) return null
 
-  if (isEmpty(repoInfo)) return message
+  if (isEmpty(repository)) return message
 
   const matches = message.match(ISSUE_REGEXP)
   if (!matches) return message
 
-  return message.replace(ISSUE_REGEXP, `[#$1](${repoInfo.bugsUrl}/$1)`)
+  return message.replace(ISSUE_REGEXP, `[#$1](${repository.bugsUrl}/$1)`)
 }
 
 module.exports = {

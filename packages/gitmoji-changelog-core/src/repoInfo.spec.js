@@ -22,7 +22,7 @@ describe('getRepoInfo', () => {
       domain: 'github.com',
       user: 'frinyvonnick',
       project: 'gitmoji-changelog',
-      repoUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      url: 'https://github.com/frinyvonnick/gitmoji-changelog',
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
   })
@@ -38,7 +38,7 @@ describe('getRepoInfo', () => {
       domain: 'github.com',
       user: 'frinyvonnick',
       project: 'gitmoji-changelog',
-      repoUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      url: 'https://github.com/frinyvonnick/gitmoji-changelog',
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
   })

@@ -4,12 +4,12 @@ describe('Markdown converter', () => {
   it('should convert changelog into markdown', () => {
     const changelog = {
       meta: {
-        repoInfo: {
+        repository: {
           type: 'github',
           domain: 'github.com',
           user: 'frinyvonnick',
           project: 'gitmoji-changelog',
-          repoUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
           bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
         },
       },
@@ -86,7 +86,7 @@ describe('getHashUrl', () => {
 
   it('should return short hash markdown with repo url', () => {
     const result = getShortHash('xxxxxxxxxxxxxxxxx', {
-      repoUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      url: 'https://github.com/frinyvonnick/gitmoji-changelog',
     })
     expect(result).toBe('[xxxxxxx](https://github.com/frinyvonnick/gitmoji-changelog/commit/xxxxxxxxxxxxxxxxx)')
   })
