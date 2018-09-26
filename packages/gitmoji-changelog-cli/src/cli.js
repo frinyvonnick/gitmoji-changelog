@@ -4,15 +4,15 @@ const fs = require('fs')
 
 async function main({ format } = {}) {
   try {
-    const changes = await generateChangelog()
+    const changelog = await generateChangelog()
 
     switch (format) {
       case 'json':
-        fs.writeFileSync('./CHANGELOG.json', JSON.stringify(changes))
+        fs.writeFileSync('./CHANGELOG.json', JSON.stringify(changelog))
         break
       case 'markdown':
       default: {
-        fs.writeFileSync('./CHANGELOG.md', convert(changes))
+        fs.writeFileSync('./CHANGELOG.md', convert(changelog))
       }
     }
   } catch (e) {

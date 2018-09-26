@@ -25,20 +25,18 @@ function getCommitGroup(emoji) {
   return group
 }
 
-function parseCommit(commit, gitInfo) {
+function parseCommit(commit) {
   const lines = splitLines(commit)
   const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, message } = parseSubject(subject)
   const group = getCommitGroup(emoji)
   return {
     hash,
-    shortHash: hash.slice(0, 7),
-    urlHash: gitInfo && `${gitInfo.browse()}/commit/${hash}`,
     date,
-    subject,
     emoji,
-    message,
     group,
+    subject: subject,
+    message: message,
     body: body.join('\n'),
   }
 }
