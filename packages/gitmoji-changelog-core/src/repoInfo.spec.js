@@ -5,7 +5,7 @@ const gitRemoteOriginUrl = require('git-remote-origin-url')
 const { getRepoInfo } = require('./repoInfo')
 
 describe('getRepoInfo', () => {
-  it('should extract repo info from package.json', async () => {
+  it('should extract github repo info from package.json', async () => {
     readPkgUp.mockImplementationOnce(() => Promise.resolve({
       pkg: {
         repository: {
@@ -50,6 +50,50 @@ describe('getRepoInfo', () => {
     const result = await getRepoInfo()
 
     expect(result).toBeNull()
+  })
+
+  it('should extract gitlab repo info from package.json', async () => {
+    readPkgUp.mockImplementationOnce(() => Promise.resolve({
+      pkg: {
+        repository: {
+          type: 'git',
+          url: 'git+https://gitlab.com/gitlab-user/gitlab-project.git',
+        },
+      },
+    }))
+
+    const result = await getRepoInfo()
+
+    expect(result).toEqual({
+      type: 'gitlab',
+      domain: 'gitlab.com',
+      user: 'gitlab-user',
+      project: 'gitlab-project',
+      url: 'https://gitlab.com/gitlab-user/gitlab-project',
+      bugsUrl: 'https://gitlab.com/gitlab-user/gitlab-project/issues',
+    })
+  })
+
+  it('should extract bitbucket repo info from package.json', async () => {
+    readPkgUp.mockImplementationOnce(() => Promise.resolve({
+      pkg: {
+        repository: {
+          type: 'git',
+          url: 'https://username@bitbucket.org/bitbucket-account/bitbucket-project.git',
+        },
+      },
+    }))
+
+    const result = await getRepoInfo()
+
+    expect(result).toEqual({
+      type: 'bitbucket',
+      domain: 'bitbucket.org',
+      user: 'bitbucket-account',
+      project: 'bitbucket-project',
+      url: 'https://bitbucket.org/bitbucket-account/bitbucket-project',
+      bugsUrl: undefined,
+    })
   })
 })
 

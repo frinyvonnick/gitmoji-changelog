@@ -32,7 +32,7 @@ function getShortHash(hash, repository) {
 
   const shortHash = hash.slice(0, 7)
 
-  if (isEmpty(repository)) return shortHash
+  if (isEmpty(repository) || !repository.url) return shortHash
 
   return `[${shortHash}](${repository.url}/commit/${hash})`
 }
@@ -42,7 +42,7 @@ const ISSUE_REGEXP = /#{1}(\d+)/gm
 function autolink(message, repository) {
   if (!message) return null
 
-  if (isEmpty(repository)) return message
+  if (isEmpty(repository) || !repository.bugsUrl) return message
 
   const matches = message.match(ISSUE_REGEXP)
   if (!matches) return message
