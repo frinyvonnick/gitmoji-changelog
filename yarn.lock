@@ -1827,6 +1827,12 @@ ignore@^4.0.2:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
 
+immutadot@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/immutadot/-/immutadot-1.0.0.tgz#9d99bffde37666755aff0b6f9cb7df8e5a4b4231"
+  dependencies:
+    babel-runtime "^6.26.0"
+
 import-local@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/import-local/-/import-local-1.0.0.tgz#5e4ffdc03f4fe6c009c6729beb29631c2f8227bc"

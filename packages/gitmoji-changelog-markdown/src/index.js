@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
+const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
@@ -10,18 +11,12 @@ function convert({ meta, changes }) {
 
   const generateMarkdown = handlebars.compile(template)
 
-  const changelog = changes.map(version => ({
-    ...version,
-    groups: version.groups.map(group => ({
-      ...group,
-      commits: group.commits.map(commit => ({
-        ...commit,
-        hash: getShortHash(commit.hash, meta.repository),
-        subject: autolink(commit.subject, meta.repository),
-        message: autolink(commit.message, meta.repository),
-        body: autolink(commit.body, meta.repository),
-      })),
-    })),
+  const changelog = update(changes, '[:].groups[:].commits[:]', commit => ({
+    ...commit,
+    hash: getShortHash(commit.hash, meta.repository),
+    subject: autolink(commit.subject, meta.repository),
+    message: autolink(commit.message, meta.repository),
+    body: autolink(commit.body, meta.repository),
   }))
 
   return generateMarkdown({ changelog })

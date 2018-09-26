@@ -4,6 +4,7 @@
 
 ### Added
 
+- :white_check_mark: add gitlab and bitbucket tests ([0203483](https://github.com/frinyvonnick/gitmoji-changelog/commit/0203483f17111a30be879797c398bb87df86e9ab))
 - :sparkles: Add autolink to issues and PRs in commit subject and body ([#17](https://github.com/frinyvonnick/gitmoji-changelog/issues/17)) ([43449fc](https://github.com/frinyvonnick/gitmoji-changelog/commit/43449fc628facf06fe453c8f940b7a0887372820))
 - :sparkles: support commit url in changelog ([02c72b0](https://github.com/frinyvonnick/gitmoji-changelog/commit/02c72b0214a8b3219bc69969321de6ba0b663b26))
 - :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
@@ -41,6 +42,7 @@
 
 ### Miscellaneous
 
+- :refactor: rename meta.repoInfo to meta.repository ([8f97208](https://github.com/frinyvonnick/gitmoji-changelog/commit/8f9720891e7a970a3dca1954ed4f0a570daaee05))
 - :refactor: clean some code ([7af3086](https://github.com/frinyvonnick/gitmoji-changelog/commit/7af3086dfbc5d514434d990855d191ca81988bf1))
 - :memo: Update roadmap ([02cec25](https://github.com/frinyvonnick/gitmoji-changelog/commit/02cec25ce329d68a02d1669913495108d93e2285))
 - :memo: Add README.md ([c177349](https://github.com/frinyvonnick/gitmoji-changelog/commit/c177349386dfd87ab41c58f8a317b0962a511207))

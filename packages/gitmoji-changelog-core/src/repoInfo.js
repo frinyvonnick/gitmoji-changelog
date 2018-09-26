@@ -11,7 +11,7 @@ async function getRepoInfo() {
     const packageInfo = await readPkgUp()
     packageJson = packageInfo.pkg || {}
   } catch (e) {
-    packageJson = {}
+    // error reading package.json
   }
 
   // if pkg not found or empty, get git remote origin
@@ -21,7 +21,7 @@ async function getRepoInfo() {
       packageJson.repository = { url }
       normalizePackageData(packageJson)
     } catch (e) {
-      packageJson = {}
+      return null
     }
   }
 
