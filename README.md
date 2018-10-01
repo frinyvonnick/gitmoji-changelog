@@ -44,8 +44,8 @@ When a commit is done with a gitmoji, the following mapping is used to group the
 
 | Categorie | Gitmoji |
 |---|---|
-| Added | :sparkles: :tada: :white_check_mark: :bookmark: :construction_worker: :charts_with_upwards_trend: :heavy_plus_sign: :loud_sound: |
-| Changed | :art: :zap: :lipstick: :rotating_light: :arrow_down: :arrow_up: :pushpin: :recycle: :wrench: :rewind: :alien: :truck: :boom: :bento: :wheelchair: :speech_ballon: :card_file_box: :children_crossing: :building_construction: :iphone: |
+| Added | :sparkles: :tada: :white_check_mark: :bookmark: :construction_worker: :chart_with_upwards_trend: :heavy_plus_sign: :loud_sound: |
+| Changed | :art: :zap: :lipstick: :rotating_light: :arrow_down: :arrow_up: :pushpin: :recycle: :wrench: :rewind: :alien: :truck: :boom: :bento: :wheelchair: :speech_balloon: :card_file_box: :children_crossing: :building_construction: :iphone: |
 | Removed | :fire: :heavy_minus_sign: :mute: |
 | Fixed | :bug: :ambulance: :apple: :penguin: :checkered_flag: :robot: :green_apple: :green_heart: :pencil2: |
 | Security | :lock: |
