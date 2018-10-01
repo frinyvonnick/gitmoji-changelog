@@ -58,7 +58,7 @@ When a commit is done with a gitmoji, the following mapping is used to group the
 
 Here is an example of the produced `changelog.md` produced : 
 
-![Changelog example](docs/screenshot.png)
+![Changelog example](doc/screenshot.png)
 
 
 ## Roadmap
