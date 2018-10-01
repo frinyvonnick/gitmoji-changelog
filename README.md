@@ -16,7 +16,7 @@ This library generates changelog for repositories using [gitmoji](https://gitmoj
   git commit . -m ":sparkles: my awesome feature"
   ```
 2. Bump version in package.json
-3. Run `gitmoji-changelog`
+3. Run `gitmoji-changelog`, the file `changelog.md` is created or updated with the summary of all changes in the release. See the example below.
 4. Commit `package.json` and `changelog` files
 5. Tag and push
 
@@ -52,6 +52,13 @@ When a commit is done with a gitmoji, the following mapping is used to group the
 
 
 > See [mapping.js](packages/gitmoji-changelog-core/src/mapping.js) for more details
+
+
+## Example
+
+Here is an example of the produced `changelog.md` produced : 
+![Changelog example](docs/screenshot.png)
+
 
 ## Roadmap
 
