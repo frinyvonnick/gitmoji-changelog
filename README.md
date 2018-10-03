@@ -4,6 +4,15 @@
 
 This library generates changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention.
 
+## Setup
+
+Install the lib:
+
+```bash
+git clone git@github.com:frinyvonnick/gitmoji-changelog.git
+cd gitmoji-changelog && yarn
+```
+
 ## Usage
 
 **Prerequisites:**
@@ -23,20 +32,12 @@ This library generates changelog for repositories using [gitmoji](https://gitmoj
 ### CLI
 
 ```bash
-gitmoji-changelog
+node ../[path-to-gitmoji-changelog-folder]/packages/gitmoji-changelog-cli/src/index.js
 ```
 
 ### API
 
 **// TODO**
-
-## Setup
-
-Install the lib in your PATH : 
-
-```bash
-npm install -g gitmoji-changelog
-```
 
 ## Mapping
 
