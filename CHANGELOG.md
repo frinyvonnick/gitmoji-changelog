@@ -4,6 +4,7 @@
 
 ### Added
 
+- :sparkles: add a logger ([3202ad8](https://github.com/frinyvonnick/gitmoji-changelog/commit/3202ad83243242658ac510994bfe2ad358d0283f))
 - :sparkles: Support commit&#x27;s URL and issues autolink in changelog ([#16](https://github.com/frinyvonnick/gitmoji-changelog/issues/16)) ([871f164](https://github.com/frinyvonnick/gitmoji-changelog/commit/871f16499acee400863a94976e2520a4bdbc6cea))
 - :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
 - :sparkles: Use handlebars templating to generate markdown ([#10](https://github.com/frinyvonnick/gitmoji-changelog/issues/10)) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))

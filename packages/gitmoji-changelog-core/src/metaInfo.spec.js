@@ -2,12 +2,14 @@
 const readPkgUp = require('read-pkg-up')
 const gitRemoteOriginUrl = require('git-remote-origin-url')
 
-const { getRepoInfo } = require('./repoInfo')
+const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 
-describe('getRepoInfo', () => {
+describe('getPackageInfo', () => {
   it('should extract github repo info from package.json', async () => {
     readPkgUp.mockImplementationOnce(() => Promise.resolve({
       pkg: {
+        name: 'gitmoji-changelog',
+        version: '0.0.1',
         repository: {
           type: 'git',
           url: 'git+https://github.com/frinyvonnick/gitmoji-changelog.git',
@@ -15,7 +17,27 @@ describe('getRepoInfo', () => {
       },
     }))
 
-    const result = await getRepoInfo()
+    const result = await getPackageInfo()
+
+    expect(result).toEqual({
+      name: 'gitmoji-changelog',
+      version: '0.0.1',
+      repository: {
+        type: 'git',
+        url: 'git+https://github.com/frinyvonnick/gitmoji-changelog.git',
+      },
+    })
+  })
+})
+
+describe('getRepoInfo', () => {
+  it('should extract github repo info from package.json', async () => {
+    const result = await getRepoInfo({
+      repository: {
+        type: 'git',
+        url: 'git+https://github.com/frinyvonnick/gitmoji-changelog.git',
+      },
+    })
 
     expect(result).toEqual({
       type: 'github',
@@ -28,7 +50,6 @@ describe('getRepoInfo', () => {
   })
 
   it('should extract repo info from .git info if nothing in package.json', async () => {
-    readPkgUp.mockImplementationOnce(() => Promise.resolve({}))
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve('git+https://github.com/frinyvonnick/gitmoji-changelog.git'))
 
     const result = await getRepoInfo()
@@ -44,7 +65,6 @@ describe('getRepoInfo', () => {
   })
 
   it('should return null if no git info found', async () => {
-    readPkgUp.mockImplementationOnce(() => Promise.resolve({}))
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve(null))
 
     const result = await getRepoInfo()
@@ -53,16 +73,12 @@ describe('getRepoInfo', () => {
   })
 
   it('should extract gitlab repo info from package.json', async () => {
-    readPkgUp.mockImplementationOnce(() => Promise.resolve({
-      pkg: {
-        repository: {
-          type: 'git',
-          url: 'git+https://gitlab.com/gitlab-user/gitlab-project.git',
-        },
+    const result = await getRepoInfo({
+      repository: {
+        type: 'git',
+        url: 'git+https://gitlab.com/gitlab-user/gitlab-project.git',
       },
-    }))
-
-    const result = await getRepoInfo()
+    })
 
     expect(result).toEqual({
       type: 'gitlab',
@@ -75,16 +91,12 @@ describe('getRepoInfo', () => {
   })
 
   it('should extract bitbucket repo info from package.json', async () => {
-    readPkgUp.mockImplementationOnce(() => Promise.resolve({
-      pkg: {
-        repository: {
-          type: 'git',
-          url: 'https://username@bitbucket.org/bitbucket-account/bitbucket-project.git',
-        },
+    const result = await getRepoInfo({
+      repository: {
+        type: 'git',
+        url: 'https://username@bitbucket.org/bitbucket-account/bitbucket-project.git',
       },
-    }))
-
-    const result = await getRepoInfo()
+    })
 
     expect(result).toEqual({
       type: 'bitbucket',

@@ -5,7 +5,7 @@ const concat = require('concat-stream')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getRepoInfo } = require('./repoInfo')
+const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const mapping = require('./mapping')
 const logger = require('./logger')
 
@@ -38,13 +38,13 @@ function makeGroups(commits) {
 }
 
 async function generateChangelog() {
-  const meta = {
-    repository: await getRepoInfo(),
-  }
+  const packageInfo = await getPackageInfo()
+  const repository = await getRepoInfo(packageInfo)
 
-  logger.info(meta.repository.project)
-  logger.info(meta.repository.version) // @todo get package.json from another function
-  logger.info(meta.repository.url)
+  const meta = {
+    package: packageInfo,
+    repository,
+  }
 
   let previousTag = ''
   const tags = await gitSemverTagsAsync()
