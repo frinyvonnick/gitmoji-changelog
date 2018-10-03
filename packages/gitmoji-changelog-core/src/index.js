@@ -7,6 +7,7 @@ const { promisify } = require('util')
 const { parseCommit } = require('./parser')
 const { getRepoInfo } = require('./repoInfo')
 const mapping = require('./mapping')
+const logger = require('./logger')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -41,6 +42,10 @@ async function generateChangelog() {
     repository: await getRepoInfo(),
   }
 
+  logger.info(meta.repository.project)
+  logger.info(meta.repository.version) // @todo get package.json from another function
+  logger.info(meta.repository.url)
+
   let previousTag = ''
   const tags = await gitSemverTagsAsync()
 
@@ -68,4 +73,5 @@ async function generateChangelog() {
 
 module.exports = {
   generateChangelog,
+  logger,
 }
