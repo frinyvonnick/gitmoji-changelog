@@ -52,6 +52,7 @@ describe('changelog', () => {
     expect(changes).toEqual([
       {
         version: 'v1.0.0',
+        date: '2018-08-28',
         groups: [
           {
             group: 'added',

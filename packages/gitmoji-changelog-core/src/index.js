@@ -46,10 +46,12 @@ async function generateChangelog() {
 
   const changes = await Promise.all(tags.map(async tag => {
     const commits = await getCommits(previousTag, tag)
+    const lastCommitDate = getLastCommitDate(commits)
 
     previousTag = tag
     return {
       version: tag,
+      date: lastCommitDate,
       groups: makeGroups(commits),
     }
   }))
@@ -64,6 +66,18 @@ async function generateChangelog() {
     meta,
     changes,
   }
+}
+
+function getLastCommitDate(commits) {
+  return commits
+    .map((commit) => new Date(commit.date))
+    .reduce((lastCommitDate, currentCommitDate) => {
+      if (currentCommitDate > lastCommitDate) {
+        return currentCommitDate
+      }
+      return lastCommitDate
+    })
+    .toISOString().split('T')[0]
 }
 
 module.exports = {
