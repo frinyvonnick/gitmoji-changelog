@@ -18,7 +18,7 @@ async function main({ format } = {}) {
         break
       default:
         output = './CHANGELOG.md'
-        fs.writeFileSync('./CHANGELOG.md', convert(changelog))
+        fs.writeFileSync(output, convert(changelog))
     }
     logger.success(`changelog updated into ${output}`)
   } catch (e) {

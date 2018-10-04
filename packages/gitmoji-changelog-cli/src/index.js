@@ -1,10 +1,12 @@
 #! /usr/bin/env node
 
 const yargs = require('yargs')
-const { main } = require('./cli')
 const { logger } = require('@gitmoji-changelog/core')
 
-logger.start('gitmoji-changelog v0.1.1')
+const { version } = require('../package.json')
+const { main } = require('./cli')
+
+logger.start(`gitmoji-changelog v${version}`)
 
 const args = yargs
   .option('format', {

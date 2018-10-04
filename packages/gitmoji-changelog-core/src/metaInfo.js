@@ -8,15 +8,15 @@ const { isEmpty } = require('lodash')
 async function getPackageInfo() {
   try {
     const packageInfo = await readPkgUp()
-    if (packageInfo.pkg) {
-      return {
-        name: packageInfo.pkg.name,
-        version: packageInfo.pkg.version,
-        description: packageInfo.pkg.description,
-        repository: packageInfo.pkg.repository,
-      }
+
+    if (!packageInfo.pkg) return null
+
+    return {
+      name: packageInfo.pkg.name,
+      version: packageInfo.pkg.version,
+      description: packageInfo.pkg.description,
+      repository: packageInfo.pkg.repository,
     }
-    return null
   } catch (e) {
     return null
   }
