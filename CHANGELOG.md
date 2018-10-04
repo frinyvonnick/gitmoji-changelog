@@ -4,9 +4,10 @@
 
 ### Added
 
-- :white_check_mark: add gitlab and bitbucket tests ([0203483](https://github.com/frinyvonnick/gitmoji-changelog/commit/0203483f17111a30be879797c398bb87df86e9ab))
-- :sparkles: Add autolink to issues and PRs in commit subject and body ([#17](https://github.com/frinyvonnick/gitmoji-changelog/issues/17)) ([43449fc](https://github.com/frinyvonnick/gitmoji-changelog/commit/43449fc628facf06fe453c8f940b7a0887372820))
-- :sparkles: support commit url in changelog ([02c72b0](https://github.com/frinyvonnick/gitmoji-changelog/commit/02c72b0214a8b3219bc69969321de6ba0b663b26))
+- :sparkles: add some logs ([4d8a0e3](https://github.com/frinyvonnick/gitmoji-changelog/commit/4d8a0e312dc0388be16d239a73330bd55af16ed6))
+- :sparkles: log project, version and url ([dc0bb6c](https://github.com/frinyvonnick/gitmoji-changelog/commit/dc0bb6c08cd6dbbc6a1b84ccc53ad31c2fdcb532))
+- :sparkles: add a logger ([3202ad8](https://github.com/frinyvonnick/gitmoji-changelog/commit/3202ad83243242658ac510994bfe2ad358d0283f))
+- :sparkles: Support commit&#x27;s URL and issues autolink in changelog ([#16](https://github.com/frinyvonnick/gitmoji-changelog/issues/16)) ([871f164](https://github.com/frinyvonnick/gitmoji-changelog/commit/871f16499acee400863a94976e2520a4bdbc6cea))
 - :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
 - :sparkles: Use handlebars templating to generate markdown ([#10](https://github.com/frinyvonnick/gitmoji-changelog/issues/10)) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))
 - :sparkles: Generate changelog for the next release ([#8](https://github.com/frinyvonnick/gitmoji-changelog/issues/8)) ([2d783e4](https://github.com/frinyvonnick/gitmoji-changelog/commit/2d783e44e7d4b84a993237e27b95a5d27532426b))
@@ -23,6 +24,7 @@
 
 ### Changed
 
+- :lipstick: Update the documentation ([#19](https://github.com/frinyvonnick/gitmoji-changelog/issues/19)) ([2ae9819](https://github.com/frinyvonnick/gitmoji-changelog/commit/2ae98191c6cd221115162789188ea4ebdaf91c2f))
 - :recycle: remove babel to use native node 10 ([#3](https://github.com/frinyvonnick/gitmoji-changelog/issues/3)) ([6edd0c4](https://github.com/frinyvonnick/gitmoji-changelog/commit/6edd0c48591e935f3bcd7e73d48733e623f779d9))
 - :truck: move parse functions into parser.js ([e29f239](https://github.com/frinyvonnick/gitmoji-changelog/commit/e29f239dee8dc393caee9d320371e54a37eb90ae))
 - :wrench: Fix main script in core module ([7f091a3](https://github.com/frinyvonnick/gitmoji-changelog/commit/7f091a3900605ee9bc44e793ddbb10a7272112fa))
@@ -37,13 +39,13 @@
 
 ### Fixed
 
+- :bug: Fix gitmoji mapping ([#20](https://github.com/frinyvonnick/gitmoji-changelog/issues/20)) ([9561914](https://github.com/frinyvonnick/gitmoji-changelog/commit/95619149e7ce7d26dcb4f1837a8c8bf351b1cb1c))
 - :green_heart: Ignore node_modules in linter ([802c0f7](https://github.com/frinyvonnick/gitmoji-changelog/commit/802c0f7dc29508876c6b4d178bbcc8274ee308b5))
 - :green_heart: Set up travis configuration ([dda9b28](https://github.com/frinyvonnick/gitmoji-changelog/commit/dda9b287989c1ca2e9513c4a5a4a3d1b6749e816))
 
 ### Miscellaneous
 
-- :refactor: rename meta.repoInfo to meta.repository ([8f97208](https://github.com/frinyvonnick/gitmoji-changelog/commit/8f9720891e7a970a3dca1954ed4f0a570daaee05))
-- :refactor: clean some code ([7af3086](https://github.com/frinyvonnick/gitmoji-changelog/commit/7af3086dfbc5d514434d990855d191ca81988bf1))
+- :memo: Update setup and usage parts ([42c5a65](https://github.com/frinyvonnick/gitmoji-changelog/commit/42c5a65daa3587d7260058a79de832a9037b6ccd))
 - :memo: Update roadmap ([02cec25](https://github.com/frinyvonnick/gitmoji-changelog/commit/02cec25ce329d68a02d1669913495108d93e2285))
 - :memo: Add README.md ([c177349](https://github.com/frinyvonnick/gitmoji-changelog/commit/c177349386dfd87ab41c58f8a317b0962a511207))
 - :package: Fix build ([a1526b3](https://github.com/frinyvonnick/gitmoji-changelog/commit/a1526b38e164b8471954e3dd0c658e10595ee966))

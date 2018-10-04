@@ -4,22 +4,36 @@ const gitRemoteOriginUrl = require('git-remote-origin-url')
 const normalizePackageData = require('normalize-package-data')
 const { isEmpty } = require('lodash')
 
-async function getRepoInfo() {
-  // get the closest package.json file
-  let packageJson = {}
+// get the closest package.json file
+async function getPackageInfo() {
   try {
     const packageInfo = await readPkgUp()
-    packageJson = packageInfo.pkg || {}
+
+    if (!packageInfo.pkg) return null
+
+    return {
+      name: packageInfo.pkg.name,
+      version: packageInfo.pkg.version,
+      description: packageInfo.pkg.description,
+      repository: packageInfo.pkg.repository,
+    }
   } catch (e) {
-    // error reading package.json
+    return null
+  }
+}
+
+// get git repository info
+async function getRepoInfo(packageJson = {}) {
+  const pkg = {
+    repository: packageJson.repository,
   }
 
   // if pkg not found or empty, get git remote origin
-  if (!packageJson.repository || !packageJson.repository.url) {
+  if (!pkg.repository || !pkg.repository.url) {
     try {
       const url = await gitRemoteOriginUrl()
-      packageJson.repository = { url }
-      normalizePackageData(packageJson)
+      pkg.repository = { url }
+      normalizePackageData(pkg)
     } catch (e) {
       return null
     }
@@ -27,7 +41,7 @@ async function getRepoInfo() {
 
   // extract repo info from package.json info
   try {
-    const repo = getPkgRepo(packageJson)
+    const repo = getPkgRepo(pkg)
 
     if (isEmpty(repo)) return null
 
@@ -45,5 +59,6 @@ async function getRepoInfo() {
 }
 
 module.exports = {
+  getPackageInfo,
   getRepoInfo,
 }

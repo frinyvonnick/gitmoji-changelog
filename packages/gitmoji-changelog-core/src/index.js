@@ -5,8 +5,9 @@ const concat = require('concat-stream')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getRepoInfo } = require('./repoInfo')
+const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const mapping = require('./mapping')
+const logger = require('./logger')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -37,8 +38,12 @@ function makeGroups(commits) {
 }
 
 async function generateChangelog() {
+  const packageInfo = await getPackageInfo()
+  const repository = await getRepoInfo(packageInfo)
+
   const meta = {
-    repository: await getRepoInfo(),
+    package: packageInfo,
+    repository,
   }
 
   let previousTag = ''
@@ -82,4 +87,5 @@ function getLastCommitDate(commits) {
 
 module.exports = {
   generateChangelog,
+  logger,
 }
