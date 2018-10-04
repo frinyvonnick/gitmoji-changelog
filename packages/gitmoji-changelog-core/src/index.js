@@ -2,6 +2,7 @@ const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
 const through = require('through2')
 const concat = require('concat-stream')
+const { last } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -37,7 +38,30 @@ function makeGroups(commits) {
     .filter(group => group.commits.length)
 }
 
-async function generateChangelog() {
+async function generateChanges(from, to) {
+  const commits = await getCommits(from, to)
+  const lastCommitDate = getLastCommitDate(commits)
+
+  return {
+    version: to,
+    date: lastCommitDate,
+    groups: makeGroups(commits),
+  }
+}
+
+async function generateTagsChanges(tags) {
+  let previousTag = ''
+
+  return Promise.all(tags.map(async tag => {
+    const changes = await generateChanges(previousTag, tag)
+    previousTag = tag
+    return changes
+  }))
+}
+
+async function generateChangelog(options = {}) {
+  const { mode = 'full', version = 'next' } = options
+
   const packageInfo = await getPackageInfo()
   const repository = await getRepoInfo(packageInfo)
 
@@ -46,26 +70,20 @@ async function generateChangelog() {
     repository,
   }
 
-  let previousTag = ''
+  let changes = []
+
   const tags = await gitSemverTagsAsync()
 
-  const changes = await Promise.all(tags.map(async tag => {
-    const commits = await getCommits(previousTag, tag)
-    const lastCommitDate = getLastCommitDate(commits)
+  if (mode === 'full') {
+    changes = await generateTagsChanges(tags)
+  }
 
-    previousTag = tag
-    return {
-      version: tag,
-      date: lastCommitDate,
-      groups: makeGroups(commits),
-    }
-  }))
-
-  const commits = await getCommits(previousTag)
-  changes.push({
-    version: 'next',
-    groups: makeGroups(commits),
-  })
+  if (version) {
+    const lastTag = last(tags)
+    const lastChanges = await generateChanges(lastTag)
+    lastChanges.version = version
+    changes.push(lastChanges)
+  }
 
   return {
     meta,
