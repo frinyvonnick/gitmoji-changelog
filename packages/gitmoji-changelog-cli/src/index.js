@@ -4,7 +4,7 @@ const yargs = require('yargs')
 const { main } = require('./cli')
 const { logger } = require('@gitmoji-changelog/core')
 
-logger.start('gitmoji-changelog v0.1.1\n')
+logger.start('gitmoji-changelog v0.1.1')
 
 const args = yargs
   .option('format', {

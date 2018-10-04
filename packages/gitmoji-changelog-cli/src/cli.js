@@ -10,15 +10,17 @@ async function main({ format } = {}) {
     logger.info('v%s', changelog.meta.package.version)
     logger.info(changelog.meta.repository.url)
 
+    let output
     switch (format) {
       case 'json':
-        fs.writeFileSync('./CHANGELOG.json', JSON.stringify(changelog))
+        output = './CHANGELOG.json'
+        fs.writeFileSync(output, JSON.stringify(changelog))
         break
-      case 'markdown':
-      default: {
+      default:
+        output = './CHANGELOG.md'
         fs.writeFileSync('./CHANGELOG.md', convert(changelog))
-      }
     }
+    logger.success(`changelog updated into ${output}`)
   } catch (e) {
     console.error('Cannot find a git repository in current path.')
   }
