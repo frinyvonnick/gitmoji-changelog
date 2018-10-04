@@ -16,6 +16,7 @@ describe('Markdown converter', () => {
       changes: [
         {
           version: 'v1.0.0',
+          date: '2018-08-28',
           groups: [
             {
               group: 'added',
@@ -53,7 +54,7 @@ describe('Markdown converter', () => {
 
     expect(convert(changelog)).toEqual(`# Changelog
 
-## v1.0.0
+## v1.0.0 - 2018-08-28
 
 ### Added
 

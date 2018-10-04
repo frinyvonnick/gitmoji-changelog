@@ -1,7 +1,7 @@
 # Changelog
 
 {{#each changelog}}
-## {{version}}
+## {{version}}{{#if date}} - {{date}}{{/if}}
 
 {{#each groups}}
 ### {{label}}
