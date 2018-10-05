@@ -2,13 +2,17 @@ const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
 const fs = require('fs')
 
-async function main({ format, mode } = {}) {
+async function main({ format, mode, release } = {}) {
   try {
-    const changelog = await generateChangelog({ mode })
+    const changelog = await generateChangelog({ mode, release })
 
-    logger.info(changelog.meta.package.name)
-    logger.info('v%s', changelog.meta.package.version)
-    logger.info(changelog.meta.repository.url)
+    if (changelog.meta.package) {
+      const { name, version } = changelog.meta.package
+      logger.info(`${name} v${version}`)
+    }
+    if (changelog.meta.repository) {
+      logger.info(changelog.meta.repository.url)
+    }
 
     let output
     switch (format) {

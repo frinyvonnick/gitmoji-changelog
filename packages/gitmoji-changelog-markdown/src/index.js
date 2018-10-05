@@ -26,6 +26,7 @@ function toMarkdown({ meta, changes }) {
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
   }))
+    .sort((r1, r2) => r1.version < r2.version) // TODO sort must be done in core
 
   return compileTemplate({ changelog })
 }
@@ -51,11 +52,15 @@ function markdownIncremental({ meta, changes }, options) {
   writer.write(nextVersionOuput)
 
   // read original file until last tags and add it to the end
+  let incrementalWriting = false
   return new Promise(resolve => {
-    const stream = readline(currentFile)
+    const stream = readline(currentFile) // TODO find a better lib than 'readline'
     stream.on('line', (line) => {
       if (line.startsWith(`<a name="${lastTag}"></a>`)) {
-        writer.write(line)
+        incrementalWriting = true
+      }
+      if (incrementalWriting) {
+        writer.write(`${line}\n`)
       }
     }).on('end', () => {
       writer.end()

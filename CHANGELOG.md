@@ -1,10 +1,11 @@
 # Changelog
 
-<a name="next"></a>
+<a name="vnext"></a>
 ## next
 
 ### Added
 
+- :sparkles: write incremental markdown ([2c148a6](https://github.com/frinyvonnick/gitmoji-changelog/commit/2c148a696eede21e2a35740bb25ac34db87e2371))
 - :sparkles: write process to generate incremental markdown file ([f86030c](https://github.com/frinyvonnick/gitmoji-changelog/commit/f86030c2b43f71d709eae9920be53dcfa91d34a4))
 - :sparkles: Add logger ([#21](https://github.com/frinyvonnick/gitmoji-changelog/issues/21)) ([93887ca](https://github.com/frinyvonnick/gitmoji-changelog/commit/93887ca1f2e59263a31b3b700507aa1e9853118c))
 - :sparkles: Add tag&#x27;s date on version ([#22](https://github.com/frinyvonnick/gitmoji-changelog/issues/22)) ([ab3d9c6](https://github.com/frinyvonnick/gitmoji-changelog/commit/ab3d9c600e307dd0db16bc7abcbdf8a8a2c83ff5))

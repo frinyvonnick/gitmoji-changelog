@@ -38,12 +38,19 @@ function makeGroups(commits) {
     .filter(group => group.commits.length)
 }
 
+function getVersionFromTagName(tagName) {
+  if (tagName && tagName.startsWith('v')) {
+    return tagName.slice(1, tagName.length)
+  }
+  return tagName
+}
+
 async function generateChanges(from, to) {
   const commits = await getCommits(from, to)
   const lastCommitDate = getLastCommitDate(commits)
 
   return {
-    version: to,
+    version: getVersionFromTagName(to),
     date: to && lastCommitDate,
     groups: makeGroups(commits),
   }
@@ -60,7 +67,9 @@ async function generateTagsChanges(tags) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode = 'init', version = 'next' } = options
+  const { mode = 'init', release } = options
+
+  const packageInfo = await getPackageInfo()
 
   let changes = []
 
@@ -71,13 +80,13 @@ async function generateChangelog(options = {}) {
     changes = await generateTagsChanges(tags)
   }
 
-  if (version) {
+  const nextVersion = release === 'from-package' ? packageInfo.version : release
+  if (mode !== 'init' && nextVersion) {
     const lastChanges = await generateChanges(lastTag)
-    lastChanges.version = version
+    lastChanges.version = nextVersion
     changes.push(lastChanges)
   }
 
-  const packageInfo = await getPackageInfo()
   const repository = await getRepoInfo(packageInfo)
 
   return {

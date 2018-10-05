@@ -15,6 +15,12 @@ const args = yargs
     description: 'build from scratch or incremental changelog',
     choices: ['init', 'incremental'],
   })
+  .option('release', {
+    alias: 'r',
+    default: 'from-package',
+    description: 'next release version for the changelog from package.json or next release',
+    choices: ['from-package', 'next'],
+  })
   .option('format', {
     alias: 'f',
     default: 'markdown',
