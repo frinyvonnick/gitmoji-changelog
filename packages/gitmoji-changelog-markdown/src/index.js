@@ -6,7 +6,25 @@ const { isEmpty } = require('lodash')
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
 
-function convert({ meta, changes }) {
+function convert({ meta, changes } = {}, { mode = 'init' } = {}) {
+  if (mode === 'init') {
+    // generate from scratch
+    return markdownFromScratch({ meta, changes })
+  }
+  const { lastTag } = meta
+  return console.log(lastTag)
+  // check if file exists else throw error
+
+  // write file for next version (<FILENAME>.tmp)
+
+  // read original file util last tags (<FILENAME>)
+
+  // write the rest of the file to the new one (<FILENAME>.tmp)
+
+  // rename <FILENAME>.tmp to <FILENAME>
+}
+
+function markdownFromScratch({ meta, changes }) {
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
 
   const generateMarkdown = handlebars.compile(template)

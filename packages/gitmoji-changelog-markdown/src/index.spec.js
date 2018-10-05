@@ -54,6 +54,7 @@ describe('Markdown converter', () => {
 
     expect(convert(changelog)).toEqual(`# Changelog
 
+<a name="v1.0.0"></a>
 ## v1.0.0 - 2018-08-28
 
 ### Added
@@ -61,6 +62,7 @@ describe('Markdown converter', () => {
 - :sparkles: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
 
 
+<a name="next"></a>
 ## next
 
 ### Changed

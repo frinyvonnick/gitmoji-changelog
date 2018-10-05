@@ -2,7 +2,7 @@ const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
 const through = require('through2')
 const concat = require('concat-stream')
-const { last } = require('lodash')
+const { head } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -62,31 +62,30 @@ async function generateTagsChanges(tags) {
 async function generateChangelog(options = {}) {
   const { mode = 'init', version = 'next' } = options
 
-  const packageInfo = await getPackageInfo()
-  const repository = await getRepoInfo(packageInfo)
-
-  const meta = {
-    package: packageInfo,
-    repository,
-  }
-
   let changes = []
 
   const tags = await gitSemverTagsAsync()
+  const lastTag = head(tags)
 
   if (mode === 'init') {
     changes = await generateTagsChanges(tags)
   }
 
   if (version) {
-    const lastTag = last(tags)
     const lastChanges = await generateChanges(lastTag)
     lastChanges.version = version
     changes.push(lastChanges)
   }
 
+  const packageInfo = await getPackageInfo()
+  const repository = await getRepoInfo(packageInfo)
+
   return {
-    meta,
+    meta: {
+      package: packageInfo,
+      repository,
+      lastTag,
+    },
     changes,
   }
 }

@@ -1,12 +1,12 @@
 # Changelog
 
+<a name="next"></a>
 ## next
 
 ### Added
 
-- :sparkles: add some logs ([4d8a0e3](https://github.com/frinyvonnick/gitmoji-changelog/commit/4d8a0e312dc0388be16d239a73330bd55af16ed6))
-- :sparkles: log project, version and url ([dc0bb6c](https://github.com/frinyvonnick/gitmoji-changelog/commit/dc0bb6c08cd6dbbc6a1b84ccc53ad31c2fdcb532))
-- :sparkles: add a logger ([3202ad8](https://github.com/frinyvonnick/gitmoji-changelog/commit/3202ad83243242658ac510994bfe2ad358d0283f))
+- :sparkles: Add logger ([#21](https://github.com/frinyvonnick/gitmoji-changelog/issues/21)) ([93887ca](https://github.com/frinyvonnick/gitmoji-changelog/commit/93887ca1f2e59263a31b3b700507aa1e9853118c))
+- :sparkles: Add tag&#x27;s date on version ([#22](https://github.com/frinyvonnick/gitmoji-changelog/issues/22)) ([ab3d9c6](https://github.com/frinyvonnick/gitmoji-changelog/commit/ab3d9c600e307dd0db16bc7abcbdf8a8a2c83ff5))
 - :sparkles: Support commit&#x27;s URL and issues autolink in changelog ([#16](https://github.com/frinyvonnick/gitmoji-changelog/issues/16)) ([871f164](https://github.com/frinyvonnick/gitmoji-changelog/commit/871f16499acee400863a94976e2520a4bdbc6cea))
 - :sparkles: Group commits by changelog types ([#11](https://github.com/frinyvonnick/gitmoji-changelog/issues/11)) ([7b8b49b](https://github.com/frinyvonnick/gitmoji-changelog/commit/7b8b49b366d3d51f0cc75f4ffb67efcd633cca16))
 - :sparkles: Use handlebars templating to generate markdown ([#10](https://github.com/frinyvonnick/gitmoji-changelog/issues/10)) ([141d160](https://github.com/frinyvonnick/gitmoji-changelog/commit/141d1601fd1fa3b278db05acbc8f47e2bb239bbf))
@@ -24,6 +24,7 @@
 
 ### Changed
 
+- :recycle: split functions to generate changelog ([2df5b8e](https://github.com/frinyvonnick/gitmoji-changelog/commit/2df5b8e229aabf59a1e06664326faaa73871bb86))
 - :lipstick: Update the documentation ([#19](https://github.com/frinyvonnick/gitmoji-changelog/issues/19)) ([2ae9819](https://github.com/frinyvonnick/gitmoji-changelog/commit/2ae98191c6cd221115162789188ea4ebdaf91c2f))
 - :recycle: remove babel to use native node 10 ([#3](https://github.com/frinyvonnick/gitmoji-changelog/issues/3)) ([6edd0c4](https://github.com/frinyvonnick/gitmoji-changelog/commit/6edd0c48591e935f3bcd7e73d48733e623f779d9))
 - :truck: move parse functions into parser.js ([e29f239](https://github.com/frinyvonnick/gitmoji-changelog/commit/e29f239dee8dc393caee9d320371e54a37eb90ae))
@@ -45,6 +46,8 @@
 
 ### Miscellaneous
 
+- :ok_hand: pair prog with Y ([96df4a1](https://github.com/frinyvonnick/gitmoji-changelog/commit/96df4a16102358fd1d437220f171a942e78a37ab))
+- :memo: Update roadmap ([eea3814](https://github.com/frinyvonnick/gitmoji-changelog/commit/eea38147f18e5fd8eecbbcd055ce3473495a720a))
 - :memo: Update setup and usage parts ([42c5a65](https://github.com/frinyvonnick/gitmoji-changelog/commit/42c5a65daa3587d7260058a79de832a9037b6ccd))
 - :memo: Update roadmap ([02cec25](https://github.com/frinyvonnick/gitmoji-changelog/commit/02cec25ce329d68a02d1669913495108d93e2285))
 - :memo: Add README.md ([c177349](https://github.com/frinyvonnick/gitmoji-changelog/commit/c177349386dfd87ab41c58f8a317b0962a511207))
