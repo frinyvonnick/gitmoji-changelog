@@ -1,10 +1,10 @@
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
-const { convert } = require('@gitmoji-changelog/markdown')
+const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
 const fs = require('fs')
 
-async function main({ format } = {}) {
+async function main({ format, mode } = {}) {
   try {
-    const changelog = await generateChangelog()
+    const changelog = await generateChangelog({ mode })
 
     logger.info(changelog.meta.package.name)
     logger.info('v%s', changelog.meta.package.version)
@@ -18,11 +18,11 @@ async function main({ format } = {}) {
         break
       default:
         output = './CHANGELOG.md'
-        fs.writeFileSync(output, convert(changelog))
+        await buildMarkdownFile(changelog, { mode, output })
     }
     logger.success(`changelog updated into ${output}`)
   } catch (e) {
-    console.error('Cannot find a git repository in current path.')
+    logger.error(e)
   }
 }
 

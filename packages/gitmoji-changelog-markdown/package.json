@@ -22,6 +22,7 @@
   "dependencies": {
     "handlebars": "^4.0.12",
     "immutadot": "^1.0.0",
+    "linebyline": "^1.3.0",
     "lodash": "^4.17.11"
   }
 }

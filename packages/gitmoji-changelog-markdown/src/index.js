@@ -1,33 +1,23 @@
 const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
+const readline = require('linebyline')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
 
-function convert({ meta, changes } = {}, { mode = 'init' } = {}) {
-  if (mode === 'init') {
-    // generate from scratch
-    return markdownFromScratch({ meta, changes })
+function buildMarkdownFile(changelog = {}, options = {}) {
+  if (options.mode === 'init') {
+    return markdownFromScratch(changelog, options)
   }
-  const { lastTag } = meta
-  return console.log(lastTag)
-  // check if file exists else throw error
-
-  // write file for next version (<FILENAME>.tmp)
-
-  // read original file util last tags (<FILENAME>)
-
-  // write the rest of the file to the new one (<FILENAME>.tmp)
-
-  // rename <FILENAME>.tmp to <FILENAME>
+  return markdownIncremental(changelog, options)
 }
 
-function markdownFromScratch({ meta, changes }) {
+function toMarkdown({ meta, changes }) {
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
 
-  const generateMarkdown = handlebars.compile(template)
+  const compileTemplate = handlebars.compile(template)
 
   const changelog = update(changes, '[:].groups[:].commits[:]', commit => ({
     ...commit,
@@ -37,7 +27,44 @@ function markdownFromScratch({ meta, changes }) {
     body: autolink(commit.body, meta.repository),
   }))
 
-  return generateMarkdown({ changelog })
+  return compileTemplate({ changelog })
+}
+
+function markdownFromScratch({ meta, changes }, options) {
+  const output = toMarkdown({ meta, changes })
+  return Promise.resolve(fs.writeFileSync(options.output, output))
+}
+
+function markdownIncremental({ meta, changes }, options) {
+  const { lastTag } = meta
+
+  const currentFile = options.output
+  const tempFile = `${currentFile}.tmp`
+
+  if (!fs.existsSync(currentFile)) {
+    throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
+  }
+
+  // write file for next version (<FILENAME>.tmp)
+  const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
+  const nextVersionOuput = toMarkdown({ meta, changes })
+  writer.write(nextVersionOuput)
+
+  // read original file until last tags and add it to the end
+  return new Promise(resolve => {
+    const stream = readline(currentFile)
+    stream.on('line', (line) => {
+      if (line.startsWith(`<a name="${lastTag}"></a>`)) {
+        writer.write(line)
+      }
+    }).on('end', () => {
+      writer.end()
+      resolve()
+    })
+  }).then(() => {
+    // replace changelog file by the new one
+    fs.renameSync(tempFile, currentFile)
+  })
 }
 
 function getShortHash(hash, repository) {
@@ -64,7 +91,7 @@ function autolink(message, repository) {
 }
 
 module.exports = {
-  convert,
+  buildMarkdownFile,
   getShortHash,
   autolink,
 }
