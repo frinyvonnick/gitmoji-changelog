@@ -41,7 +41,7 @@ const secondLipstickCommit = {
 
 describe('changelog', () => {
   beforeEach(() => {
-    mockCommits()
+    mockGroups()
   })
 
   it('should generate changelog in json format for next release', async () => {
@@ -106,7 +106,7 @@ describe('changelog', () => {
 jest.mock('git-raw-commits')
 jest.mock('git-semver-tags')
 
-function mockCommit(commits) {
+function mockGroup(commits) {
   gitRawCommits.mockImplementationOnce(() => {
     const stream = require('stream')
     const readable = new stream.Readable()
@@ -125,7 +125,7 @@ function mockCommit(commits) {
   })
 }
 
-function mockCommits() {
-  mockCommit([sparklesCommit])
-  mockCommit([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
+function mockGroups() {
+  mockGroup([sparklesCommit])
+  mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
 }
