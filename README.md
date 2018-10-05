@@ -71,24 +71,22 @@ Here is an example of the produced `changelog.md` produced :
 - [x] Write changelog file
 - [x] Generate changelog for the next release
 - [x] Add templating system for changelog in markdown (#7)
-- [ ] Sort commits by emojis type and date (order defined in mapping file)
-- [ ] Add tag's date on version
+- [ ] Sort commits by emojis type and date (order defined in mapping file) (#12)
+- [x] Add tag's date on version
+- [ ] Handle incremental writing of changelog files (#23)
 
 **Templating:**
 - [x] Group commits by changelog types (#2)
-- [ ] Improve markdown template: use emojis in changelog type headings
-- [ ] Improve markdown template: keep tags hierarchy (semver)
-- [ ] Support Github commit links
+- [x] Support Github commit links
+- [x] Support Bitbucket, Gitlab, ... commit links
 
 ### Coming next
 
-- [ ] Handle incremental writing of changelog files
-- [ ] Generate changelog between two tags
 - [ ] CLI options (output file, from, to)
+- [ ] Improve markdown template: keep tags hierarchy (semver)
 - [ ] Add a middleware system to custom commits organization (#6)
-- [ ] Support Bitbucket, Gitlab, ... commit links
 - [ ] Generate Github release with changelog
-- [ ] Generate Bitbucket, Gitlab, ... relase with changelog
+- [ ] Generate Bitbucket, Gitlab, ... release with changelog
 - [ ] Manage monorepo (package.json path option in cli)
-- [ ] Manage scope (middleware ?)
+- [ ] Manage scope (middleware ?) (#6)
 - [ ] Generate other file formats (ASCIIdoc...)
