@@ -44,7 +44,7 @@ async function generateChanges(from, to) {
 
   return {
     version: to,
-    date: lastCommitDate,
+    date: to && lastCommitDate,
     groups: makeGroups(commits),
   }
 }
@@ -60,7 +60,7 @@ async function generateTagsChanges(tags) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode = 'full', version = 'next' } = options
+  const { mode = 'init', version = 'next' } = options
 
   const packageInfo = await getPackageInfo()
   const repository = await getRepoInfo(packageInfo)
@@ -74,7 +74,7 @@ async function generateChangelog(options = {}) {
 
   const tags = await gitSemverTagsAsync()
 
-  if (mode === 'full') {
+  if (mode === 'init') {
     changes = await generateTagsChanges(tags)
   }
 

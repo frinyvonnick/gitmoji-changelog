@@ -31,7 +31,6 @@ describe('changelog', () => {
     expect(changes).toEqual([
       {
         version: 'next',
-        date: '2018-08-28',
         groups: [
           {
             group: 'changed',
@@ -66,7 +65,6 @@ describe('changelog', () => {
       },
       {
         version: 'next',
-        date: '2018-08-28',
         groups: [
           {
             group: 'changed',
