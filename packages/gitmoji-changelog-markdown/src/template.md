@@ -1,7 +1,7 @@
 # Changelog
 
 {{#each changelog}}
-<a name="v{{version}}"></a>
+<a name="{{version}}"></a>
 ## {{version}}{{#if date}} - {{date}}{{/if}}
 
 {{#each groups}}

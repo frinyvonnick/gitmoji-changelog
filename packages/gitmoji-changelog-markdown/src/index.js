@@ -1,7 +1,7 @@
 const fs = require('fs')
+const es = require('event-stream')
 const path = require('path')
 const handlebars = require('handlebars')
-const readline = require('linebyline')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
 
@@ -37,7 +37,7 @@ function markdownFromScratch({ meta, changes }, options) {
 }
 
 function markdownIncremental({ meta, changes }, options) {
-  const { lastTag } = meta
+  const { lastVersion } = meta
 
   const currentFile = options.output
   const tempFile = `${currentFile}.tmp`
@@ -46,7 +46,7 @@ function markdownIncremental({ meta, changes }, options) {
     throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
   }
 
-  // write file for next version (<FILENAME>.tmp)
+  // write file for next version
   const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
   const nextVersionOuput = toMarkdown({ meta, changes })
   writer.write(nextVersionOuput)
@@ -54,18 +54,27 @@ function markdownIncremental({ meta, changes }, options) {
   // read original file until last tags and add it to the end
   let incrementalWriting = false
   return new Promise(resolve => {
-    const stream = readline(currentFile) // TODO find a better lib than 'readline'
-    stream.on('line', (line) => {
-      if (line.startsWith(`<a name="${lastTag}"></a>`)) {
-        incrementalWriting = true
-      }
-      if (incrementalWriting) {
-        writer.write(`${line}\n`)
-      }
-    }).on('end', () => {
-      writer.end()
-      resolve()
-    })
+    const stream = fs.createReadStream(currentFile)
+      .pipe(es.split())
+      .pipe(es.mapSync((line) => {
+        stream.pause()
+
+        if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
+          incrementalWriting = true
+        }
+        if (incrementalWriting) {
+          writer.write(`${line}\n`)
+        }
+
+        stream.resume()
+      }))
+      .on('error', (err) => {
+        throw new Error(err)
+      })
+      .on('end', () => {
+        writer.end()
+        resolve()
+      })
   }).then(() => {
     // replace changelog file by the new one
     fs.renameSync(tempFile, currentFile)

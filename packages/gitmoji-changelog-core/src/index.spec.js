@@ -19,12 +19,10 @@ const recycleCommit = {
 }
 
 describe('changelog', () => {
-  beforeEach(() => {
+  it('should generate changelog for next release', async () => {
     mockCommits()
-  })
 
-  it('should generate changelog in json format for next release', async () => {
-    gitSemverTags.mockImplementation((cb) => cb(null, []))
+    gitSemverTags.mockImplementation(cb => cb(null, []))
 
     const { changes } = await generateChangelog({ mode: 'incremental', release: 'next' })
 
@@ -35,17 +33,17 @@ describe('changelog', () => {
           {
             group: 'changed',
             label: 'Changed',
-            commits: [
-              expect.objectContaining(recycleCommit),
-            ],
+            commits: [expect.objectContaining(recycleCommit)],
           },
         ],
       },
     ])
   })
 
-  it('should generate changelog in json format for all tags', async () => {
-    gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
+  it('should generate changelog for all tags', async () => {
+    mockCommits()
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
     const { changes } = await generateChangelog({ mode: 'init' })
 
@@ -57,13 +55,20 @@ describe('changelog', () => {
           {
             group: 'added',
             label: 'Added',
-            commits: [
-              expect.objectContaining(sparklesCommit),
-            ],
+            commits: [expect.objectContaining(sparklesCommit)],
           },
         ],
       },
     ])
+  })
+
+  it('should generate empty changelog if no commits', async () => {
+    mockNoCommits()
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog({ mode: 'incremental', release: 'next' })
+
+    expect(changes).toEqual([{ version: 'next', date: undefined, groups: [] }])
   })
 })
 
@@ -75,10 +80,7 @@ function mockCommits() {
     const stream = require('stream')
     const readable = new stream.Readable()
     const {
-      hash,
-      date,
-      subject,
-      body,
+      hash, date, subject, body,
     } = recycleCommit
     readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
     readable.push(null)
@@ -89,12 +91,21 @@ function mockCommits() {
     const stream = require('stream')
     const readable = new stream.Readable()
     const {
-      hash,
-      date,
-      subject,
-      body,
+      hash, date, subject, body,
     } = sparklesCommit
     readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+    readable.push(null)
+    readable.emit('close')
+    return readable
+  })
+}
+
+function mockNoCommits() {
+  gitRawCommits.mockReset()
+
+  gitRawCommits.mockImplementationOnce(() => {
+    const stream = require('stream')
+    const readable = new stream.Readable()
     readable.push(null)
     readable.emit('close')
     return readable

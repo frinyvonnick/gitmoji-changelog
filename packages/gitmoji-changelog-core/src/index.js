@@ -2,7 +2,7 @@ const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
 const through = require('through2')
 const concat = require('concat-stream')
-const { head } = require('lodash')
+const { head, isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -29,6 +29,8 @@ function getCommits(from, to) {
 }
 
 function makeGroups(commits) {
+  if (isEmpty(commits)) return []
+
   return mapping
     .map(({ group, label }) => ({
       group,
@@ -93,13 +95,15 @@ async function generateChangelog(options = {}) {
     meta: {
       package: packageInfo,
       repository,
-      lastTag,
+      lastVersion: getVersionFromTagName(lastTag),
     },
     changes,
   }
 }
 
 function getLastCommitDate(commits) {
+  if (isEmpty(commits)) return null
+
   return commits
     .map((commit) => new Date(commit.date))
     .reduce((lastCommitDate, currentCommitDate) => {
