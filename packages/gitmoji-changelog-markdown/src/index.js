@@ -47,11 +47,10 @@ function markdownIncremental({ meta, changes }, options) {
 
   // write file for next version
   const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
-  const nextVersionOuput = toMarkdown({ meta, changes })
-  writer.write(nextVersionOuput)
+  writer.write(toMarkdown({ meta, changes }))
 
   // read original file until last tags and add it to the end
-  let incrementalWriting = false
+  let lastVersionFound = false
   return new Promise(resolve => {
     const stream = fs.createReadStream(currentFile)
       .pipe(es.split())
@@ -59,9 +58,9 @@ function markdownIncremental({ meta, changes }, options) {
         stream.pause()
 
         if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-          incrementalWriting = true
+          lastVersionFound = true
         }
-        if (incrementalWriting) {
+        if (lastVersionFound) {
           writer.write(`${line}\n`)
         }
 
