@@ -26,7 +26,7 @@ describe('changelog', () => {
   it('should generate changelog in json format for next release', async () => {
     gitSemverTags.mockImplementation((cb) => cb(null, []))
 
-    const { changes } = await generateChangelog()
+    const { changes } = await generateChangelog({ mode: 'incremental', release: 'next' })
 
     expect(changes).toEqual([
       {
@@ -47,11 +47,11 @@ describe('changelog', () => {
   it('should generate changelog in json format for all tags', async () => {
     gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog()
+    const { changes } = await generateChangelog({ mode: 'init' })
 
     expect(changes).toEqual([
       {
-        version: 'v1.0.0',
+        version: '1.0.0',
         date: '2018-08-28',
         groups: [
           {
@@ -59,18 +59,6 @@ describe('changelog', () => {
             label: 'Added',
             commits: [
               expect.objectContaining(sparklesCommit),
-            ],
-          },
-        ],
-      },
-      {
-        version: 'next',
-        groups: [
-          {
-            group: 'changed',
-            label: 'Changed',
-            commits: [
-              expect.objectContaining(recycleCommit),
             ],
           },
         ],

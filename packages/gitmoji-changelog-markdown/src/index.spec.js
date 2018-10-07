@@ -1,7 +1,11 @@
-const { convert, autolink, getShortHash } = require('./index')
+const fs = require('fs')
+
+const { buildMarkdownFile, autolink, getShortHash } = require('./index')
 
 describe('Markdown converter', () => {
-  it('should convert changelog into markdown', () => {
+  it('should convert changelog into markdown', async () => {
+    fs.writeFileSync = jest.fn()
+
     const changelog = {
       meta: {
         repository: {
@@ -15,7 +19,7 @@ describe('Markdown converter', () => {
       },
       changes: [
         {
-          version: 'v1.0.0',
+          version: '1.0.0',
           date: '2018-08-28',
           groups: [
             {
@@ -52,22 +56,26 @@ describe('Markdown converter', () => {
       ],
     }
 
-    expect(convert(changelog)).toEqual(`# Changelog
+    await buildMarkdownFile(changelog, { mode: 'init', output: './README.md' })
 
-<a name="v1.0.0"></a>
-## v1.0.0 - 2018-08-28
+    expect(fs.writeFileSync.mock.calls[0].length).toBe(2)
+    expect(fs.writeFileSync.mock.calls[0][0]).toBe('./README.md')
+    expect(fs.writeFileSync.mock.calls[0][1]).toEqual(`# Changelog
 
-### Added
-
-- :sparkles: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
-
-
-<a name="next"></a>
+<a name="vnext"></a>
 ## next
 
 ### Changed
 
 - :recycle: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+
+
+<a name="v1.0.0"></a>
+## 1.0.0 - 2018-08-28
+
+### Added
+
+- :sparkles: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
 
 
 `)
