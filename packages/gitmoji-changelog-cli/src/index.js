@@ -1,32 +1,63 @@
 #! /usr/bin/env node
-
+const fs = require('fs')
 const yargs = require('yargs')
-const { logger } = require('@gitmoji-changelog/core')
+const { noop } = require('lodash')
 
-const { version } = require('../package.json')
+const { homepage } = require('../package.json')
 const { main } = require('./cli')
 
-logger.start(`gitmoji-changelog v${version}`)
+function getOutputFile({ output, format }) {
+  if (output) {
+    return output
+  }
+  if (format === 'json') {
+    return './CHANGELOG.json'
+  }
+  return './CHANGELOG.md'
+}
 
-const args = yargs
-  .option('mode', {
-    alias: 'm',
-    default: 'init',
-    description: 'build from scratch or incremental changelog',
-    choices: ['init', 'incremental'],
+yargs
+  .usage('Usage: $0 <command> [options]')
+  .command('$0 [release]', 'Generate changelog', (command) => {
+    command.positional('release', {
+      desc: 'Next version (from-package, next)',
+      default: 'from-package',
+    })
+  }, (argv) => {
+    const output = getOutputFile(argv)
+    const existsOuput = fs.existsSync(output)
+    main({
+      ...argv,
+      mode: existsOuput ? 'update' : 'init',
+      output,
+    })
   })
-  .option('release', {
-    alias: 'r',
-    default: 'from-package',
-    description: 'next release version for the changelog from package.json or next release',
-    choices: ['from-package', 'next'],
+  .command('init', 'Initialize changelog from tags', noop, (argv) => {
+    main({
+      ...argv,
+      mode: 'init',
+      output: getOutputFile(argv),
+    })
+  })
+  .command('update [release]', 'Update changelog with a new version', (command) => {
+    command.positional('release', {
+      desc: 'Next version (from-package, next)',
+      default: 'from-package',
+    })
+  }, (argv) => {
+    main({
+      ...argv,
+      mode: 'update',
+      output: getOutputFile(argv),
+    })
   })
   .option('format', {
-    alias: 'f',
     default: 'markdown',
-    description: 'changelog output format',
-    choices: ['json', 'markdown'],
+    desc: 'changelog format (markdown, json)',
   })
+  .option('output', {
+    desc: 'output changelog file',
+  })
+  .help('help')
+  .epilog(`For more information visit: ${homepage}`)
   .parse()
-
-main(args)

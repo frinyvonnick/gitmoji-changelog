@@ -20,6 +20,7 @@ describe('cli', () => {
 jest.mock('@gitmoji-changelog/core', () => ({
   generateChangelog: jest.fn(),
   logger: {
+    start: jest.fn(),
     error: jest.fn(),
     success: jest.fn(),
     info: jest.fn(),

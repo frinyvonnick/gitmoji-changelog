@@ -1,10 +1,15 @@
 # Changelog
 
-<a name="vnext"></a>
-## next
+<a name="0.0.1"></a>
+## 0.0.1
 
 ### Added
 
+- :white_check_mark: add (bad) test for incremental writing ([60a0340](https://github.com/frinyvonnick/gitmoji-changelog/commit/60a034027315884f33b30d803e67faab049629f7))
+- :sparkles: order releases by reverse semver versions ([2df2bbf](https://github.com/frinyvonnick/gitmoji-changelog/commit/2df2bbffc5218a9eb1556be61a8a401f2cc74799))
+- :white_check_mark: add tests when no commits available ([90903c6](https://github.com/frinyvonnick/gitmoji-changelog/commit/90903c61233418aeb12515c11b7f269e85bc9afc))
+- :white_check_mark: fix tests ([80425f9](https://github.com/frinyvonnick/gitmoji-changelog/commit/80425f9009ab6ffc5e738cb6270f38189f34f28b))
+- :sparkles: add incremental markdown ([11b71e6](https://github.com/frinyvonnick/gitmoji-changelog/commit/11b71e686c563e3cbfdfbd4ad5d076c174c82c2a))
 - :sparkles: write incremental markdown ([2c148a6](https://github.com/frinyvonnick/gitmoji-changelog/commit/2c148a696eede21e2a35740bb25ac34db87e2371))
 - :sparkles: write process to generate incremental markdown file ([f86030c](https://github.com/frinyvonnick/gitmoji-changelog/commit/f86030c2b43f71d709eae9920be53dcfa91d34a4))
 - :sparkles: Add logger ([#21](https://github.com/frinyvonnick/gitmoji-changelog/issues/21)) ([93887ca](https://github.com/frinyvonnick/gitmoji-changelog/commit/93887ca1f2e59263a31b3b700507aa1e9853118c))

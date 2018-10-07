@@ -1,10 +1,16 @@
-const { generateChangelog, logger } = require('@gitmoji-changelog/core')
-const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
 const fs = require('fs')
 
-async function main({ format, mode, release } = {}) {
+const { generateChangelog, logger } = require('@gitmoji-changelog/core')
+const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
+
+const pkg = require('../package.json')
+
+async function main(options = {}) {
+  logger.start(`gitmoji-changelog v${pkg.version}`)
+  logger.info(`${options.mode} ${options.output}`)
+
   try {
-    const changelog = await generateChangelog({ mode, release })
+    const changelog = await generateChangelog(options)
 
     if (changelog.meta.package) {
       const { name, version } = changelog.meta.package
@@ -14,17 +20,14 @@ async function main({ format, mode, release } = {}) {
       logger.info(changelog.meta.repository.url)
     }
 
-    let output
-    switch (format) {
+    switch (options.format) {
       case 'json':
-        output = './CHANGELOG.json'
-        fs.writeFileSync(output, JSON.stringify(changelog))
+        fs.writeFileSync(options.ouptut, JSON.stringify(changelog))
         break
       default:
-        output = './CHANGELOG.md'
-        await buildMarkdownFile(changelog, { mode, output })
+        await buildMarkdownFile(changelog, options)
     }
-    logger.success(`changelog updated into ${output}`)
+    logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
     logger.error(e)
   }
