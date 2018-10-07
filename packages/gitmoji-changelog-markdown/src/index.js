@@ -26,7 +26,6 @@ function toMarkdown({ meta, changes }) {
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
   }))
-    .sort((r1, r2) => r1.version < r2.version) // TODO sort must be done in core
 
   return compileTemplate({ changelog })
 }

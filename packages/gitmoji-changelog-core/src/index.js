@@ -1,5 +1,6 @@
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
+const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
 const { head, isEmpty } = require('lodash')
@@ -65,7 +66,9 @@ async function generateTagsChanges(tags) {
     const changes = await generateChanges(previousTag, tag)
     previousTag = tag
     return changes
-  }))
+  })).then((changes) => {
+    return changes.sort((c1, c2) => semverCompare(c1.version, c2.version)).reverse()
+  })
 }
 
 async function generateChangelog(options = {}) {

@@ -19,6 +19,23 @@ describe('Markdown converter', () => {
       },
       changes: [
         {
+          version: 'next',
+          groups: [
+            {
+              group: 'changed',
+              label: 'Changed',
+              commits: [
+                {
+                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  date: '2018-08-28T10:07:00+02:00',
+                  subject: ':recycle: Upgrade brand new feature',
+                  body: 'Waouh this is awesome 3',
+                },
+              ],
+            },
+          ],
+        },
+        {
           version: '1.0.0',
           date: '2018-08-28',
           groups: [
@@ -31,23 +48,6 @@ describe('Markdown converter', () => {
                   date: '2018-08-28T10:06:00+02:00',
                   subject: ':sparkles: Upgrade brand new feature',
                   body: 'Waouh this is awesome 2',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          version: 'next',
-          groups: [
-            {
-              group: 'changed',
-              label: 'Changed',
-              commits: [
-                {
-                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-                  date: '2018-08-28T10:07:00+02:00',
-                  subject: ':recycle: Upgrade brand new feature',
-                  body: 'Waouh this is awesome 3',
                 },
               ],
             },
