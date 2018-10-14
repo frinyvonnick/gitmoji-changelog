@@ -47,6 +47,8 @@
 ### Removed
 
 - :fire: remove parsing multiple commit ([73207b7](https://github.com/frinyvonnick/gitmoji-changelog/commit/73207b70d85ad2371def0ec9045e5a6ea46fee8c))
+- :fire: remove useless default value ([fedea13](https://github.com/frinyvonnick/gitmoji-changelog/commit/fedea1371f9f871de23ebd2b92f8925d070c3438))
+- :fire: clean code ([241ff14](https://github.com/frinyvonnick/gitmoji-changelog/commit/241ff1497e4ecc06f45dbb3db50aead35b5acd13))
 
 ### Fixed
 

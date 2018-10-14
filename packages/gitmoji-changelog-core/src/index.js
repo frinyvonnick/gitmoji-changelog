@@ -111,6 +111,11 @@ async function generateChangelog(options = {}) {
       from: lastTag,
       version,
     })
+
+    if (isEmpty(lastChanges.groups)) {
+      throw new Error('No changes found. You may need to fetch or pull the last changes.')
+    }
+
     changes.push(lastChanges)
   }
 
