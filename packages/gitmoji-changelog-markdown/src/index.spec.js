@@ -30,6 +30,8 @@ describe('Markdown converter', () => {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
+                  emoji: '♻️',
+                  message: 'Upgrade brand new feature',
                   body: 'Waouh this is awesome 3',
                 },
               ],
@@ -48,6 +50,8 @@ describe('Markdown converter', () => {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
                   date: '2018-08-28T10:06:00+02:00',
                   subject: ':sparkles: Upgrade brand new feature',
+                  emoji: '✨',
+                  message: 'Upgrade brand new feature',
                   body: 'Waouh this is awesome 2',
                 },
               ],
@@ -68,7 +72,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- :recycle: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
 
 
 <a name="1.0.0"></a>
@@ -76,7 +80,7 @@ describe('Markdown converter', () => {
 
 ### Added
 
-- :sparkles: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
+- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
 
 
 `)
@@ -113,6 +117,8 @@ describe('Markdown converter', () => {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
+                  emoji: '♻️',
+                  message: 'Upgrade brand new feature',
                   body: 'Waouh this is awesome 3',
                 },
               ],
@@ -134,7 +140,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- :recycle: Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
 
 
 `)

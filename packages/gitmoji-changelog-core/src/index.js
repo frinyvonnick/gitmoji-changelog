@@ -9,7 +9,7 @@ const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
 const { getPackageInfo, getRepoInfo } = require('./metaInfo')
-const mapping = require('./mapping')
+const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
@@ -33,16 +33,16 @@ function getCommits(from, to) {
 function makeGroups(commits) {
   if (isEmpty(commits)) return []
 
-  return mapping
+  return groupMapping
     .map(({ group, label }) => ({
       group,
       label,
       commits: commits
         .filter(commit => commit.group === group)
         .sort((first, second) => {
-          if (!first.emoji) return -1
+          if (!first.emojiCode) return -1
 
-          const emojiCriteria = first.emoji.localeCompare(second.emoji)
+          const emojiCriteria = first.emojiCode.localeCompare(second.emojiCode)
           if (emojiCriteria !== 0) return emojiCriteria
           return first.date.localeCompare(second.date)
         }),
