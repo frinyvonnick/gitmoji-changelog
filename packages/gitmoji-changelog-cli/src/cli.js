@@ -3,9 +3,15 @@ const { convert } = require('@gitmoji-changelog/markdown')
 const fs = require('fs')
 
 async function main({ format } = {}) {
+  let changelog
   try {
-    const changelog = await generateChangelog()
+    changelog = await generateChangelog()
+  } catch (e) {
+    logger.error('Cannot find a git repository in current path.')
+    return
+  }
 
+  try {
     logger.info(changelog.meta.package.name)
     logger.info('v%s', changelog.meta.package.version)
     logger.info(changelog.meta.repository.url)
@@ -22,7 +28,7 @@ async function main({ format } = {}) {
     }
     logger.success(`changelog updated into ${output}`)
   } catch (e) {
-    console.error('Cannot find a git repository in current path.')
+    logger.error(e)
   }
 }
 
