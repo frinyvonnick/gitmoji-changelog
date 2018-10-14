@@ -30,12 +30,14 @@ All available commands and parameters can be listed using: `gitmoji-changelog --
 
 Here the recommended workflow to generate your changelog file using `gitmoji-changelog`:
 
+**Important:** Before generating, be sure to have all tags locally (e.g. `git fetch origin`)
+
 1. Make changes and commit: `git commit -m ":sparkles: my awesome feature"`
 2. Bump version (ex: `1.0.0`) in `package.json` using [semver](https://semver.org/) convention
 3. Run `gitmoji-changelog`, then the file `CHANGELOG.md` is created or updated with all changes
 4. Commit `package.json` and `CHANGELOG.md` file
-5. Push it to the remote (optional)
-6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a github release)
+5. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
+6. Push to the remote `git push`
 
 ## Customize your changelog
 
