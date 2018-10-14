@@ -54,10 +54,10 @@ describe('changelog', () => {
         version: 'next',
         groups: [
           {
-            group: 'changed',
-            label: 'Changed',
+            group: 'added',
+            label: 'Added',
             commits: expect.arrayContaining([
-              expect.objectContaining(recycleCommit),
+              expect.objectContaining(sparklesCommit),
             ]),
           },
         ],
@@ -65,7 +65,7 @@ describe('changelog', () => {
     ])
   })
 
-  it.only('should generate changelog in json format for all tags', async () => {
+  it('should generate changelog in json format for all tags', async () => {
     gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
 
     const { changes } = await generateChangelog()
@@ -73,19 +73,7 @@ describe('changelog', () => {
     expect(changes).toEqual([
       {
         version: 'v1.0.0',
-        date: '2018-08-28',
-        groups: [
-          {
-            group: 'added',
-            label: 'Added',
-            commits: [
-              expect.objectContaining(sparklesCommit),
-            ],
-          },
-        ],
-      },
-      {
-        version: 'next',
+        date: '2018-08-30',
         groups: [
           {
             group: 'changed',
@@ -95,6 +83,17 @@ describe('changelog', () => {
               expect.objectContaining(secondLipstickCommit),
               expect.objectContaining(recycleCommit),
               expect.objectContaining(secondRecycleCommit),
+            ],
+          },
+        ],
+      }, {
+        version: 'next',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: [
+              expect.objectContaining(sparklesCommit),
             ],
           },
         ],
