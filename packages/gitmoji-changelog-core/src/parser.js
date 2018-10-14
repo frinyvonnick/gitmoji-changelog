@@ -1,40 +1,37 @@
 const splitLines = require('split-lines')
-const mapping = require('./mapping')
+const groupMapping = require('./groupMapping')
+const emojiMapping = require('./emojiMapping')
 
 function parseSubject(subject) {
   if (!subject) return {}
   const matches = subject.match(/:(\w*):(.*)/)
   if (!matches) return {}
-  const [, emoji, message] = matches
+  const [, emojiCode, message] = matches
 
   return {
-    emoji,
+    emojiCode,
+    emoji: emojiMapping[emojiCode] || '¿',
     message: message.trim(),
   }
 }
 
-function getCommitGroup(emoji) {
-  let group = 'misc'
-
-  mapping.forEach(type => {
-    if (type.emojis.includes(emoji)) {
-      group = type.group
-    }
-  })
-
-  return group
+function getCommitGroup(emojiCode) {
+  const group = groupMapping.find(({ emojis }) => emojis.includes(emojiCode))
+  if (!group) return 'misc'
+  return group.group
 }
 
 function parseCommit(commit) {
   const lines = splitLines(commit)
   const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
-  const { emoji, message } = parseSubject(subject)
-  const group = getCommitGroup(emoji)
+  const { emoji, emojiCode, message } = parseSubject(subject)
+  const group = getCommitGroup(emojiCode)
 
   return {
     hash,
     date,
     subject,
+    emojiCode,
     emoji,
     message,
     group,
