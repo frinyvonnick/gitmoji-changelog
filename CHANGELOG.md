@@ -25,6 +25,7 @@
 - :sparkles: order releases by reverse semver versions ([2df2bbf](https://github.com/frinyvonnick/gitmoji-changelog/commit/2df2bbffc5218a9eb1556be61a8a401f2cc74799))
 - :sparkles: add cli commands to manage init and update ([0b20404](https://github.com/frinyvonnick/gitmoji-changelog/commit/0b20404c2d537b117f600376924e3fff4959ac50))
 - :sparkles: Sort commits by emoji and date ([#24](https://github.com/frinyvonnick/gitmoji-changelog/issues/24)) ([08b2af3](https://github.com/frinyvonnick/gitmoji-changelog/commit/08b2af3241a13f6ebae9c24a3a51ef10b60f2879))
+- :sparkles: add checks if correct semver version ([66c3baa](https://github.com/frinyvonnick/gitmoji-changelog/commit/66c3baa904e2110cecbaf5bda166a545bb50d563))
 - :tada: intialize cli project ([0b4f394](https://github.com/frinyvonnick/gitmoji-changelog/commit/0b4f39408e675f368c9562bd7645ac74abcd2293))
 - :tada: Intialize markdown project ([a4a12bb](https://github.com/frinyvonnick/gitmoji-changelog/commit/a4a12bb4f7133e7e5e40436da4c884f135abf03d))
 - :white_check_mark: fix tests ([80425f9](https://github.com/frinyvonnick/gitmoji-changelog/commit/80425f9009ab6ffc5e738cb6270f38189f34f28b))

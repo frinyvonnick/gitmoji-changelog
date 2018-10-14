@@ -85,7 +85,7 @@ async function generateTagsChanges(tags) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode = 'init', release } = options
+  const { mode, release } = options
 
   const packageInfo = await getPackageInfo()
 
