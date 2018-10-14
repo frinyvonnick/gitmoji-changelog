@@ -99,10 +99,10 @@ describe('changelog', () => {
             group: 'changed',
             label: 'Changed',
             commits: [
-              recycleCommit,
-              secondRecycleCommit,
               lipstickCommit,
               secondLipstickCommit,
+              recycleCommit,
+              secondRecycleCommit,
             ],
           },
         ],
