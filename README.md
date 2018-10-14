@@ -50,11 +50,11 @@ By default when you generate your changelog with `gitmoji-changelog`, the follow
 
 ### CLI
 
-*// TODO: explain CLI functions*
+Full CLI documentation in [gitmoji-changelog-cli package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-cli#gitmoji-changelog-cli)
 
 ### API
 
-*// TODO: explain API reference*
+Full API documentation in [gitmoji-changelog-core package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-core#gitmoji-changelog-core)
 
 ## Develop and contribute
 
