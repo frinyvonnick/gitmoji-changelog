@@ -18,9 +18,9 @@ gitmoji-changelog
 
 If `CHANGELOG.md` file doesn't exist, it will generate all previous changelog based on semver tags of your repo.
 
-If `CHANGELOG.md` file already exists yhis will not overwrite any previous changelog. It will generate a changelog based on commits since the last semver tag that match.
+If `CHANGELOG.md` file already exists, _this will not overwrite any previous changelog_, it will generate a changelog based on commits since the last semver tag that match.
 
-All available commands and parameters can be listed using CLI: `gitmoji-changelog --help`
+All available commands and parameters can be listed using: `gitmoji-changelog --help`
 
 **Here an example output:** [CHANGELOG.md](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/CHANGELOG.md)
 
@@ -37,7 +37,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 
 ## Customize your changelog
 
-By default when a commit is done with a gitmoji, the following mapping is used to group commits :
+By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits :
 > [mapping.js](packages/gitmoji-changelog-core/src/mapping.js).
 
 *// TODO: override the default mapping with it's own.*
