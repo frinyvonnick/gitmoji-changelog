@@ -72,7 +72,7 @@ describe('Markdown converter', () => {
 
 
 <a name="1.0.0"></a>
-## 1.0.0 - 2018-08-28
+## 1.0.0 (2018-08-28)
 
 ### Added
 

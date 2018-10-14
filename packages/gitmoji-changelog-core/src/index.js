@@ -1,3 +1,4 @@
+const semver = require('semver')
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
@@ -49,11 +50,11 @@ function makeGroups(commits) {
     .filter(group => group.commits.length)
 }
 
-function getVersionFromTagName(tagName) {
-  if (tagName && tagName.startsWith('v')) {
-    return tagName.slice(1, tagName.length)
-  }
-  return tagName
+function sanitizeVersion(version) {
+  return semver.valid(version, {
+    loose: false,
+    includePrerelease: true,
+  })
 }
 
 async function generateChanges({ from, to, version }) {
@@ -74,7 +75,7 @@ async function generateTagsChanges(tags) {
     const changes = await generateChanges({
       from: previousTag,
       to: tag,
-      version: getVersionFromTagName(tag),
+      version: sanitizeVersion(tag),
     })
     previousTag = tag
     return changes
@@ -88,6 +89,14 @@ async function generateChangelog(options = {}) {
 
   const packageInfo = await getPackageInfo()
 
+  let version = release === 'from-package' ? packageInfo.version : release
+  if (version && version !== 'next') {
+    if (!semver.valid(version)) {
+      throw new Error(`${version} is not a valid semver version.`)
+    }
+    version = sanitizeVersion(version)
+  }
+
   let changes = []
 
   const tags = await gitSemverTagsAsync()
@@ -97,11 +106,10 @@ async function generateChangelog(options = {}) {
     changes = await generateTagsChanges(tags)
   }
 
-  const specificVersion = release === 'from-package' ? packageInfo.version : release
-  if (mode !== 'init' && specificVersion) {
+  if (mode !== 'init' && version) {
     const lastChanges = await generateChanges({
       from: lastTag,
-      version: specificVersion,
+      version: version,
     })
     changes.push(lastChanges)
   }
@@ -112,7 +120,7 @@ async function generateChangelog(options = {}) {
     meta: {
       package: packageInfo,
       repository,
-      lastVersion: getVersionFromTagName(lastTag),
+      lastVersion: sanitizeVersion(lastTag),
     },
     changes,
   }

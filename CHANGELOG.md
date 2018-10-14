@@ -1,7 +1,7 @@
 # Changelog
 
-<a name="0.0.1"></a>
-## 0.0.1 (2018-10-14)
+<a name="next"></a>
+## next
 
 ### Added
 
@@ -50,7 +50,7 @@
 ### Fixed
 
 - :bug: Fix gitmoji mapping ([#20](https://github.com/frinyvonnick/gitmoji-changelog/issues/20)) ([9561914](https://github.com/frinyvonnick/gitmoji-changelog/commit/95619149e7ce7d26dcb4f1837a8c8bf351b1cb1c))
-- :bug: set date for release except &#x27;next&#x27; ([1b970cb](https://github.com/frinyvonnick/gitmoji-changelog/commit/1b970cb79b397f27844b41a615372f263d220e33))
+- :bug: set date for release except &#x27;next&#x27; ([a11ed49](https://github.com/frinyvonnick/gitmoji-changelog/commit/a11ed49ed62258115985f3fa9c8856c9fae96e07))
 - :green_heart: Set up travis configuration ([dda9b28](https://github.com/frinyvonnick/gitmoji-changelog/commit/dda9b287989c1ca2e9513c4a5a4a3d1b6749e816))
 - :green_heart: Ignore node_modules in linter ([802c0f7](https://github.com/frinyvonnick/gitmoji-changelog/commit/802c0f7dc29508876c6b4d178bbcc8274ee308b5))
 
