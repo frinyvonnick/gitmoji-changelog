@@ -9,6 +9,10 @@ const sparklesCommit = {
   date: '2018-08-28T10:06:00+02:00',
   subject: ':sparkles: Upgrade brand new feature',
   body: 'Waouh this is awesome 2',
+  emoji: '✨',
+  emojiCode: 'sparkles',
+  group: 'added',
+  message: 'Upgrade brand new feature',
 }
 
 const recycleCommit = {
@@ -16,6 +20,10 @@ const recycleCommit = {
   date: '2018-08-01T10:07:00+02:00',
   subject: ':recycle: Upgrade brand new feature',
   body: 'Waouh this is awesome 3',
+  emoji: '♻️',
+  emojiCode: 'recycle',
+  group: 'changed',
+  message: 'Upgrade brand new feature',
 }
 
 const secondRecycleCommit = {
@@ -23,6 +31,10 @@ const secondRecycleCommit = {
   date: '2018-08-30T10:07:00+02:00',
   subject: ':recycle: Upgrade another brand new feature',
   body: 'Waouh this is awesome 4',
+  emoji: '♻️',
+  emojiCode: 'recycle',
+  group: 'changed',
+  message: 'Upgrade another brand new feature',
 }
 
 const lipstickCommit = {
@@ -30,6 +42,10 @@ const lipstickCommit = {
   date: '2018-08-10T10:07:00+02:00',
   subject: ':lipstick: Change graphics for a feature',
   body: 'Waouh this is awesome 5',
+  emoji: '💄',
+  emojiCode: 'lipstick',
+  group: 'changed',
+  message: 'Change graphics for a feature',
 }
 
 const secondLipstickCommit = {
@@ -37,6 +53,10 @@ const secondLipstickCommit = {
   date: '2018-08-18T10:07:00+02:00',
   subject: ':lipstick: Change more graphics for a feature',
   body: 'Waouh this is awesome 6',
+  emoji: '💄',
+  emojiCode: 'lipstick',
+  group: 'changed',
+  message: 'Change more graphics for a feature',
 }
 
 describe('changelog', () => {
@@ -79,10 +99,10 @@ describe('changelog', () => {
             group: 'changed',
             label: 'Changed',
             commits: [
-              expect.objectContaining(lipstickCommit),
-              expect.objectContaining(secondLipstickCommit),
-              expect.objectContaining(recycleCommit),
-              expect.objectContaining(secondRecycleCommit),
+              recycleCommit,
+              secondRecycleCommit,
+              lipstickCommit,
+              secondLipstickCommit,
             ],
           },
         ],
@@ -93,7 +113,7 @@ describe('changelog', () => {
             group: 'added',
             label: 'Added',
             commits: [
-              expect.objectContaining(sparklesCommit),
+              sparklesCommit,
             ],
           },
         ],

@@ -6,7 +6,7 @@ const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
 const { getPackageInfo, getRepoInfo } = require('./metaInfo')
-const mapping = require('./mapping')
+const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
@@ -28,7 +28,7 @@ function getCommits(from, to) {
 }
 
 function makeGroups(commits) {
-  return mapping
+  return groupMapping
     .map(({ group, label }) => ({
       group,
       label,
