@@ -4,8 +4,10 @@ const emojiMapping = require('./emojiMapping')
 
 function parseSubject(subject) {
   if (!subject) return {}
+
   const matches = subject.match(/:(\w*):(.*)/)
-  if (!matches) return {}
+  if (!matches) return { message: subject }
+
   const [, emojiCode, message] = matches
 
   return {
