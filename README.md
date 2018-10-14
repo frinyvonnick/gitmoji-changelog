@@ -12,7 +12,9 @@
 
 ```bash
 npm install -g gitmoji-changelog
+
 cd my-project
+
 gitmoji-changelog
 ```
 
@@ -40,7 +42,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits :
 > [mapping.js](packages/gitmoji-changelog-core/src/mapping.js).
 
-*// TODO: override the default mapping with it's own.*
+*// TODO: How to override the default mapping with it's own.*
 
 ## Usage
 
