@@ -109,7 +109,7 @@ async function generateChangelog(options = {}) {
   if (mode !== 'init' && version) {
     const lastChanges = await generateChanges({
       from: lastTag,
-      version: version,
+      version,
     })
     changes.push(lastChanges)
   }
