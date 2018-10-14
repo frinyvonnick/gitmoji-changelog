@@ -94,6 +94,7 @@ async function generateChangelog(options = {}) {
     if (!semver.valid(version)) {
       throw new Error(`${version} is not a valid semver version.`)
     }
+
     version = sanitizeVersion(version)
   }
 

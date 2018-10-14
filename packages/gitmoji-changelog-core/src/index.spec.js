@@ -90,14 +90,18 @@ describe('changelog', () => {
     ])
   })
 
-  it('should generate empty changelog if no commits', async () => {
+  it('should throw an error if no commits', async () => {
     mockNoCommits()
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'incremental', release: 'next' })
-
-    expect(changes).toEqual([{ version: 'next', date: undefined, groups: [] }])
+    let message = false
+    try {
+      await generateChangelog({ mode: 'incremental', release: 'next' })
+    } catch (e) {
+      message = e.message
+    }
+    expect(message).toBeTruthy()
   })
 })
 

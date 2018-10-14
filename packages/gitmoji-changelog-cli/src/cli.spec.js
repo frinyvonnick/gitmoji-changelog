@@ -1,8 +1,6 @@
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { main } = require('./cli')
 
-console.error = jest.fn()
-
 describe('cli', () => {
   it('should throw an error if changelog generation fails', async () => {
     generateChangelog.mockImplementationOnce(() => {
