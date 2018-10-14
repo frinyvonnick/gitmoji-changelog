@@ -5,7 +5,7 @@ const gitSemverTags = require('git-semver-tags')
 const { generateChangelog } = require('./index')
 
 const sparklesCommit = {
-  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
   date: '2018-08-28T10:06:00+02:00',
   subject: ':sparkles: Upgrade brand new feature',
   body: 'Waouh this is awesome 2',
@@ -13,14 +13,35 @@ const sparklesCommit = {
 
 const recycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-  date: '2018-08-28T10:07:00+02:00',
+  date: '2018-08-01T10:07:00+02:00',
   subject: ':recycle: Upgrade brand new feature',
   body: 'Waouh this is awesome 3',
 }
 
+const secondRecycleCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23d',
+  date: '2018-08-30T10:07:00+02:00',
+  subject: ':recycle: Upgrade another brand new feature',
+  body: 'Waouh this is awesome 4',
+}
+
+const lipstickCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23e',
+  date: '2018-08-10T10:07:00+02:00',
+  subject: ':lipstick: Change graphics for a feature',
+  body: 'Waouh this is awesome 5',
+}
+
+const secondLipstickCommit = {
+  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  date: '2018-08-18T10:07:00+02:00',
+  subject: ':lipstick: Change more graphics for a feature',
+  body: 'Waouh this is awesome 6',
+}
+
 describe('changelog', () => {
   beforeEach(() => {
-    mockCommits()
+    mockGroups()
   })
 
   it('should generate changelog in json format for next release', async () => {
@@ -33,11 +54,11 @@ describe('changelog', () => {
         version: 'next',
         groups: [
           {
-            group: 'changed',
-            label: 'Changed',
-            commits: [
-              expect.objectContaining(recycleCommit),
-            ],
+            group: 'added',
+            label: 'Added',
+            commits: expect.arrayContaining([
+              expect.objectContaining(sparklesCommit),
+            ]),
           },
         ],
       },
@@ -52,25 +73,27 @@ describe('changelog', () => {
     expect(changes).toEqual([
       {
         version: 'v1.0.0',
-        date: '2018-08-28',
+        date: '2018-08-30',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              expect.objectContaining(lipstickCommit),
+              expect.objectContaining(secondLipstickCommit),
+              expect.objectContaining(recycleCommit),
+              expect.objectContaining(secondRecycleCommit),
+            ],
+          },
+        ],
+      }, {
+        version: 'next',
         groups: [
           {
             group: 'added',
             label: 'Added',
             commits: [
               expect.objectContaining(sparklesCommit),
-            ],
-          },
-        ],
-      },
-      {
-        version: 'next',
-        groups: [
-          {
-            group: 'changed',
-            label: 'Changed',
-            commits: [
-              expect.objectContaining(recycleCommit),
             ],
           },
         ],
@@ -82,33 +105,26 @@ describe('changelog', () => {
 jest.mock('git-raw-commits')
 jest.mock('git-semver-tags')
 
-function mockCommits() {
+function mockGroup(commits) {
   gitRawCommits.mockImplementationOnce(() => {
     const stream = require('stream')
     const readable = new stream.Readable()
-    const {
-      hash,
-      date,
-      subject,
-      body,
-    } = recycleCommit
-    readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+    commits.forEach(commit => {
+      const {
+        hash,
+        date,
+        subject,
+        body,
+      } = commit
+      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+    })
     readable.push(null)
     readable.emit('close')
     return readable
   })
-  gitRawCommits.mockImplementationOnce(() => {
-    const stream = require('stream')
-    const readable = new stream.Readable()
-    const {
-      hash,
-      date,
-      subject,
-      body,
-    } = sparklesCommit
-    readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
-    readable.push(null)
-    readable.emit('close')
-    return readable
-  })
+}
+
+function mockGroups() {
+  mockGroup([sparklesCommit])
+  mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
 }
