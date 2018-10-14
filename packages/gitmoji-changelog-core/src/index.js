@@ -36,7 +36,15 @@ function makeGroups(commits) {
     .map(({ group, label }) => ({
       group,
       label,
-      commits: commits.filter(commit => commit.group === group),
+      commits: commits
+        .filter(commit => commit.group === group)
+        .sort((first, second) => {
+          if (!first.emoji) return -1
+
+          const emojiCriteria = first.emoji.localeCompare(second.emoji)
+          if (emojiCriteria !== 0) return emojiCriteria
+          return first.date.localeCompare(second.date)
+        }),
     }))
     .filter(group => group.commits.length)
 }
