@@ -56,13 +56,13 @@ function getVersionFromTagName(tagName) {
   return tagName
 }
 
-async function generateChanges(from, to) {
+async function generateChanges({ from, to, version }) {
   const commits = await getCommits(from, to)
   const lastCommitDate = getLastCommitDate(commits)
 
   return {
-    version: getVersionFromTagName(to),
-    date: to && lastCommitDate,
+    version,
+    date: version !== 'next' ? lastCommitDate : undefined,
     groups: makeGroups(commits),
   }
 }
@@ -71,7 +71,11 @@ async function generateTagsChanges(tags) {
   let previousTag = ''
 
   return Promise.all(tags.map(async tag => {
-    const changes = await generateChanges(previousTag, tag)
+    const changes = await generateChanges({
+      from: previousTag,
+      to: tag,
+      version: getVersionFromTagName(tag),
+    })
     previousTag = tag
     return changes
   })).then((changes) => {
@@ -93,10 +97,12 @@ async function generateChangelog(options = {}) {
     changes = await generateTagsChanges(tags)
   }
 
-  const nextVersion = release === 'from-package' ? packageInfo.version : release
-  if (mode !== 'init' && nextVersion) {
-    const lastChanges = await generateChanges(lastTag)
-    lastChanges.version = nextVersion
+  const specificVersion = release === 'from-package' ? packageInfo.version : release
+  if (mode !== 'init' && specificVersion) {
+    const lastChanges = await generateChanges({
+      from: lastTag,
+      version: specificVersion,
+    })
     changes.push(lastChanges)
   }
 

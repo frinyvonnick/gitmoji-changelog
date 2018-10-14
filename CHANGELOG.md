@@ -1,7 +1,7 @@
 # Changelog
 
-<a name="next"></a>
-## next
+<a name="0.0.1"></a>
+## 0.0.1 (2018-10-14)
 
 ### Added
 
@@ -50,19 +50,27 @@
 ### Fixed
 
 - :bug: Fix gitmoji mapping ([#20](https://github.com/frinyvonnick/gitmoji-changelog/issues/20)) ([9561914](https://github.com/frinyvonnick/gitmoji-changelog/commit/95619149e7ce7d26dcb4f1837a8c8bf351b1cb1c))
+- :bug: set date for release except &#x27;next&#x27; ([1b970cb](https://github.com/frinyvonnick/gitmoji-changelog/commit/1b970cb79b397f27844b41a615372f263d220e33))
 - :green_heart: Set up travis configuration ([dda9b28](https://github.com/frinyvonnick/gitmoji-changelog/commit/dda9b287989c1ca2e9513c4a5a4a3d1b6749e816))
 - :green_heart: Ignore node_modules in linter ([802c0f7](https://github.com/frinyvonnick/gitmoji-changelog/commit/802c0f7dc29508876c6b4d178bbcc8274ee308b5))
 
 ### Miscellaneous
 
-- Merge remote-tracking branch &#x27;origin/master&#x27; into feat/init-and-update ([1847cf1](https://github.com/frinyvonnick/gitmoji-changelog/commit/1847cf1a2c2ee6256cd4c014cb8f109d53546a2c))
 - :memo: Add README.md ([c177349](https://github.com/frinyvonnick/gitmoji-changelog/commit/c177349386dfd87ab41c58f8a317b0962a511207))
 - :memo: Update roadmap ([02cec25](https://github.com/frinyvonnick/gitmoji-changelog/commit/02cec25ce329d68a02d1669913495108d93e2285))
 - :memo: Update setup and usage parts ([42c5a65](https://github.com/frinyvonnick/gitmoji-changelog/commit/42c5a65daa3587d7260058a79de832a9037b6ccd))
 - :memo: Update roadmap ([eea3814](https://github.com/frinyvonnick/gitmoji-changelog/commit/eea38147f18e5fd8eecbbcd055ce3473495a720a))
-- :ok_hand: pair prog with Y ([96df4a1](https://github.com/frinyvonnick/gitmoji-changelog/commit/96df4a16102358fd1d437220f171a942e78a37ab))
+- :memo: update changelog ([86ccd51](https://github.com/frinyvonnick/gitmoji-changelog/commit/86ccd51322126db85e4b4181577504ce595e047a))
+- :memo: update documentation ([ab81a29](https://github.com/frinyvonnick/gitmoji-changelog/commit/ab81a294dc069bf84461d174eed414d4c7e9671a))
+- :memo: update readme ([759a384](https://github.com/frinyvonnick/gitmoji-changelog/commit/759a384f40b34a91c8649abd017815ee264b5139))
+- :memo: update readme ([bc5b2d5](https://github.com/frinyvonnick/gitmoji-changelog/commit/bc5b2d51f42a99b56c613cc7d06525596b9d7a72))
+- :memo: update workflow ([498d8f4](https://github.com/frinyvonnick/gitmoji-changelog/commit/498d8f4624bba225d33e74379a2171e8e7119bd2))
+- :memo: add reference to package documentations ([fa79f1d](https://github.com/frinyvonnick/gitmoji-changelog/commit/fa79f1d4c2b790b1fe084db6c22e87f3978b2710))
+- Merge remote-tracking branch &#x27;origin/master&#x27; into feat/init-and-update ([1847cf1](https://github.com/frinyvonnick/gitmoji-changelog/commit/1847cf1a2c2ee6256cd4c014cb8f109d53546a2c))
+- :memo: add changelog edition in workflow ([2e68a78](https://github.com/frinyvonnick/gitmoji-changelog/commit/2e68a78152e62515924768b1049fd7731562a313))
 - :package: Build dist file ([acba6f7](https://github.com/frinyvonnick/gitmoji-changelog/commit/acba6f776196d8312c470ccefce8be81bafd8d52))
 - :package: Fix build ([a1526b3](https://github.com/frinyvonnick/gitmoji-changelog/commit/a1526b38e164b8471954e3dd0c658e10595ee966))
 - Initial commit ([a60d98d](https://github.com/frinyvonnick/gitmoji-changelog/commit/a60d98def5bcbbef74a19db9e8f43af7a6ff6865))
+- :ok_hand: pair prog with Y ([96df4a1](https://github.com/frinyvonnick/gitmoji-changelog/commit/96df4a16102358fd1d437220f171a942e78a37ab))
 
 
