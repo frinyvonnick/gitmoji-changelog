@@ -22,7 +22,7 @@ async function main(options = {}) {
 
     switch (options.format) {
       case 'json':
-        fs.writeFileSync(options.ouptut, JSON.stringify(changelog))
+        fs.writeFileSync(options.output, JSON.stringify(changelog))
         break
       default:
         await buildMarkdownFile(changelog, options)

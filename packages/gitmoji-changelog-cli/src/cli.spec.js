@@ -3,11 +3,7 @@ const { main } = require('./cli')
 
 describe('cli', () => {
   it('should throw an error if changelog generation fails', async () => {
-    generateChangelog.mockImplementationOnce(() => {
-      throw new Error()
-    })
-
-    logger.error = jest.fn()
+    generateChangelog.mockRejectedValue(new Error())
 
     await main()
 

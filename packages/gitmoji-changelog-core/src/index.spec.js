@@ -65,7 +65,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'incremental', release: 'next' })
+    const { changes } = await generateChangelog({ mode: 'update', release: 'next' })
 
     expect(changes).toEqual([
       {
@@ -117,7 +117,7 @@ describe('changelog', () => {
 
     let message = false
     try {
-      await generateChangelog({ mode: 'incremental', release: 'next' })
+      await generateChangelog({ mode: 'update', release: 'next' })
     } catch (e) {
       message = e.message
     }
