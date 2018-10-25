@@ -21,6 +21,19 @@ describe('commits parser', () => {
     expect(parseCommit(commit)).toEqual(expect.objectContaining(sparklesCommit))
   })
 
+  it('should parse a unicode emojies', () => {
+    const {
+      hash,
+      date,
+      body,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${date}\n✨ Upgrade brand new feature\n${body}\n`
+    const parsed = parseCommit(commit)
+    expect(parsed.emoji).toEqual('✨')
+    expect(parsed.emojiCode).toEqual('sparkles')
+    expect(parsed.message).toEqual('Upgrade brand new feature')
+  })
+
   it('should parse a single commit without a body', () => {
     const {
       hash,
