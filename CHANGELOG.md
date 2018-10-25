@@ -1,5 +1,14 @@
 # Changelog
 
+<a name="1.0.1"></a>
+## 1.0.1 (2018-10-25)
+
+### Fixed
+
+- 🐛 Prevent having right commits by version ([#30](https://github.com/frinyvonnick/gitmoji-changelog/issues/30)) ([de06319](https://github.com/frinyvonnick/gitmoji-changelog/commit/de063192baefebad16e05ce79061d815888a442f))
+- 🐛 Get correct commit ranges from tags ([#32](https://github.com/frinyvonnick/gitmoji-changelog/issues/32)) ([573a2d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/573a2d0b583b426d358c388af0ba1dc48a4e0ddf))
+
+
 <a name="1.0.0"></a>
 ## 1.0.0 (2018-10-25)
 
@@ -12,3 +21,4 @@
 - ✨ Add tag&#x27;s date on version ([#22](https://github.com/frinyvonnick/gitmoji-changelog/issues/22)) ([ab3d9c6](https://github.com/frinyvonnick/gitmoji-changelog/commit/ab3d9c600e307dd0db16bc7abcbdf8a8a2c83ff5))
 - ✨ Generate changelog JSON file ([86ca3ea](https://github.com/frinyvonnick/gitmoji-changelog/commit/86ca3eaefb18fd9c9b6bb4256ed2f6fa711aef59))
 - ✨ Generate changelog markdown file ([b165f69](https://github.com/frinyvonnick/gitmoji-changelog/commit/b165f695f4c1a49ff16a5f03918545bfb36cf367))
+
