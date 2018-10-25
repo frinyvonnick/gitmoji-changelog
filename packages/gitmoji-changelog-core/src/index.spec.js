@@ -74,9 +74,7 @@ describe('changelog', () => {
           {
             group: 'added',
             label: 'Added',
-            commits: expect.arrayContaining([
-              expect.objectContaining(sparklesCommit),
-            ]),
+            commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
           },
         ],
       },
@@ -92,18 +90,23 @@ describe('changelog', () => {
 
     expect(changes).toEqual([
       {
-        version: '1.0.0',
-        date: '2018-08-30',
+        version: 'next',
         groups: [
           {
             group: 'changed',
             label: 'Changed',
-            commits: [
-              lipstickCommit,
-              secondLipstickCommit,
-              recycleCommit,
-              secondRecycleCommit,
-            ],
+            commits: [lipstickCommit, secondLipstickCommit, recycleCommit, secondRecycleCommit],
+          },
+        ],
+      },
+      {
+        version: '1.0.0',
+        date: '2018-08-28',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: [sparklesCommit],
           },
         ],
       },
@@ -126,13 +129,17 @@ describe('changelog', () => {
 
   it('should get previous tag in from', async () => {
     mockGroups()
+    mockGroup([sparklesCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
 
     await generateChangelog({ mode: 'init' })
 
     expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: '' }))
-    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.0', to: 'v1.0.1' }))
+    expect(gitRawCommits).toHaveBeenCalledWith(
+      expect.objectContaining({ from: 'v1.0.0', to: 'v1.0.1' })
+    )
+    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: '', to: 'v1.0.0' }))
   })
 })
 
@@ -145,10 +152,7 @@ function mockGroup(commits) {
     const readable = new stream.Readable()
     commits.forEach(commit => {
       const {
-        hash,
-        date,
-        subject,
-        body,
+        hash, date, subject, body,
       } = commit
       readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
     })

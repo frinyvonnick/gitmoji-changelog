@@ -1,5 +1,5 @@
 {
-  "name": "gitmoji-changelog",
+  "name": "@gitmoji-changelog/workspace",
   "private": true,
   "version": "0.0.1",
   "description": "Tools for generating changelog based on gitmoji convention https://gitmoji.carloscuesta.me/",
