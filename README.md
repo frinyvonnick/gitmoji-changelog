@@ -41,7 +41,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 ## Customize your changelog
 
 By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits :
-> [mapping.js](packages/gitmoji-changelog-core/src/mapping.js).
+> [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js).
 
 *// TODO: How to override the default mapping with it's own.*
 
