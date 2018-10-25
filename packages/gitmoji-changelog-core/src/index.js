@@ -1,7 +1,10 @@
+const semver = require('semver')
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
+const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
+const { head, isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -28,6 +31,8 @@ function getCommits(from, to) {
 }
 
 function makeGroups(commits) {
+  if (isEmpty(commits)) return []
+
   return groupMapping
     .map(({ group, label }) => ({
       group,
@@ -45,43 +50,89 @@ function makeGroups(commits) {
     .filter(group => group.commits.length)
 }
 
-async function generateChangelog() {
-  const packageInfo = await getPackageInfo()
-  const repository = await getRepoInfo(packageInfo)
-
-  const meta = {
-    package: packageInfo,
-    repository,
-  }
-
-  let previousTag = ''
-  const tags = await gitSemverTagsAsync()
-
-  const changes = await Promise.all(tags.map(async tag => {
-    const commits = await getCommits(previousTag, tag)
-    const lastCommitDate = getLastCommitDate(commits)
-
-    previousTag = tag
-    return {
-      version: tag,
-      date: lastCommitDate,
-      groups: makeGroups(commits),
-    }
-  }))
-
-  const commits = await getCommits(previousTag)
-  changes.push({
-    version: 'next',
-    groups: makeGroups(commits),
+function sanitizeVersion(version) {
+  return semver.valid(version, {
+    loose: false,
+    includePrerelease: true,
   })
+}
+
+async function generateVersion({ from, to, version }) {
+  const commits = await getCommits(from, to)
+  const lastCommitDate = getLastCommitDate(commits)
 
   return {
-    meta,
+    version,
+    date: version !== 'next' ? lastCommitDate : undefined,
+    groups: makeGroups(commits),
+  }
+}
+
+async function generateVersions(tags) {
+  let previousTag = ''
+
+  return Promise.all(tags.map(async tag => {
+    const changes = await generateVersion({
+      from: previousTag,
+      to: tag,
+      version: sanitizeVersion(tag),
+    })
+    previousTag = tag
+    return changes
+  })).then((changes) => {
+    return changes.sort((c1, c2) => semverCompare(c2.version, c1.version))
+  })
+}
+
+async function generateChangelog(options = {}) {
+  const { mode, release } = options
+
+  const packageInfo = await getPackageInfo()
+
+  let version = release === 'from-package' ? packageInfo.version : release
+  if (version && version !== 'next') {
+    if (!semver.valid(version)) {
+      throw new Error(`${version} is not a valid semver version.`)
+    }
+
+    version = sanitizeVersion(version)
+  }
+
+  let changes = []
+
+  const tags = await gitSemverTagsAsync()
+  const lastTag = head(tags)
+
+  if (mode === 'init') {
+    changes = await generateVersions(tags)
+  } else {
+    const lastChanges = await generateVersion({
+      from: lastTag,
+      version,
+    })
+
+    if (isEmpty(lastChanges.groups)) {
+      throw new Error('No changes found. You may need to fetch or pull the last changes.')
+    }
+
+    changes.push(lastChanges)
+  }
+
+  const repository = await getRepoInfo(packageInfo)
+
+  return {
+    meta: {
+      package: packageInfo,
+      repository,
+      lastVersion: sanitizeVersion(lastTag),
+    },
     changes,
   }
 }
 
 function getLastCommitDate(commits) {
+  if (isEmpty(commits)) return null
+
   return commits
     .map((commit) => new Date(commit.date))
     .reduce((lastCommitDate, currentCommitDate) => {

@@ -60,14 +60,12 @@ const secondLipstickCommit = {
 }
 
 describe('changelog', () => {
-  beforeEach(() => {
+  it('should generate changelog for next release', async () => {
     mockGroups()
-  })
 
-  it('should generate changelog in json format for next release', async () => {
-    gitSemverTags.mockImplementation((cb) => cb(null, []))
+    gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog()
+    const { changes } = await generateChangelog({ mode: 'update', release: 'next' })
 
     expect(changes).toEqual([
       {
@@ -85,14 +83,16 @@ describe('changelog', () => {
     ])
   })
 
-  it('should generate changelog in json format for all tags', async () => {
-    gitSemverTags.mockImplementation((cb) => cb(null, ['v1.0.0']))
+  it('should generate changelog for all tags', async () => {
+    mockGroups()
 
-    const { changes } = await generateChangelog()
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
+
+    const { changes } = await generateChangelog({ mode: 'init' })
 
     expect(changes).toEqual([
       {
-        version: 'v1.0.0',
+        version: '1.0.0',
         date: '2018-08-30',
         groups: [
           {
@@ -106,19 +106,22 @@ describe('changelog', () => {
             ],
           },
         ],
-      }, {
-        version: 'next',
-        groups: [
-          {
-            group: 'added',
-            label: 'Added',
-            commits: [
-              sparklesCommit,
-            ],
-          },
-        ],
       },
     ])
+  })
+
+  it('should throw an error if no commits', async () => {
+    mockNoCommits()
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    let message = false
+    try {
+      await generateChangelog({ mode: 'update', release: 'next' })
+    } catch (e) {
+      message = e.message
+    }
+    expect(message).toBeTruthy()
   })
 })
 
@@ -138,6 +141,18 @@ function mockGroup(commits) {
       } = commit
       readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
     })
+    readable.push(null)
+    readable.emit('close')
+    return readable
+  })
+}
+
+function mockNoCommits() {
+  gitRawCommits.mockReset()
+
+  gitRawCommits.mockImplementationOnce(() => {
+    const stream = require('stream')
+    const readable = new stream.Readable()
     readable.push(null)
     readable.emit('close')
     return readable

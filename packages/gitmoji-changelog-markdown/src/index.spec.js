@@ -1,7 +1,12 @@
-const { convert, autolink, getShortHash } = require('./index')
+/* eslint-disable global-require */
+const fs = require('fs')
+
+const { buildMarkdownFile, autolink, getShortHash } = require('./index')
 
 describe('Markdown converter', () => {
-  it('should convert changelog into markdown', () => {
+  it('should generate full changelog into markdown from scratch', async () => {
+    fs.writeFileSync = jest.fn()
+
     const changelog = {
       meta: {
         repository: {
@@ -15,7 +20,26 @@ describe('Markdown converter', () => {
       },
       changes: [
         {
-          version: 'v1.0.0',
+          version: 'next',
+          groups: [
+            {
+              group: 'changed',
+              label: 'Changed',
+              commits: [
+                {
+                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  date: '2018-08-28T10:07:00+02:00',
+                  subject: ':recycle: Upgrade brand new feature',
+                  emoji: '♻️',
+                  message: 'Upgrade brand new feature',
+                  body: 'Waouh this is awesome 3',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          version: '1.0.0',
           date: '2018-08-28',
           groups: [
             {
@@ -34,6 +58,54 @@ describe('Markdown converter', () => {
             },
           ],
         },
+      ],
+    }
+
+    await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md' })
+
+    expect(fs.writeFileSync.mock.calls[0].length).toBe(2)
+    expect(fs.writeFileSync.mock.calls[0][0]).toBe('./CHANGELOG.md')
+    expect(fs.writeFileSync.mock.calls[0][1]).toEqual(`# Changelog
+
+<a name="next"></a>
+## next
+
+### Changed
+
+- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+
+
+<a name="1.0.0"></a>
+## 1.0.0 (2018-08-28)
+
+### Added
+
+- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
+
+
+`)
+  })
+
+  // FIXME: should find a better way to mock fs
+  it.skip('should generate incremental markdown changelog', async () => {
+    fs.createWriteStream = jest.fn(() => ({
+      write: jest.fn(),
+      end: jest.fn(),
+    }))
+    fs.renameSync = jest.fn()
+
+    const changelog = {
+      meta: {
+        repository: {
+          type: 'github',
+          domain: 'github.com',
+          user: 'frinyvonnick',
+          project: 'gitmoji-changelog',
+          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
+          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+        },
+      },
+      changes: [
         {
           version: 'next',
           groups: [
@@ -56,15 +128,14 @@ describe('Markdown converter', () => {
       ],
     }
 
-    expect(convert(changelog)).toEqual(`# Changelog
+    await buildMarkdownFile(changelog, { mode: 'incremental', output: './CHANGELOG.md' })
 
-## v1.0.0 - 2018-08-28
+    const writer = fs.createWriteStream.mock.results[0].value.write
 
-### Added
+    expect(writer.mock.calls.length).toBe(1)
+    expect(writer.mock.calls[0][0]).toBe(`# Changelog
 
-- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
-
-
+<a name="next"></a>
 ## next
 
 ### Changed

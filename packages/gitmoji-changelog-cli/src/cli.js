@@ -1,32 +1,33 @@
-const { generateChangelog, logger } = require('@gitmoji-changelog/core')
-const { convert } = require('@gitmoji-changelog/markdown')
 const fs = require('fs')
 
-async function main({ format } = {}) {
-  let changelog
-  try {
-    changelog = await generateChangelog()
-  } catch (e) {
-    logger.error('Cannot find a git repository in current path.')
-    return
-  }
+const { generateChangelog, logger } = require('@gitmoji-changelog/core')
+const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
+
+const pkg = require('../package.json')
+
+async function main(options = {}) {
+  logger.start(`gitmoji-changelog v${pkg.version}`)
+  logger.info(`${options.mode} ${options.output}`)
 
   try {
-    logger.info(changelog.meta.package.name)
-    logger.info('v%s', changelog.meta.package.version)
-    logger.info(changelog.meta.repository.url)
+    const changelog = await generateChangelog(options)
 
-    let output
-    switch (format) {
+    if (changelog.meta.package) {
+      const { name, version } = changelog.meta.package
+      logger.info(`${name} v${version}`)
+    }
+    if (changelog.meta.repository) {
+      logger.info(changelog.meta.repository.url)
+    }
+
+    switch (options.format) {
       case 'json':
-        output = './CHANGELOG.json'
-        fs.writeFileSync(output, JSON.stringify(changelog))
+        fs.writeFileSync(options.output, JSON.stringify(changelog))
         break
       default:
-        output = './CHANGELOG.md'
-        fs.writeFileSync(output, convert(changelog))
+        await buildMarkdownFile(changelog, options)
     }
-    logger.success(`changelog updated into ${output}`)
+    logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
     logger.error(e)
   }
