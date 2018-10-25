@@ -3,7 +3,7 @@ const { invert } = require('lodash')
 const groupMapping = require('./groupMapping')
 const emojiMapping = require('./emojiMapping')
 
-const emojieMappingInvert = invert(emojiMapping)
+const emojiMappingInvert = invert(emojiMapping)
 
 function parseSubject(subject) {
   if (!subject) return {}
@@ -18,7 +18,7 @@ function parseSubject(subject) {
   } else {
     // extract unicode emoji
     const emoji = subject.substr(0, 1)
-    emojiCode = emojieMappingInvert[emoji]
+    emojiCode = emojiMappingInvert[emoji]
     if (emojiCode) {
       message = subject.substr(1, subject.length)
     }
