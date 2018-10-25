@@ -5,15 +5,16 @@ const emojiMapping = require('./emojiMapping')
 
 const emojieMappingInvert = invert(emojiMapping)
 
-function parseEmoji(subject) {
+function parseSubject(subject) {
+  if (!subject) return {}
+
   let emojiCode
   let message = subject
 
   const matches = subject.match(/:(\w*):(.*)/)
   if (matches) {
     // extract textual emoji
-    emojiCode = matches[1]
-    message = matches[2]
+    [, emojiCode, message] = matches
   } else {
     // extract unicode emoji
     const emoji = subject.substr(0, 1)
@@ -22,13 +23,6 @@ function parseEmoji(subject) {
       message = subject.substr(1, subject.length)
     }
   }
-  return { emojiCode, message }
-}
-
-function parseSubject(subject) {
-  if (!subject) return {}
-
-  const { emojiCode, message } = parseEmoji(subject)
 
   return {
     emojiCode,
