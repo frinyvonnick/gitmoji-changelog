@@ -2,8 +2,6 @@
 
 > Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention.
 
-:construction: **PROJECT IN DEVELOPMENT - NOT PUBLISHED IN NODE REGISTRY YET** :construction:
-
 **Prerequisites:**
 - use [gitmoji](https://gitmoji.carloscuesta.me/) for commits convention
 - use [semver](https://semver.org/) for versions and tags convention
@@ -95,14 +93,3 @@ We are using [airbnb-base](https://github.com/airbnb/javascript/tree/master/pack
 ```bash
 yarn lint
 ```
-
-### Roadmap - Coming next
-
-- [ ] CLI options (output file, from, to)
-- [ ] Override mapping to customize changelog
-- [ ] Improve markdown template: keep tags hierarchy (semver)
-- [ ] Add a middleware system to have an advanced custom commits (#6)
-- [ ] Generate Github, Bitbucket, Gitlab release with changelog
-- [ ] Manage monorepo
-- [ ] Manage scope
-- [ ] Generate other file formats (ASCIIdoc...)

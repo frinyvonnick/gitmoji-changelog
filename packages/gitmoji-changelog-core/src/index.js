@@ -57,7 +57,7 @@ function sanitizeVersion(version) {
   })
 }
 
-async function generateChanges({ from, to, version }) {
+async function generateVersion({ from, to, version }) {
   const commits = await getCommits(from, to)
   const lastCommitDate = getLastCommitDate(commits)
 
@@ -68,11 +68,11 @@ async function generateChanges({ from, to, version }) {
   }
 }
 
-async function generateTagsChanges(tags) {
+async function generateVersions(tags) {
   let previousTag = ''
 
   return Promise.all(tags.map(async tag => {
-    const changes = await generateChanges({
+    const changes = await generateVersion({
       from: previousTag,
       to: tag,
       version: sanitizeVersion(tag),
@@ -104,11 +104,9 @@ async function generateChangelog(options = {}) {
   const lastTag = head(tags)
 
   if (mode === 'init') {
-    changes = await generateTagsChanges(tags)
-  }
-
-  if (mode !== 'init' && version) {
-    const lastChanges = await generateChanges({
+    changes = await generateVersions(tags)
+  } else {
+    const lastChanges = await generateVersion({
       from: lastTag,
       version,
     })
