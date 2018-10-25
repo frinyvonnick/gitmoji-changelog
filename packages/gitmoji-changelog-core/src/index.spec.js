@@ -123,6 +123,17 @@ describe('changelog', () => {
     }
     expect(message).toBeTruthy()
   })
+
+  it('should get previous tag in from', async () => {
+    mockGroups()
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
+
+    await generateChangelog({ mode: 'init' })
+
+    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: '' }))
+    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.0', to: 'v1.0.1' }))
+  })
 })
 
 jest.mock('git-raw-commits')
