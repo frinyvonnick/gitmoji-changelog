@@ -69,19 +69,22 @@ async function generateVersion({ from, to, version }) {
 }
 
 async function generateVersions(tags) {
-  let previousTag = ''
+  let nextTag = ''
 
-  return Promise.all(tags.map(async tag => {
-    const changes = await generateVersion({
-      from: previousTag,
-      to: tag,
-      version: sanitizeVersion(tag),
-    })
-    previousTag = tag
-    return changes
-  })).then((changes) => {
-    return changes.sort((c1, c2) => semverCompare(c2.version, c1.version))
-  })
+  return Promise.all(
+    tags
+      .map(tag => {
+        const params = {
+          from: tag,
+          to: nextTag,
+          version: sanitizeVersion(tag),
+        }
+        nextTag = tag
+        return params
+      })
+      .map(generateVersion)
+  )
+    .then(changes => changes.sort((c1, c2) => semverCompare(c2.version, c1.version)))
 }
 
 async function generateChangelog(options = {}) {
