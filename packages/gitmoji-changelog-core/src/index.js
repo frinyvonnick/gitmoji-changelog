@@ -80,7 +80,7 @@ async function generateTagsChanges(tags) {
     previousTag = tag
     return changes
   })).then((changes) => {
-    return changes.sort((c1, c2) => semverCompare(c1.version, c2.version)).reverse()
+    return changes.sort((c1, c2) => semverCompare(c2.version, c1.version))
   })
 }
 
