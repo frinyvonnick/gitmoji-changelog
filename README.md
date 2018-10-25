@@ -32,7 +32,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 
 1. Make changes and commit: `git commit -m ":sparkles: my awesome feature"`
 2. Bump version (ex: `1.0.0`) in `package.json` using [semver](https://semver.org/) convention
-3. Run `gitmoji-changelog`, then the file `CHANGELOG.md` is created or updated with all changes
+3. Run `gitmoji-changelog --release 1.0.0`, then the file `CHANGELOG.md` is created or updated with all changes
 4. You can freely edit the new release in the changelog file, it will not be overwrite with the next generation
 5. Commit `package.json` and `CHANGELOG.md` file
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)

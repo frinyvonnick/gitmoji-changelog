@@ -3,7 +3,6 @@ const fs = require('fs')
 const yargs = require('yargs')
 const { noop } = require('lodash')
 
-const { homepage } = require('../package.json')
 const { main } = require('./cli')
 
 function getOutputFile({ output, format }) {
@@ -23,32 +22,18 @@ const execute = mode => argv => main({
 })
 
 yargs
-  .usage('Usage: $0 <command> [options]')
+  .usage('Usage: $0 [options]')
 
-  .command('$0 [release]', 'Generate changelog', (command) => {
-    command.positional('release', {
-      desc: 'Next version (from-package, next)',
-      default: 'from-package',
-    })
-  }, (argv) => {
+  .command('$0', 'Generate changelog', noop, (argv) => {
     const output = getOutputFile(argv)
     const existsOuput = fs.existsSync(output)
     const mode = existsOuput ? 'update' : 'init'
     execute(mode)(argv)
   })
 
-  .command('init', 'Initialize changelog from tags', noop, execute('init'))
-
-  .command('update [release]', 'Update changelog with a new version', (command) => {
-    command.positional('release', {
-      desc: 'Next version (from-package, next)',
-      default: 'from-package',
-    })
-  }, execute('update'))
-
-  .option('format', { default: 'markdown', desc: 'changelog format (markdown, json)' })
-  .option('output', { desc: 'output changelog file' })
+  .option('release', { desc: 'Next release name', default: 'next' })
+  .option('format', { desc: 'Output format', default: 'markdown', choices: ['markdown', 'json'] })
+  .option('output', { desc: 'Output file name', default: 'CHANGELOG.md' })
 
   .help('help')
-  .epilog(`For more information visit: ${homepage}`)
   .parse()
