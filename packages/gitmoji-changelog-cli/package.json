@@ -1,6 +1,17 @@
 {
   "name": "@gitmoji-changelog/cli",
   "version": "0.0.1",
+  "keywords": [
+    "gitmoji",
+    "generate",
+    "changelog",
+    "semver",
+    "cli",
+    "nantes",
+    "version",
+    "release",
+    "markdown"
+  ],
   "description": "Gitmoji Changelog CLI",
   "main": "src/index.js",
   "engines" : {
