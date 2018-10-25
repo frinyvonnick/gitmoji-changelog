@@ -38,58 +38,8 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
 7. Push to the remote `git push`
 
-## Customize your changelog
-
-By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits :
-> [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js).
-
-*// TODO: How to override the default mapping with it's own.*
-
 ## Usage
 
-### CLI
-
-Full CLI documentation in [gitmoji-changelog-cli package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-cli#gitmoji-changelog-cli)
-
-### API
-
-Full API documentation in [gitmoji-changelog-core package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-core#gitmoji-changelog-core)
-
-## Develop and contribute
-
-### Setup
-
-```bash
-git clone git@github.com:frinyvonnick/gitmoji-changelog.git
-
-cd gitmoji-changelog && yarn
-```
-
-We are using lerna and yarn workspaces to split the library in modules:
-- [gitmoji-changelog-cli](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-cli) - the full-featured command line interface
-- [gitmoji-changelog-core](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-core) - the core lib generating changelog
-- [gitmoji-changelog-markdown](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-markdown) - the markdown changelog file writer
-
-**Execute it locally:**
-
-```
-node [path-to-gitmoji-changelog-folder]/packages/gitmoji-changelog-cli/src/index.js
-```
-
-**Execute tests:**
-
-We are using [jest](https://jestjs.io/) to manage unit testing.
-
-```bash
-yarn test
-# or
-yarn test --watch
-```
-
-**Execute linter:**
-
-We are using [airbnb-base](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base) as linter:
-
-```bash
-yarn lint
+```js
+gitmoji-changelog --help
 ```

@@ -1,6 +1,6 @@
 {
   "name": "@gitmoji-changelog/markdown",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Gitmoji Changelog markdown formatter",
   "main": "src/index.js",
   "bin": {
