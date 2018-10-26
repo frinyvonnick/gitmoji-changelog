@@ -59,7 +59,7 @@ function sanitizeVersion(version) {
 }
 
 function groupCommitsByWordsDistance(commits = []) {
-  const groupedCommits = new Set()
+  const groupedCommits = []
   const alreadyProcessed = new Set()
 
   const groupedTextsByDistance = getGroupedTextsByDistance(commits.map(commit => commit.message))
@@ -70,7 +70,7 @@ function groupCommitsByWordsDistance(commits = []) {
 
     // the commit has no close distance to an other (it's alone)
     if (!groupedTextsByDistance.get(index)) {
-      groupedCommits.add(commit)
+      groupedCommits.push(commit)
       return
     }
 
@@ -78,7 +78,7 @@ function groupCommitsByWordsDistance(commits = []) {
     const closedDistancesCommitIndex = groupedTextsByDistance.get(index)
     const copyCommit = { ...commit }
     // - store this commit
-    groupedCommits.add(copyCommit)
+    groupedCommits.push(copyCommit)
     // - group all others in its `siblings`
     copyCommit.siblings = Array.from(closedDistancesCommitIndex)
       .filter(otherCommitIndex => otherCommitIndex !== index)
@@ -93,7 +93,7 @@ function groupCommitsByWordsDistance(commits = []) {
     })
   })
 
-  return Array.from(groupedCommits)
+  return groupedCommits
 }
 
 async function generateVersion({ from, to, version }) {

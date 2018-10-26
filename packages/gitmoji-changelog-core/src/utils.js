@@ -19,11 +19,13 @@ function getGroupedTextsByDistance(texts = []) {
     for (let j = i + 1; j < textsWithSortedWords.length; j += 1) {
       const distance = levenshtein.get(textsWithSortedWords[i], textsWithSortedWords[j])
 
-      const maxLength = Math.max(texts[i].length, texts[j].length)
+      // const minLength = Math.min(texts[i].length, texts[j].length)
 
-      // 10 is a magic number, this comes from various testing
+      // console.log(minLength, distance, texts[i], texts[j])
+
+      // this is a magic number, this comes from various testing
       // feel free to tweak it
-      if ((maxLength - distance) > 10) {
+      if (distance < 10) {
         closedMeaningTexts.get(i)
         addToMapValues(closedMeaningTexts, i, j)
         addToMapValues(closedMeaningTexts, j, i)

@@ -7,24 +7,24 @@ const { generateChangelog } = require('./index')
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
   date: '2018-08-28T10:06:00+02:00',
-  subject: ':sparkles: Upgrade brand new feature',
+  subject: ':sparkles: Add a brand new feature',
   body: 'Waouh this is awesome 2',
   emoji: '✨',
   emojiCode: 'sparkles',
   group: 'added',
-  message: 'Upgrade brand new feature',
+  message: 'Add a brand new feature',
   siblings: [],
 }
 
 const recycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
   date: '2018-08-01T10:07:00+02:00',
-  subject: ':recycle: Upgrade brand new feature',
+  subject: ':recycle: Make some reworking on code',
   body: 'Waouh this is awesome 3',
   emoji: '♻️',
   emojiCode: 'recycle',
   group: 'changed',
-  message: 'Upgrade brand new feature',
+  message: 'Make some reworking on code',
   siblings: [],
 }
 
@@ -100,7 +100,14 @@ describe('changelog', () => {
           {
             group: 'changed',
             label: 'Changed',
-            commits: [lipstickCommit, secondLipstickCommit, recycleCommit, secondRecycleCommit],
+            commits: [
+              {
+                ...lipstickCommit,
+                siblings: [secondLipstickCommit],
+              },
+              recycleCommit,
+              secondRecycleCommit,
+            ],
           },
         ],
       },
