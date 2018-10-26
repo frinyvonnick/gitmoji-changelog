@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.0.1"></a>
+## 0.0.1 (2018-10-26)
+
+### Miscellaneous
+
+- 🚧 sparkles/levenshtein ([50b8c62](https://github.com/frinyvonnick/gitmoji-changelog/commit/50b8c62554ea081fab2a53709907b011055ec25f))
+
+
 <a name="1.0.1"></a>
 ## 1.0.1 (2018-10-25)
 
@@ -21,4 +29,5 @@
 - ✨ Add tag&#x27;s date on version ([#22](https://github.com/frinyvonnick/gitmoji-changelog/issues/22)) ([ab3d9c6](https://github.com/frinyvonnick/gitmoji-changelog/commit/ab3d9c600e307dd0db16bc7abcbdf8a8a2c83ff5))
 - ✨ Generate changelog JSON file ([86ca3ea](https://github.com/frinyvonnick/gitmoji-changelog/commit/86ca3eaefb18fd9c9b6bb4256ed2f6fa711aef59))
 - ✨ Generate changelog markdown file ([b165f69](https://github.com/frinyvonnick/gitmoji-changelog/commit/b165f695f4c1a49ff16a5f03918545bfb36cf367))
+
 
