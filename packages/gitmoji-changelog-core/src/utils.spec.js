@@ -1,7 +1,7 @@
-const { getGroupedTextsByDistance } = require('./utils')
+const { groupSentencesByDistance } = require('./utils')
 
 describe('utils', () => {
-  describe('getGroupedTextsByDistance', () => {
+  describe('groupSentencesByDistance', () => {
     it('should group values together', () => {
       const messages = [
         'add levenshtein', // 0 - group1
@@ -12,7 +12,7 @@ describe('utils', () => {
         'an other kind of bug', // 5 - group2
       ]
 
-      expect(getGroupedTextsByDistance(messages)).toEqual([[0, 2, 3], [1, 5], [4]])
+      expect(groupSentencesByDistance(messages)).toEqual([[0, 2, 3], [1, 5], [4]])
     })
   })
 })

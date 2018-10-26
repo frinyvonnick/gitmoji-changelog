@@ -1,7 +1,6 @@
 const levenshtein = require('fast-levenshtein')
 
-// FIXME: rename texts to sentences
-function getGroupedTextsByDistance(texts = []) {
+function groupSentencesByDistance(texts = []) {
   const textsWithSortedWords = texts.map(text => text.split(' ').sort().join(''))
 
   const alreadyProcessedWords = new Set()
@@ -29,5 +28,5 @@ function getGroupedTextsByDistance(texts = []) {
 }
 
 module.exports = {
-  getGroupedTextsByDistance,
+  groupSentencesByDistance,
 }

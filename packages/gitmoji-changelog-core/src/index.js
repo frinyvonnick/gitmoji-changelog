@@ -11,7 +11,7 @@ const { parseCommit } = require('./parser')
 const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
-const { getGroupedTextsByDistance } = require('./utils')
+const { groupSentencesByDistance } = require('./utils')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -58,8 +58,8 @@ function sanitizeVersion(version) {
   })
 }
 
-function groupCommitsByWordsDistance(commits = []) {
-  const distanceGroups = getGroupedTextsByDistance(commits.map(commit => commit.message))
+function groupCommitsByMessagesDistance(commits = []) {
+  const distanceGroups = groupSentencesByDistance(commits.map(commit => commit.message))
 
   return distanceGroups.map(([first, ...siblings]) => ({
     ...commits[first],
@@ -68,7 +68,7 @@ function groupCommitsByWordsDistance(commits = []) {
 }
 
 async function generateVersion({ from, to, version }) {
-  const commits = groupCommitsByWordsDistance(await getCommits(from, to))
+  const commits = groupCommitsByMessagesDistance(await getCommits(from, to))
   const lastCommitDate = getLastCommitDate(commits)
 
   return {
