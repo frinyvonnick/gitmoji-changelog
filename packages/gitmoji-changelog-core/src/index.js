@@ -80,7 +80,9 @@ function groupCommitsByWordsDistance(commits = []) {
     // - store this commit
     groupedCommits.add(copyCommit)
     // - group all others in its `siblings`
-    copyCommit.siblings = closedDistancesCommitIndex.map(otherCommitIndex => commits[otherCommitIndex])
+    copyCommit.siblings = Array.from(closedDistancesCommitIndex)
+      .filter(otherCommitIndex => otherCommitIndex !== index)
+      .map(otherCommitIndex => commits[otherCommitIndex])
 
     // take care of its siblings
     closedDistancesCommitIndex.forEach((otherCommitIndex) => {
