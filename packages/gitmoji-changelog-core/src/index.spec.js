@@ -13,6 +13,7 @@ const sparklesCommit = {
   emojiCode: 'sparkles',
   group: 'added',
   message: 'Upgrade brand new feature',
+  siblings: [],
 }
 
 const recycleCommit = {
@@ -24,6 +25,7 @@ const recycleCommit = {
   emojiCode: 'recycle',
   group: 'changed',
   message: 'Upgrade brand new feature',
+  siblings: [],
 }
 
 const secondRecycleCommit = {
@@ -35,6 +37,7 @@ const secondRecycleCommit = {
   emojiCode: 'recycle',
   group: 'changed',
   message: 'Upgrade another brand new feature',
+  siblings: [],
 }
 
 const lipstickCommit = {
@@ -46,6 +49,7 @@ const lipstickCommit = {
   emojiCode: 'lipstick',
   group: 'changed',
   message: 'Change graphics for a feature',
+  siblings: [],
 }
 
 const secondLipstickCommit = {
@@ -57,6 +61,7 @@ const secondLipstickCommit = {
   emojiCode: 'lipstick',
   group: 'changed',
   message: 'Change more graphics for a feature',
+  siblings: [],
 }
 
 describe('changelog', () => {

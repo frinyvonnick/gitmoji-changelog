@@ -9,8 +9,8 @@
 
 {{#each commits}}
 - {{emoji}} {{message}} ({{hash}})
-
   {{#if siblings}}
+
     **siblings:**
 
   {{#each siblings}}
