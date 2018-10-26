@@ -11,6 +11,7 @@ const { parseCommit } = require('./parser')
 const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
+const { getGroupedTextsByDistance } = require('./utils')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -57,8 +58,44 @@ function sanitizeVersion(version) {
   })
 }
 
+function groupCommitsByWordsDistance(commits = []) {
+  const groupedCommits = new Set()
+  const alreadyProcessed = new Set()
+
+  const groupedTextsByDistance = getGroupedTextsByDistance(commits.map(commit => commit.message))
+
+  commits.forEach((commit, index) => {
+    // the commit is already processed (in case it was stored in an other siblings)
+    if (alreadyProcessed.has(index)) return
+
+    // the commit has no close distance to an other (it's alone)
+    if (!groupedTextsByDistance.get(index)) {
+      groupedCommits.add(commit)
+      return
+    }
+
+    // commit is close distance to other(s)
+    const closedDistancesCommitIndex = groupedTextsByDistance.get(index)
+    const copyCommit = { ...commit }
+    // - store this commit
+    groupedCommits.add(copyCommit)
+    // - group all others in its `siblings`
+    copyCommit.siblings = closedDistancesCommitIndex.map(otherCommitIndex => commits[otherCommitIndex])
+
+    // take care of its siblings
+    closedDistancesCommitIndex.forEach((otherCommitIndex) => {
+      // - store others into a Set so we don't process them
+      alreadyProcessed.add(otherCommitIndex)
+      // - remove others from the Map, avoiding duplicates
+      groupedTextsByDistance.delete(otherCommitIndex)
+    })
+  })
+
+  return Array.from(groupedCommits)
+}
+
 async function generateVersion({ from, to, version }) {
-  const commits = await getCommits(from, to)
+  const commits = groupCommitsByWordsDistance(await getCommits(from, to))
   const lastCommitDate = getLastCommitDate(commits)
 
   return {

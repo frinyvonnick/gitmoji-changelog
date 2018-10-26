@@ -37,6 +37,7 @@ function parseCommit(commit) {
     emoji,
     message,
     group,
+    siblings: [],
     body: body.join('\n'),
   }
 }
