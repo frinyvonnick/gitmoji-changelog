@@ -141,6 +141,53 @@ describe('changelog', () => {
     )
     expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: '', to: 'v1.0.0' }))
   })
+
+  it('should filter empty groups out', async () => {
+    mockGroup([sparklesCommit])
+    mockGroup([recycleCommit])
+    mockGroup([]) // empty group
+    mockGroup([lipstickCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', '1.0.0', 'v1.1.1']))
+
+    const { changes } = await generateChangelog({ mode: 'init' })
+
+    expect(changes).toEqual([
+      {
+        date: undefined,
+        version: 'next',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: [sparklesCommit],
+          },
+        ],
+      },
+      {
+        date: '2018-08-10',
+        version: '1.1.1',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [lipstickCommit],
+          },
+        ],
+      },
+      {
+        date: '2018-08-01',
+        version: '1.0.0',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [recycleCommit],
+          },
+        ],
+      },
+    ])
+  })
 })
 
 jest.mock('git-raw-commits')
