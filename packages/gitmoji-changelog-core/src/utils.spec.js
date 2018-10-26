@@ -12,21 +12,7 @@ describe('utils', () => {
         'an other kind of bug', // 5 - group2
       ]
 
-      const groups = getGroupedTextsByDistance(messages)
-
-      const expectedGroup1 = [0, 2, 3]
-      const expectedGroup2 = [1, 5]
-
-      expect(Array.from(groups.keys())).toEqual([...expectedGroup1, ...expectedGroup2])
-
-      // first group
-      expect(Array.from(groups.get(0))).toEqual(expectedGroup1)
-      expect(Array.from(groups.get(2))).toEqual(expectedGroup1)
-      expect(Array.from(groups.get(3))).toEqual(expectedGroup1)
-
-      // second group
-      expect(Array.from(groups.get(1))).toEqual(expectedGroup2)
-      expect(Array.from(groups.get(5))).toEqual(expectedGroup2)
+      expect(getGroupedTextsByDistance(messages)).toEqual([[0, 2, 3], [1, 5], [4]])
     })
   })
 })

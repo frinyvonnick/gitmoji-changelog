@@ -1,52 +1,31 @@
 const levenshtein = require('fast-levenshtein')
 
-function addToMapValues(map, reference, toAdd) {
-  let set = map.get(reference)
-  if (!set) {
-    set = new Set()
-    map.set(reference, set)
-  }
-
-  set.add(toAdd)
-  set.add(reference)
-}
-
+// FIXME: rename texts to sentences
 function getGroupedTextsByDistance(texts = []) {
   const textsWithSortedWords = texts.map(text => text.split(' ').sort().join(''))
-  const closedMeaningTexts = new Map()
+
+  const alreadyProcessedWords = new Set()
+  const keyGroups = new Map()
 
   for (let i = 0; i < textsWithSortedWords.length; i += 1) {
-    for (let j = i + 1; j < textsWithSortedWords.length; j += 1) {
-      const distance = levenshtein.get(textsWithSortedWords[i], textsWithSortedWords[j])
+    if (!alreadyProcessedWords.has(i)) {
+      alreadyProcessedWords.add(i)
+      keyGroups.set(i, [i])
 
-      // const minLength = Math.min(texts[i].length, texts[j].length)
+      for (let j = i + 1; j < textsWithSortedWords.length; j += 1) {
+        const distance = levenshtein.get(textsWithSortedWords[i], textsWithSortedWords[j])
 
-      // console.log(minLength, distance, texts[i], texts[j])
-
-      // this is a magic number, this comes from various testing
-      // feel free to tweak it
-      if (distance < 10) {
-        closedMeaningTexts.get(i)
-        addToMapValues(closedMeaningTexts, i, j)
-        addToMapValues(closedMeaningTexts, j, i)
+        // this is a magic number, this comes from various testing
+        // feel free to tweak it
+        if (distance < 10) {
+          keyGroups.get(i).push(j)
+          alreadyProcessedWords.add(j)
+        }
       }
     }
   }
 
-  // sort values
-  const isSorted = new Set()
-  closedMeaningTexts.forEach((value, key) => {
-    if (isSorted.has(key)) return
-
-    const sortedValues = new Set(Array.from(value).sort())
-
-    value.forEach((index) => {
-      isSorted.add(index)
-      closedMeaningTexts.set(index, sortedValues)
-    })
-  })
-
-  return closedMeaningTexts
+  return Array.from(keyGroups.values())
 }
 
 module.exports = {

@@ -59,41 +59,12 @@ function sanitizeVersion(version) {
 }
 
 function groupCommitsByWordsDistance(commits = []) {
-  const groupedCommits = []
-  const alreadyProcessed = new Set()
+  const distanceGroups = getGroupedTextsByDistance(commits.map(commit => commit.message))
 
-  const groupedTextsByDistance = getGroupedTextsByDistance(commits.map(commit => commit.message))
-
-  commits.forEach((commit, index) => {
-    // the commit is already processed (in case it was stored in an other siblings)
-    if (alreadyProcessed.has(index)) return
-
-    // the commit has no close distance to an other (it's alone)
-    if (!groupedTextsByDistance.get(index)) {
-      groupedCommits.push(commit)
-      return
-    }
-
-    // commit is close distance to other(s)
-    const closedDistancesCommitIndex = groupedTextsByDistance.get(index)
-    const copyCommit = { ...commit }
-    // - store this commit
-    groupedCommits.push(copyCommit)
-    // - group all others in its `siblings`
-    copyCommit.siblings = Array.from(closedDistancesCommitIndex)
-      .filter(otherCommitIndex => otherCommitIndex !== index)
-      .map(otherCommitIndex => commits[otherCommitIndex])
-
-    // take care of its siblings
-    closedDistancesCommitIndex.forEach((otherCommitIndex) => {
-      // - store others into a Set so we don't process them
-      alreadyProcessed.add(otherCommitIndex)
-      // - remove others from the Map, avoiding duplicates
-      groupedTextsByDistance.delete(otherCommitIndex)
-    })
-  })
-
-  return groupedCommits
+  return distanceGroups.map(([first, ...siblings]) => ({
+    ...commits[first],
+    siblings: siblings.map(index => commits[index]),
+  }))
 }
 
 async function generateVersion({ from, to, version }) {
