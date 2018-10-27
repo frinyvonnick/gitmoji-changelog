@@ -58,17 +58,19 @@ function sanitizeVersion(version) {
   })
 }
 
-function groupCommitsByMessagesDistance(commits = []) {
+function groupSimilarCommits(commits = []) {
   const distanceGroups = groupSentencesByDistance(commits.map(commit => commit.message))
 
-  return distanceGroups.map(([first, ...siblings]) => ({
-    ...commits[first],
-    siblings: siblings.map(index => commits[index]),
-  }))
+  return distanceGroups
+    .map(indexes => indexes.map(index => commits[index]))
+    .map(([first, ...siblings]) => ({
+      ...first,
+      siblings,
+    }))
 }
 
 async function generateVersion({ from, to, version }) {
-  const commits = groupCommitsByMessagesDistance(await getCommits(from, to))
+  const commits = groupSimilarCommits(await getCommits(from, to))
   const lastCommitDate = getLastCommitDate(commits)
 
   return {
