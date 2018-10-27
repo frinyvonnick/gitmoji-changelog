@@ -48,6 +48,7 @@ yargs
 
   .option('format', { default: 'markdown', desc: 'changelog format (markdown, json)' })
   .option('output', { desc: 'output changelog file' })
+  .option('group-similar-commits', { desc: 'try to group similar commits', default: true })
 
   .help('help')
   .epilog(`For more information visit: ${homepage}`)

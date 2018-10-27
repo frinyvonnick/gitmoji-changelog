@@ -101,10 +101,8 @@ describe('changelog', () => {
             group: 'changed',
             label: 'Changed',
             commits: [
-              {
-                ...lipstickCommit,
-                siblings: [secondLipstickCommit],
-              },
+              lipstickCommit,
+              secondLipstickCommit,
               recycleCommit,
               secondRecycleCommit,
             ],
@@ -122,6 +120,23 @@ describe('changelog', () => {
           },
         ],
       },
+    ])
+  })
+
+  it('should group similar commits', async () => {
+    mockGroups()
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
+
+    const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
+
+    expect(changes[0].groups[0].commits).toEqual([
+      {
+        ...lipstickCommit,
+        siblings: [secondLipstickCommit],
+      },
+      recycleCommit,
+      secondRecycleCommit,
     ])
   })
 
