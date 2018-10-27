@@ -48,13 +48,11 @@ function markdownIncremental({ meta, changes }, options) {
     let previousNextFound = false
     let previousVersionFound = false
 
-    // start from currentFile
     readStream
       .pipe(new Transform({
         transform(chunk, encoding, callback) {
           const string = chunk.toString()
 
-          // in others cases, we try to put the new changes after the header
           callback(
             null,
             string.split('\n')
@@ -63,15 +61,18 @@ function markdownIncremental({ meta, changes }, options) {
                   previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
                   previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
 
+                  // Remove old release (next version)
                   if (previousNextFound && !previousVersionFound) {
                     return content
                   }
 
+                  // Rewrite the release (next version)
                   if (previousVersionFound) {
                     previousNextFound = false
                     return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
                   }
 
+                  // Just push the line without changing anything
                   return `${content}${nextLine}\n`
                 },
                 '',
