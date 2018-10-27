@@ -5,7 +5,7 @@ const { buildMarkdownFile, autolink, getShortHash } = require('./index')
 
 describe('Markdown converter', () => {
   it('should generate full changelog into markdown from scratch', async () => {
-    fs.writeFileSync = jest.fn()
+    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
 
     const changelog = {
       meta: {
@@ -63,9 +63,9 @@ describe('Markdown converter', () => {
 
     await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md' })
 
-    expect(fs.writeFileSync.mock.calls[0].length).toBe(2)
-    expect(fs.writeFileSync.mock.calls[0][0]).toBe('./CHANGELOG.md')
-    expect(fs.writeFileSync.mock.calls[0][1]).toEqual(`# Changelog
+    expect(fs.writeFile).toHaveBeenCalledTimes(1)
+    expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
+    expect(fs.writeFile.mock.calls[0][1]).toEqual(`# Changelog
 
 <a name="next"></a>
 ## next
