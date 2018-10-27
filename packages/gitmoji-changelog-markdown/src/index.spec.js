@@ -1,11 +1,12 @@
 /* eslint-disable global-require */
 const fs = require('fs')
+const { Writable, Readable } = require('stream')
 
 const { buildMarkdownFile, autolink, getShortHash } = require('./index')
 
 describe('Markdown converter', () => {
   it('should generate full changelog into markdown from scratch', async () => {
-    fs.writeFileSync = jest.fn()
+    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
 
     const changelog = {
       meta: {
@@ -65,9 +66,9 @@ describe('Markdown converter', () => {
 
     await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md' })
 
-    expect(fs.writeFileSync.mock.calls[0].length).toBe(2)
-    expect(fs.writeFileSync.mock.calls[0][0]).toBe('./CHANGELOG.md')
-    expect(fs.writeFileSync.mock.calls[0][1]).toEqual(`# Changelog
+    expect(fs.writeFile).toHaveBeenCalledTimes(1)
+    expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
+    expect(fs.writeFile.mock.calls[0][1]).toEqual(`# Changelog
 
 <a name="next"></a>
 ## next
@@ -88,13 +89,36 @@ describe('Markdown converter', () => {
 `)
   })
 
-  // FIXME: should find a better way to mock fs
-  it.skip('should generate incremental markdown changelog', async () => {
-    fs.createWriteStream = jest.fn(() => ({
-      write: jest.fn(),
-      end: jest.fn(),
+  it('should generate incremental markdown changelog', async () => {
+    let result
+    fs.createWriteStream = jest.fn(() => new Writable({
+      write(chunk, encoding, callback) {
+        result = chunk.toString()
+        callback()
+        this.emit('close')
+      },
     }))
-    fs.renameSync = jest.fn()
+    fs.createReadStream = jest.fn(() => {
+      let index = 0
+      return new Readable({
+        read() {
+          if (index === 0) {
+            this.push(`# Changelog
+> Custom header
+
+<a name="1.0.0"></a>
+## 1.0.0
+I am the last version
+`)
+            index += 1
+            return
+          }
+
+          this.push(null)
+        },
+      })
+    })
+    fs.rename = jest.fn((fileA, fileB, cb) => cb(null, 'done'))
 
     const changelog = {
       meta: {
@@ -106,6 +130,7 @@ describe('Markdown converter', () => {
           url: 'https://github.com/frinyvonnick/gitmoji-changelog',
           bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
         },
+        lastVersion: '1.0.0',
       },
       changes: [
         {
@@ -130,12 +155,10 @@ describe('Markdown converter', () => {
       ],
     }
 
-    await buildMarkdownFile(changelog, { mode: 'incremental', output: './CHANGELOG.md' })
+    await buildMarkdownFile(changelog, { release: 'next', mode: 'incremental', output: './CHANGELOG.md' })
 
-    const writer = fs.createWriteStream.mock.results[0].value.write
-
-    expect(writer.mock.calls.length).toBe(1)
-    expect(writer.mock.calls[0][0]).toBe(`# Changelog
+    expect(result).toEqual(`# Changelog
+> Custom header
 
 <a name="next"></a>
 ## next
@@ -144,6 +167,10 @@ describe('Markdown converter', () => {
 
 - ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
 
+
+<a name="1.0.0"></a>
+## 1.0.0
+I am the last version
 
 `)
   })

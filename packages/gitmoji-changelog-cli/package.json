@@ -33,6 +33,8 @@
   "dependencies": {
     "@gitmoji-changelog/core": "^1.0.1",
     "@gitmoji-changelog/markdown": "^1.0.0",
+    "libnpm": "^1.0.0",
+    "semver-compare": "^1.0.0",
     "yargs": "^12.0.1"
   },
   "publishConfig": {

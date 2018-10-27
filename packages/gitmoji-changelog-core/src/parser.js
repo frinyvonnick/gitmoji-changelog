@@ -1,14 +1,28 @@
 const splitLines = require('split-lines')
+const { invert } = require('lodash')
 const groupMapping = require('./groupMapping')
 const emojiMapping = require('./emojiMapping')
+
+const emojiMappingInvert = invert(emojiMapping)
 
 function parseSubject(subject) {
   if (!subject) return {}
 
-  const matches = subject.match(/:(\w*):(.*)/)
-  if (!matches) return { message: subject }
+  let emojiCode
+  let message = subject
 
-  const [, emojiCode, message] = matches
+  const matches = subject.match(/:(\w*):(.*)/)
+  if (matches) {
+    // extract textual emoji
+    [, emojiCode, message] = matches
+  } else {
+    // extract unicode emoji
+    const emoji = subject.substr(0, 1)
+    emojiCode = emojiMappingInvert[emoji]
+    if (emojiCode) {
+      message = subject.substr(1, subject.length)
+    }
+  }
 
   return {
     emojiCode,
