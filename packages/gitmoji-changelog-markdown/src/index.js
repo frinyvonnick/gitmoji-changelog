@@ -64,12 +64,10 @@ function markdownIncremental({ meta, changes }, options) {
                   previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
 
                   if (previousNextFound && !previousVersionFound) {
-                    console.log('erase')
                     return content
                   }
 
                   if (previousVersionFound) {
-                    console.log('write new release')
                     previousNextFound = false
                     return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
                   }
