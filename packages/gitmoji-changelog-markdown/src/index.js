@@ -37,25 +37,30 @@ function markdownFromScratch({ meta, changes }, options) {
 
 function markdownIncremental({ meta, changes }, options) {
   const { lastVersion } = meta
+  const { output, release } = options
 
-  const currentFile = options.output
-  const tempFile = `${currentFile}.tmp`
-
-  if (!fs.existsSync(currentFile)) {
-    throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
-  }
+  const tempFile = `${output}.tmp`
 
   return new Promise((resolve, reject) => {
-    const readStream = fs.createReadStream(currentFile, { encoding: 'utf-8' })
+    const readStream = fs.createReadStream(output, { encoding: 'utf-8' })
     const writeStream = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
 
     // start from currentFile
     readStream
       .pipe(new Transform({
         transform(chunk, encoding, callback) {
+          const string = chunk.toString()
+
+          // if the release (the next) is already in file, we do nothing
+          if (string.includes(`<a name="${release}"></a>`)) {
+            callback(null, chunk)
+            return
+          }
+
+          // in others cases, we try to put the new changes after the header
           callback(
             null,
-            chunk.toString().split('\n')
+            string.split('\n')
               .map((line) => {
                 if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
                   return `${toMarkdown({ meta, changes })}${line}`
@@ -70,7 +75,7 @@ function markdownIncremental({ meta, changes }, options) {
       .pipe(writeStream)
       .on('error', reject)
       .on('close', () => {
-        fs.rename(tempFile, currentFile, resolve)
+        fs.rename(tempFile, output, resolve)
       })
   })
 }
