@@ -1,6 +1,5 @@
 const { promisify } = require('util')
 const fs = require('fs')
-const es = require('event-stream')
 const path = require('path')
 const { Transform } = require('stream')
 const handlebars = require('handlebars')
@@ -52,17 +51,20 @@ function markdownIncremental({ meta, changes }, options) {
 
     // start from currentFile
     readStream
-      .pipe(es.split('\n'))
       .pipe(new Transform({
         transform(chunk, encoding, callback) {
-          const line = `${chunk}\n`
+          callback(
+            null,
+            chunk.toString().split('\n')
+              .map((line) => {
+                if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
+                  return `${toMarkdown({ meta, changes })}${line}`
+                }
 
-          let nextChunkToWrite = line
-          if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-            nextChunkToWrite = `${toMarkdown({ meta, changes })}${line}`
-          }
-
-          callback(null, nextChunkToWrite)
+                return line
+              })
+              .join('\n')
+          )
         },
       }))
       .pipe(writeStream)
