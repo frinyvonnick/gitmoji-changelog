@@ -6,20 +6,31 @@ function groupSentencesByDistance(texts = []) {
   const alreadyProcessedWords = new Set()
   const keyGroups = []
 
-  for (let i = 0; i < textsWithSortedWords.length; i += 1) {
-    if (!alreadyProcessedWords.has(i)) {
-      alreadyProcessedWords.add(i)
-      const group = [i]
+  for (
+    let indexesFromStart = 0;
+    indexesFromStart < textsWithSortedWords.length;
+    indexesFromStart += 1
+  ) {
+    if (!alreadyProcessedWords.has(indexesFromStart)) {
+      alreadyProcessedWords.add(indexesFromStart)
+      const group = [indexesFromStart]
       keyGroups.push(group)
 
-      for (let j = i + 1; j < textsWithSortedWords.length; j += 1) {
-        const distance = levenshtein.get(textsWithSortedWords[i], textsWithSortedWords[j])
+      for (
+        let indexesFromNext = indexesFromStart + 1;
+        indexesFromNext < textsWithSortedWords.length;
+        indexesFromNext += 1
+      ) {
+        const distance = levenshtein.get(
+          textsWithSortedWords[indexesFromStart],
+          textsWithSortedWords[indexesFromNext],
+        )
 
         // this is a magic number, this comes from various testing
         // feel free to tweak it
         if (distance < 10) {
-          group.push(j)
-          alreadyProcessedWords.add(j)
+          group.push(indexesFromNext)
+          alreadyProcessedWords.add(indexesFromNext)
         }
       }
     }
