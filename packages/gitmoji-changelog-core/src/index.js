@@ -89,7 +89,7 @@ async function generateVersions(tags) {
       })
       .map(generateVersion)
   )
-    .then(changes => changes.sort((c1, c2) => {
+    .then(versions => versions.sort((c1, c2) => {
       if (c1.version === 'next') return -1
       if (c2.version === 'next') return 1
       return semverCompare(c2.version, c1.version)
@@ -138,7 +138,7 @@ async function generateChangelog(options = {}) {
       repository,
       lastVersion: sanitizeVersion(lastTag),
     },
-    changes,
+    changes: changes.filter(({ groups }) => groups.length),
   }
 }
 
