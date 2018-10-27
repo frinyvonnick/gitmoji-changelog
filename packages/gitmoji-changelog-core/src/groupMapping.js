@@ -6,7 +6,6 @@ module.exports = [
       'sparkles',
       'tada',
       'white_check_mark',
-      'bookmark',
       'construction_worker',
       'chart_with_upwards_trend',
       'heavy_plus_sign',
@@ -68,6 +67,13 @@ module.exports = [
     group: 'security',
     label: 'Security',
     emojis: ['lock'],
+  },
+  {
+    group: 'useless',
+    label: 'Useless',
+    emojis: [
+      'bookmark',
+    ],
   },
   {
     group: 'misc',

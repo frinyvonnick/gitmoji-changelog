@@ -57,8 +57,13 @@ function sanitizeVersion(version) {
   })
 }
 
+function filterCommits(commits) {
+  return commits
+    .filter(commit => commit.group !== 'useless')
+}
+
 async function generateVersion({ from, to, version }) {
-  const commits = await getCommits(from, to)
+  const commits = filterCommits(await getCommits(from, to))
   const lastCommitDate = getLastCommitDate(commits)
 
   return {
