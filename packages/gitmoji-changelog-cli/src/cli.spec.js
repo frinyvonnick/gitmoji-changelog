@@ -27,11 +27,13 @@ describe('cli', () => {
   })
 
   describe('version control', () => {
+    const findOutdatedMessage = () => logger.warn.mock.calls.find(([message]) => message.includes('outdated'))
+
     it('should print a warning about a new version', async () => {
       manifest.mockReturnValueOnce(Promise.resolve({ version: '2.0.0' }))
       await main()
 
-      expect(logger.warn).toHaveBeenCalledWith('You got an outdated version of gitmoji-changelog, please update! (yours: 1.0.0, latest: 2.0.0)')
+      expect(findOutdatedMessage()).toBeTruthy()
     })
 
     it('should NOT print a warning about a new version', async () => {
@@ -44,21 +46,21 @@ describe('cli', () => {
       await main()
 
       expect(manifest).toHaveBeenCalledTimes(2)
-      expect(logger.warn).not.toHaveBeenCalled()
+      expect(findOutdatedMessage()).toBeFalsy()
     })
 
     it('should NOT print a warning about a new version when request took to much time', async () => {
       manifest.mockImplementationOnce(() => new Promise((resolve) => { setTimeout(resolve, 1000, { version: '2.0.0' }) }))
       await main()
 
-      expect(logger.warn).not.toHaveBeenCalled()
+      expect(findOutdatedMessage()).toBeFalsy()
     })
 
     it('should NOT print a warning about a new version when request is on error', async () => {
       manifest.mockReturnValueOnce(Promise.reject(new Error('faked error (manifest)')))
       await main()
 
-      expect(logger.warn).not.toHaveBeenCalled()
+      expect(findOutdatedMessage()).toBeFalsy()
     })
   })
 })

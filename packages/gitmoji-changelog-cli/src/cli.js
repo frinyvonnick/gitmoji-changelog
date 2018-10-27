@@ -24,6 +24,8 @@ async function main(options = {}) {
     const latestVersion = await getLatestVersion()
     if (semverCompare(latestVersion, pkg.version) > 0) {
       logger.warn(`You got an outdated version of gitmoji-changelog, please update! (yours: ${pkg.version}, latest: ${latestVersion})`)
+      logger.warn('Just do the following npm command to update it:')
+      logger.warn('\t> npm install -g gitmoji-changelog@latest')
     }
   } catch (e) { /* ignore error */ }
 
