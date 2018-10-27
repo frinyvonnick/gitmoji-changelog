@@ -45,30 +45,39 @@ function markdownIncremental({ meta, changes }, options) {
     const readStream = fs.createReadStream(output, { encoding: 'utf-8' })
     const writeStream = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
 
+    let previousNextFound = false
+    let previousVersionFound = false
+
     // start from currentFile
     readStream
       .pipe(new Transform({
         transform(chunk, encoding, callback) {
           const string = chunk.toString()
 
-          // if the release (the next) is already in file, we do nothing
-          if (string.includes(`<a name="${release}"></a>`)) {
-            callback(null, chunk)
-            return
-          }
-
           // in others cases, we try to put the new changes after the header
           callback(
             null,
             string.split('\n')
-              .map((line) => {
-                if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-                  return `${toMarkdown({ meta, changes })}${line}`
-                }
+              .reduce(
+                (content, nextLine) => {
+                  previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
+                  previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
 
-                return line
-              })
-              .join('\n')
+                  if (previousNextFound && !previousVersionFound) {
+                    console.log('erase')
+                    return content
+                  }
+
+                  if (previousVersionFound) {
+                    console.log('write new release')
+                    previousNextFound = false
+                    return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
+                  }
+
+                  return `${content}${nextLine}\n`
+                },
+                '',
+              )
           )
         },
       }))
