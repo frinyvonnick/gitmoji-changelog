@@ -1,6 +1,8 @@
+const { promisify } = require('util')
 const fs = require('fs')
 const es = require('event-stream')
 const path = require('path')
+const { Transform } = require('stream')
 const handlebars = require('handlebars')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
@@ -31,8 +33,7 @@ function toMarkdown({ meta, changes }) {
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  const output = toMarkdown({ meta, changes })
-  return Promise.resolve(fs.writeFileSync(options.output, output))
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes })}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
@@ -45,37 +46,30 @@ function markdownIncremental({ meta, changes }, options) {
     throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
   }
 
-  // write file for next version
-  const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
-  writer.write(toMarkdown({ meta, changes }))
+  return new Promise((resolve, reject) => {
+    const readStream = fs.createReadStream(currentFile, { encoding: 'utf-8' })
+    const writeStream = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
 
-  // read original file until last tags and add it to the end
-  let lastVersionFound = false
-  return new Promise(resolve => {
-    const stream = fs.createReadStream(currentFile)
-      .pipe(es.split())
-      .pipe(es.mapSync((line) => {
-        stream.pause()
+    // start from currentFile
+    readStream
+      .pipe(es.split('\n'))
+      .pipe(new Transform({
+        transform(chunk, encoding, callback) {
+          const line = `${chunk}\n`
 
-        if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-          lastVersionFound = true
-        }
-        if (lastVersionFound) {
-          writer.write(`${line}\n`)
-        }
+          let nextChunkToWrite = line
+          if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
+            nextChunkToWrite = `${toMarkdown({ meta, changes })}${line}`
+          }
 
-        stream.resume()
+          callback(null, nextChunkToWrite)
+        },
       }))
-      .on('error', (err) => {
-        throw new Error(err)
+      .pipe(writeStream)
+      .on('error', reject)
+      .on('close', () => {
+        fs.rename(tempFile, currentFile, resolve)
       })
-      .on('end', () => {
-        writer.end()
-        resolve()
-      })
-  }).then(() => {
-    // replace changelog file by the new one
-    fs.renameSync(tempFile, currentFile)
   })
 }
 
