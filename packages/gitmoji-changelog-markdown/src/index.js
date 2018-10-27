@@ -1,6 +1,7 @@
+const { promisify } = require('util')
 const fs = require('fs')
-const es = require('event-stream')
 const path = require('path')
+const { Transform } = require('stream')
 const handlebars = require('handlebars')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
@@ -31,51 +32,59 @@ function toMarkdown({ meta, changes }) {
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  const output = toMarkdown({ meta, changes })
-  return Promise.resolve(fs.writeFileSync(options.output, output))
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes })}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
   const { lastVersion } = meta
+  const { output, release } = options
 
-  const currentFile = options.output
-  const tempFile = `${currentFile}.tmp`
+  const tempFile = `${output}.tmp`
 
-  if (!fs.existsSync(currentFile)) {
-    throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
-  }
+  return new Promise((resolve, reject) => {
+    const readStream = fs.createReadStream(output, { encoding: 'utf-8' })
+    const writeStream = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
 
-  // write file for next version
-  const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
-  writer.write(toMarkdown({ meta, changes }))
+    let previousNextFound = false
+    let previousVersionFound = false
 
-  // read original file until last tags and add it to the end
-  let lastVersionFound = false
-  return new Promise(resolve => {
-    const stream = fs.createReadStream(currentFile)
-      .pipe(es.split())
-      .pipe(es.mapSync((line) => {
-        stream.pause()
+    readStream
+      .pipe(new Transform({
+        transform(chunk, encoding, callback) {
+          const string = chunk.toString()
 
-        if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-          lastVersionFound = true
-        }
-        if (lastVersionFound) {
-          writer.write(`${line}\n`)
-        }
+          callback(
+            null,
+            string.split('\n')
+              .reduce(
+                (content, nextLine) => {
+                  previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
+                  previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
 
-        stream.resume()
+                  // Remove old release (next version)
+                  if (previousNextFound && !previousVersionFound) {
+                    return content
+                  }
+
+                  // Rewrite the release (next version)
+                  if (previousVersionFound) {
+                    previousNextFound = false
+                    return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
+                  }
+
+                  // Just push the line without changing anything
+                  return `${content}${nextLine}\n`
+                },
+                '',
+              )
+          )
+        },
       }))
-      .on('error', (err) => {
-        throw new Error(err)
+      .pipe(writeStream)
+      .on('error', reject)
+      .on('close', () => {
+        fs.rename(tempFile, output, resolve)
       })
-      .on('end', () => {
-        writer.end()
-        resolve()
-      })
-  }).then(() => {
-    // replace changelog file by the new one
-    fs.renameSync(tempFile, currentFile)
   })
 }
 
