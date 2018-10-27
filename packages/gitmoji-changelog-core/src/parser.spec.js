@@ -21,7 +21,7 @@ describe('commits parser', () => {
     expect(parseCommit(commit)).toEqual(expect.objectContaining(sparklesCommit))
   })
 
-  it('should parse a unicode emojies', () => {
+  it('should parse a unicode emoji', () => {
     const {
       hash,
       date,
