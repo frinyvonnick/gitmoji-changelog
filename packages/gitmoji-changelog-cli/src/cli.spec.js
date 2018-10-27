@@ -20,6 +20,12 @@ describe('cli', () => {
     expect(logger.error).toHaveBeenCalled()
   })
 
+  it('should call process.exit explicitly so promises are not waited for', async () => {
+    await main()
+
+    expect(process.exit).toHaveBeenCalledTimes(1)
+  })
+
   describe('version control', () => {
     it('should print a warning about a new version', async () => {
       manifest.mockReturnValueOnce(Promise.resolve({ version: '2.0.0' }))
