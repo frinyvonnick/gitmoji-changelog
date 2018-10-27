@@ -28,6 +28,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
@@ -48,6 +49,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+                  author: 'John Doe',
                   date: '2018-08-28T10:06:00+02:00',
                   subject: ':sparkles: Upgrade brand new feature',
                   emoji: '✨',
@@ -72,7 +74,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
 
 
 <a name="1.0.0"></a>
@@ -80,7 +82,7 @@ describe('Markdown converter', () => {
 
 ### Added
 
-- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
+- ✨ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f)] (by John Doe)
 
 
 `)
@@ -115,6 +117,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
@@ -140,7 +143,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
 
 
 `)
