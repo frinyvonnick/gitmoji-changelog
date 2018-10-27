@@ -125,6 +125,7 @@ describe('changelog', () => {
   })
 
   it('should filter some commits out', async () => {
+    gitRawCommits.mockReset()
     mockGroup([uselessCommit, lipstickCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
