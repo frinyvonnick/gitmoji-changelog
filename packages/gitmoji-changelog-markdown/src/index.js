@@ -57,7 +57,7 @@ function markdownIncremental({ meta, changes }, options) {
             null,
             string.split('\n')
               .reduce(
-                (content, nextLine) => {
+                (content, nextLine, index, array) => {
                   previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
                   previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
 
@@ -73,7 +73,10 @@ function markdownIncremental({ meta, changes }, options) {
                   }
 
                   // Just push the line without changing anything
-                  return `${content}${nextLine}\n`
+                  if (index !== array.length - 1) {
+                    return `${content}${nextLine}\n`
+                  }
+                  return `${content}${nextLine}`
                 },
                 '',
               )

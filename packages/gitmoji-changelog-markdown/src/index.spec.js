@@ -169,7 +169,6 @@ I am the last version
 <a name="1.0.0"></a>
 ## 1.0.0
 I am the last version
-
 `)
   })
 })
