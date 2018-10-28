@@ -2,7 +2,12 @@
 const fs = require('fs')
 const { Writable, Readable } = require('stream')
 
-const { buildMarkdownFile, autolink, getShortHash } = require('./index')
+const {
+  buildMarkdownFile,
+  matchVersionBreakpoint,
+  autolink,
+  getShortHash,
+} = require('./index')
 
 describe('Markdown converter', () => {
   it('should generate full changelog into markdown from scratch', async () => {
@@ -220,5 +225,22 @@ describe('autolink', () => {
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
     expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [#456](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
+  })
+})
+
+describe('matchVersionBreakpoint', () => {
+  it('should return true if match with the given version breakpoint', () => {
+    const result = matchVersionBreakpoint('<a name="1.0.0"></a>', '1.0.0')
+    expect(result).toBe(true)
+  })
+
+  it('should return true if match with any version breakpoint', () => {
+    const result = matchVersionBreakpoint('<a name="next"></a>')
+    expect(result).toBe(true)
+  })
+
+  it('should return false if no match with a version breakpoint', () => {
+    const result = matchVersionBreakpoint('hello world', '1.0.0')
+    expect(result).toBe(false)
   })
 })
