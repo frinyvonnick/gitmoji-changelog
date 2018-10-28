@@ -47,6 +47,7 @@ function markdownIncremental({ meta, changes }, options) {
 
     let previousNextFound = false
     let previousVersionFound = false
+    let nextVersionWritten = false
 
     readStream
       .pipe(new Transform({
@@ -58,17 +59,17 @@ function markdownIncremental({ meta, changes }, options) {
             string.split('\n')
               .reduce(
                 (content, nextLine, index, array) => {
-                  previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
                   previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
+                  previousNextFound = previousNextFound || nextLine.startsWith('<a name=')
 
                   // Remove old release (next version)
-                  if (previousNextFound && !previousVersionFound) {
+                  if (previousNextFound && !previousVersionFound && !nextVersionWritten) {
                     return content
                   }
 
                   // Rewrite the release (next version)
-                  if (previousVersionFound) {
-                    previousNextFound = false
+                  if (previousVersionFound && !nextVersionWritten) {
+                    nextVersionWritten = true
                     return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
                   }
 
