@@ -37,7 +37,7 @@ function markdownFromScratch({ meta, changes }, options) {
 
 function markdownIncremental({ meta, changes }, options) {
   const { lastVersion } = meta
-  const { output, release } = options
+  const { output } = options
 
   const tempFile = `${output}.tmp`
 
@@ -47,6 +47,7 @@ function markdownIncremental({ meta, changes }, options) {
 
     let previousNextFound = false
     let previousVersionFound = false
+    let nextVersionWritten = false
 
     readStream
       .pipe(new Transform({
@@ -57,23 +58,26 @@ function markdownIncremental({ meta, changes }, options) {
             null,
             string.split('\n')
               .reduce(
-                (content, nextLine) => {
-                  previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
-                  previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
+                (content, nextLine, index, array) => {
+                  previousVersionFound = matchVersionBreakpoint(nextLine, lastVersion)
+                  previousNextFound = previousNextFound || matchVersionBreakpoint(nextLine)
 
                   // Remove old release (next version)
-                  if (previousNextFound && !previousVersionFound) {
+                  if (previousNextFound && !previousVersionFound && !nextVersionWritten) {
                     return content
                   }
 
                   // Rewrite the release (next version)
-                  if (previousVersionFound) {
-                    previousNextFound = false
+                  if (previousVersionFound && !nextVersionWritten) {
+                    nextVersionWritten = true
                     return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
                   }
 
                   // Just push the line without changing anything
-                  return `${content}${nextLine}\n`
+                  if (index !== array.length - 1) {
+                    return `${content}${nextLine}\n`
+                  }
+                  return `${content}${nextLine}`
                 },
                 '',
               )
@@ -86,6 +90,11 @@ function markdownIncremental({ meta, changes }, options) {
         fs.rename(tempFile, output, resolve)
       })
   })
+}
+
+function matchVersionBreakpoint(tested, version = '.*') {
+  const regex = new RegExp(`<a name="${version}"></a>`)
+  return regex.test(tested)
 }
 
 function getShortHash(hash, repository) {
@@ -113,6 +122,7 @@ function autolink(message, repository) {
 
 module.exports = {
   buildMarkdownFile,
+  matchVersionBreakpoint,
   getShortHash,
   autolink,
 }
