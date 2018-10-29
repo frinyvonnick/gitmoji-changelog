@@ -1,6 +1,7 @@
+const { promisify } = require('util')
 const fs = require('fs')
-const es = require('event-stream')
 const path = require('path')
+const { Transform } = require('stream')
 const handlebars = require('handlebars')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
@@ -32,52 +33,69 @@ function toMarkdown({ meta, changes }, { author }) {
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  const output = toMarkdown({ meta, changes }, options)
-  return Promise.resolve(fs.writeFileSync(options.output, output))
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes }, options)}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
   const { lastVersion } = meta
+  const { output } = options
 
-  const currentFile = options.output
-  const tempFile = `${currentFile}.tmp`
+  const tempFile = `${output}.tmp`
 
-  if (!fs.existsSync(currentFile)) {
-    throw new Error(`${currentFile} doesn't exists, please execute "gitmoji-changelog init" to build it from scratch.`)
-  }
+  return new Promise((resolve, reject) => {
+    const readStream = fs.createReadStream(output, { encoding: 'utf-8' })
+    const writeStream = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
 
-  // write file for next version
-  const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
-  writer.write(toMarkdown({ meta, changes }, options))
+    let previousNextFound = false
+    let previousVersionFound = false
+    let nextVersionWritten = false
 
-  // read original file until last tags and add it to the end
-  let lastVersionFound = false
-  return new Promise(resolve => {
-    const stream = fs.createReadStream(currentFile)
-      .pipe(es.split())
-      .pipe(es.mapSync((line) => {
-        stream.pause()
+    readStream
+      .pipe(new Transform({
+        transform(chunk, encoding, callback) {
+          const string = chunk.toString()
 
-        if (line.startsWith(`<a name="${lastVersion}"></a>`)) {
-          lastVersionFound = true
-        }
-        if (lastVersionFound) {
-          writer.write(`${line}\n`)
-        }
+          callback(
+            null,
+            string.split('\n')
+              .reduce(
+                (content, nextLine, index, array) => {
+                  previousVersionFound = matchVersionBreakpoint(nextLine, lastVersion)
+                  previousNextFound = previousNextFound || matchVersionBreakpoint(nextLine)
 
-        stream.resume()
+                  // Remove old release (next version)
+                  if (previousNextFound && !previousVersionFound && !nextVersionWritten) {
+                    return content
+                  }
+
+                  // Rewrite the release (next version)
+                  if (previousVersionFound && !nextVersionWritten) {
+                    nextVersionWritten = true
+                    return `${content}${toMarkdown({ meta, changes }, options)}${nextLine}\n`
+                  }
+
+                  // Just push the line without changing anything
+                  if (index !== array.length - 1) {
+                    return `${content}${nextLine}\n`
+                  }
+                  return `${content}${nextLine}`
+                },
+                '',
+              )
+          )
+        },
       }))
-      .on('error', (err) => {
-        throw new Error(err)
+      .pipe(writeStream)
+      .on('error', reject)
+      .on('close', () => {
+        fs.rename(tempFile, output, resolve)
       })
-      .on('end', () => {
-        writer.end()
-        resolve()
-      })
-  }).then(() => {
-    // replace changelog file by the new one
-    fs.renameSync(tempFile, currentFile)
   })
+}
+
+function matchVersionBreakpoint(tested, version = '.*') {
+  const regex = new RegExp(`<a name="${version}"></a>`)
+  return regex.test(tested)
 }
 
 function getShortHash(hash, repository) {
@@ -105,6 +123,7 @@ function autolink(message, repository) {
 
 module.exports = {
   buildMarkdownFile,
+  matchVersionBreakpoint,
   getShortHash,
   autolink,
 }
