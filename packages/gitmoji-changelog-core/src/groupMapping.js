@@ -28,7 +28,6 @@ module.exports = [
       'rewind',
       'alien',
       'truck',
-      'boom',
       'bento',
       'wheelchair',
       'speech_balloon',
@@ -36,6 +35,13 @@ module.exports = [
       'children_crossing',
       'building_construction',
       'iphone',
+    ],
+  },
+  {
+    group: 'breaking_changes',
+    label: 'Breaking changes',
+    emojis: [
+      'boom',
     ],
   },
   {
