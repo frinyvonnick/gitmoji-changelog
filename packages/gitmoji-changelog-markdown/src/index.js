@@ -14,7 +14,7 @@ function buildMarkdownFile(changelog = {}, options = {}) {
   return markdownIncremental(changelog, options)
 }
 
-function toMarkdown({ meta, changes }) {
+function toMarkdown({ meta, changes }, { author }) {
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
 
   const compileTemplate = handlebars.compile(template)
@@ -25,13 +25,14 @@ function toMarkdown({ meta, changes }) {
     subject: autolink(commit.subject, meta.repository),
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
+    author: author ? commit.author : null,
   }))
 
   return compileTemplate({ changelog })
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  const output = toMarkdown({ meta, changes })
+  const output = toMarkdown({ meta, changes }, options)
   return Promise.resolve(fs.writeFileSync(options.output, output))
 }
 
@@ -47,7 +48,7 @@ function markdownIncremental({ meta, changes }, options) {
 
   // write file for next version
   const writer = fs.createWriteStream(tempFile, { encoding: 'utf-8' })
-  writer.write(toMarkdown({ meta, changes }))
+  writer.write(toMarkdown({ meta, changes }, options))
 
   // read original file until last tags and add it to the end
   let lastVersionFound = false

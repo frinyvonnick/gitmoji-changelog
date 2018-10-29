@@ -8,7 +8,7 @@
 ### {{label}}
 
 {{#each commits}}
-- {{emoji}} {{message}} [{{hash}}] (by {{author}})
+- {{emoji}} {{message}} [{{hash}}]{{#if author}} (by {{author}}){{/if}}
 {{/each}}
 
 {{/each}}

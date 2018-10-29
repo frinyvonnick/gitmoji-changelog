@@ -48,6 +48,7 @@ yargs
 
   .option('format', { default: 'markdown', desc: 'changelog format (markdown, json)' })
   .option('output', { desc: 'output changelog file' })
+  .option('author', { default: false, desc: 'add the author in changelog lines' })
 
   .help('help')
   .epilog(`For more information visit: ${homepage}`)
