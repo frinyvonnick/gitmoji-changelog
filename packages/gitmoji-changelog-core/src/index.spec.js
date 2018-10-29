@@ -4,6 +4,17 @@ const gitSemverTags = require('git-semver-tags')
 
 const { generateChangelog } = require('./index')
 
+const uselessCommit = {
+  hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd3',
+  date: '2018-09-14T21:00:18+02:00',
+  subject: ':bookmark: Bump version to 1.9.2',
+  body: 'Yes!',
+  emoji: '🔖',
+  emojiCode: 'bookmark',
+  group: 'useless',
+  message: 'Bump version to 1.9.2',
+}
+
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
   date: '2018-08-28T10:06:00+02:00',
@@ -110,6 +121,25 @@ describe('changelog', () => {
           },
         ],
       },
+    ])
+  })
+
+  it('should filter some commits out', async () => {
+    gitRawCommits.mockReset()
+    mockGroup([uselessCommit, lipstickCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog({ mode: 'init' })
+
+    expect(changes).toEqual([
+      expect.objectContaining({
+        groups: [
+          expect.objectContaining({
+            commits: [lipstickCommit],
+          }),
+        ],
+      }),
     ])
   })
 
