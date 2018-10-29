@@ -132,10 +132,15 @@ describe('changelog', () => {
 
     const { changes } = await generateChangelog({ mode: 'init' })
 
-    expect(changes).toHaveLength(1)
-    expect(changes[0].groups).toHaveLength(1)
-    expect(changes[0].groups[0].commits).toHaveLength(1)
-    expect(changes[0].groups[0].commits[0]).toEqual(lipstickCommit)
+    expect(changes).toEqual([
+      expect.objectContaining({
+        groups: [
+          expect.objectContaining({
+            commits: [lipstickCommit],
+          }),
+        ],
+      }),
+    ])
   })
 
   it('should throw an error if no commits', async () => {
