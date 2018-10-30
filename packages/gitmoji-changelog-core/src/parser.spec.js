@@ -8,6 +8,7 @@ const sparklesCommit = {
   body: 'Waouh this is awesome 2',
 }
 
+
 describe('commits parser', () => {
   it('should parse a single commit', () => {
     const {
