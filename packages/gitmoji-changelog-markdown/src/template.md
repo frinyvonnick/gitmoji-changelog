@@ -6,7 +6,7 @@
 ### {{label}}
 
 {{#each commits}}
-- {{emoji}} {{message}} ({{hash}})
+- {{emoji}} {{message}} [{{hash}}]{{#if author}} (by {{author}}){{/if}}
 {{/each}}
 
 {{/each}}

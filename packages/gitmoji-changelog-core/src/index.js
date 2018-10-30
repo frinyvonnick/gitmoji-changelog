@@ -14,7 +14,7 @@ const logger = require('./logger')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
-const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
+const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 
 function getCommits(from, to) {
   return new Promise((resolve) => {

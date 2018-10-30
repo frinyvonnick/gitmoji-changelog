@@ -34,6 +34,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
@@ -54,6 +55,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+                  author: 'John Doe',
                   date: '2018-08-28T10:06:00+02:00',
                   subject: ':sparkles: Upgrade brand new feature',
                   emoji: '✨',
@@ -78,7 +80,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>
@@ -86,7 +88,62 @@ describe('Markdown converter', () => {
 
 ### Added
 
-- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
+- ✨ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f)]
+
+
+`)
+  })
+
+  it('should generate full changelog into markdown from scratch with author', async () => {
+    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
+
+    const changelog = {
+      meta: {
+        repository: {
+          type: 'github',
+          domain: 'github.com',
+          user: 'frinyvonnick',
+          project: 'gitmoji-changelog',
+          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
+          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+        },
+      },
+      changes: [
+        {
+          version: 'next',
+          groups: [
+            {
+              group: 'changed',
+              label: 'Changed',
+              commits: [
+                {
+                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
+                  date: '2018-08-28T10:07:00+02:00',
+                  subject: ':recycle: Upgrade brand new feature',
+                  emoji: '♻️',
+                  message: 'Upgrade brand new feature',
+                  body: 'Waouh this is awesome 3',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+
+    await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md', author: true })
+
+    expect(fs.writeFile).toHaveBeenCalledTimes(1)
+    expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
+    expect(fs.writeFile.mock.calls[0][1]).toEqual(`# Changelog
+
+<a name="next"></a>
+## next
+
+### Changed
+
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
 
 
 `)
@@ -145,6 +202,7 @@ I am the last version
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
@@ -168,7 +226,7 @@ I am the last version
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>

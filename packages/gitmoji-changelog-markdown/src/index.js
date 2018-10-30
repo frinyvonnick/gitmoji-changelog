@@ -15,7 +15,7 @@ function buildMarkdownFile(changelog = {}, options = {}) {
   return markdownIncremental(changelog, options)
 }
 
-function toMarkdown({ meta, changes }) {
+function toMarkdown({ meta, changes }, { author }) {
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
 
   const compileTemplate = handlebars.compile(template)
@@ -26,13 +26,14 @@ function toMarkdown({ meta, changes }) {
     subject: autolink(commit.subject, meta.repository),
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
+    author: author ? commit.author : null,
   }))
 
   return compileTemplate({ changelog })
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes })}`)
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes }, options)}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
@@ -70,7 +71,7 @@ function markdownIncremental({ meta, changes }, options) {
                   // Rewrite the release (next version)
                   if (previousVersionFound && !nextVersionWritten) {
                     nextVersionWritten = true
-                    return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
+                    return `${content}${toMarkdown({ meta, changes }, options)}${nextLine}\n`
                   }
 
                   // Just push the line without changing anything

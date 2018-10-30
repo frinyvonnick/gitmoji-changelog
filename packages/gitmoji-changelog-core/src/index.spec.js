@@ -17,6 +17,7 @@ const uselessCommit = {
 
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
+  author: 'John Doe',
   date: '2018-08-28T10:06:00+02:00',
   subject: ':sparkles: Upgrade brand new feature',
   body: 'Waouh this is awesome 2',
@@ -28,6 +29,7 @@ const sparklesCommit = {
 
 const recycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+  author: 'John Doe',
   date: '2018-08-01T10:07:00+02:00',
   subject: ':recycle: Upgrade brand new feature',
   body: 'Waouh this is awesome 3',
@@ -39,6 +41,7 @@ const recycleCommit = {
 
 const secondRecycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23d',
+  author: 'John Doe',
   date: '2018-08-30T10:07:00+02:00',
   subject: ':recycle: Upgrade another brand new feature',
   body: 'Waouh this is awesome 4',
@@ -50,6 +53,7 @@ const secondRecycleCommit = {
 
 const lipstickCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23e',
+  author: 'John Doe',
   date: '2018-08-10T10:07:00+02:00',
   subject: ':lipstick: Change graphics for a feature',
   body: 'Waouh this is awesome 5',
@@ -61,6 +65,7 @@ const lipstickCommit = {
 
 const secondLipstickCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  author: 'John Doe',
   date: '2018-08-18T10:07:00+02:00',
   subject: ':lipstick: Change more graphics for a feature',
   body: 'Waouh this is awesome 6',
@@ -197,9 +202,9 @@ function mockGroup(commits) {
     const readable = new stream.Readable()
     commits.forEach(commit => {
       const {
-        hash, date, subject, body,
+        hash, author, date, subject, body,
       } = commit
-      readable.push(`\n${hash}\n${date}\n${subject}\n${body}\n`)
+      readable.push(`\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`)
     })
     readable.push(null)
     readable.emit('close')

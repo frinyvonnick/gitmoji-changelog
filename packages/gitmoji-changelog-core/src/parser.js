@@ -39,12 +39,13 @@ function getCommitGroup(emojiCode) {
 
 function parseCommit(commit) {
   const lines = splitLines(commit)
-  const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
+  const [hash, author, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, emojiCode, message } = parseSubject(subject)
   const group = getCommitGroup(emojiCode)
 
   return {
     hash,
+    author,
     date,
     subject,
     emojiCode,
