@@ -5,24 +5,24 @@ const groupMapping = require('./groupMapping')
 function parseSubject(subject) {
   if (!subject) return {}
 
-  let emojiCode
-  let emoji
-  let message = subject
-
   const unemojified = nodeEmoji.unemojify(subject)
+
   const matches = unemojified.match(/:(\w*):(.*)/)
+
   if (matches) {
-    [, emojiCode, message] = matches
+    const [, emojiCode, message] = matches
 
     if (nodeEmoji.hasEmoji(emojiCode)) {
-      emoji = nodeEmoji.get(emojiCode)
+      return {
+        emojiCode,
+        emoji: nodeEmoji.get(emojiCode),
+        message: nodeEmoji.emojify(message.trim()),
+      }
     }
   }
 
   return {
-    emojiCode,
-    emoji,
-    message: message.trim(),
+    message: subject,
   }
 }
 
