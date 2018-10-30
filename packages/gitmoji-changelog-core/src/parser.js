@@ -1,41 +1,27 @@
 const splitLines = require('split-lines')
-const { invert } = require('lodash')
+const nodeEmoji = require('node-emoji')
 const groupMapping = require('./groupMapping')
-const emojiMapping = require('./emojiMapping')
-
-const emojiMappingInvert = invert(emojiMapping)
 
 function parseSubject(subject) {
   if (!subject) return {}
 
   let emojiCode
+  let emoji
   let message = subject
 
-  const matches = subject.match(/:(\w*):(.*)/)
+  const unemojified = nodeEmoji.unemojify(subject)
+  const matches = unemojified.match(/:(\w*):(.*)/)
   if (matches) {
-    // extract textual emoji
-    emojiCode = matches[1]
-    message = matches[2]
-  } else {
-    // extract unicode emoji
-    const emojiUTF8 = emojiMappingInvert[subject.substr(0, 1)]
-    if (emojiUTF8) {
-      emojiCode = emojiUTF8
-      message = subject.substr(1, subject.length)
-    }
+    [, emojiCode, message] = matches
 
-    const emojiUTF16 = emojiMappingInvert[subject.substr(0, 2)]
-    if (emojiUTF16) {
-      emojiCode = emojiUTF16
-      message = subject.substr(2, subject.length)
+    if (nodeEmoji.hasEmoji(emojiCode)) {
+      emoji = nodeEmoji.get(emojiCode)
     }
-
-    console.log('extract unicode emoji', { emojiCode, message })
   }
 
   return {
     emojiCode,
-    emoji: emojiMapping[emojiCode] || '¿',
+    emoji,
     message: message.trim(),
   }
 }
