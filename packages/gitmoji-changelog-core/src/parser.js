@@ -14,14 +14,23 @@ function parseSubject(subject) {
   const matches = subject.match(/:(\w*):(.*)/)
   if (matches) {
     // extract textual emoji
-    [, emojiCode, message] = matches
+    emojiCode = matches[1]
+    message = matches[2]
   } else {
     // extract unicode emoji
-    const emoji = subject.substr(0, 1)
-    emojiCode = emojiMappingInvert[emoji]
-    if (emojiCode) {
+    const emojiUTF8 = emojiMappingInvert[subject.substr(0, 1)]
+    if (emojiUTF8) {
+      emojiCode = emojiUTF8
       message = subject.substr(1, subject.length)
     }
+
+    const emojiUTF16 = emojiMappingInvert[subject.substr(0, 2)]
+    if (emojiUTF16) {
+      emojiCode = emojiUTF16
+      message = subject.substr(2, subject.length)
+    }
+
+    console.log('extract unicode emoji', { emojiCode, message })
   }
 
   return {
