@@ -1,7 +1,7 @@
 FROM node:10-alpine
 
 # install dependencies
-RUN apk add git
+RUN apk add --no-cache git
 ENV NODE_ENV=production
 
 # build gitmoji-changelog from source
