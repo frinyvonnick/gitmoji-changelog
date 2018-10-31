@@ -3,16 +3,24 @@ const levenshtein = require('fast-levenshtein')
 
 // this is a magic number, this comes from various testing
 // feel free to tweak it
-const MAX_DISTANCE_PERCENT = 0.15
+const MAX_DISTANCE_PERCENT = 0.30
 
 function groupSentencesByDistance(texts = []) {
   const textsWithSortedWords = texts
     .map(text => (
+      // to basic latin characters
       deburr(text)
-        .replace(/[^\w\s]/gi, ' ')
+        // replace specials characters by a filler
+        .replace(/[^\w\s]/gi, '▩')
+        // split words
         .split(' ')
-        .filter(word => word.length > 3)
+        // little words are replaces by fillers
+        // this way -> we remove useless word like (a, of, etc)
+        // we keep the string length for the algorithm
+        .map(word => word.length < 4 ? Array.from({ length: word.length }).join('▩') : word)
+        // we sort words
         .sort()
+        // we make them a sentence
         .join('')
     ))
 
@@ -39,7 +47,7 @@ function groupSentencesByDistance(texts = []) {
         const distance = levenshtein.get(textA, textB)
         const textAverageLength = (textA.length + textB.length) / 2
 
-        if ((textAverageLength * MAX_DISTANCE_PERCENT) > distance) {
+        if ((textAverageLength * MAX_DISTANCE_PERCENT) >= distance) {
           group.push(indexesFromNext)
           alreadyProcessedWords.add(indexesFromNext)
         }
