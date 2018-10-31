@@ -2,7 +2,7 @@ const { groupSentencesByDistance } = require('./utils')
 
 describe('utils', () => {
   describe('groupSentencesByDistance', () => {
-    it.only('should group values together', () => {
+    it('should group values together', () => {
       const messages = [
         'add levenshtein', // 0 - group1
         'fix a bug about failures graph', // 1 - group2
