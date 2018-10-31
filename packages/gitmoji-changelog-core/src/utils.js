@@ -47,7 +47,12 @@ function groupSentencesByDistance(texts = []) {
         const distance = levenshtein.get(textA, textB)
         const textAverageLength = (textA.length + textB.length) / 2
 
-        if ((textAverageLength * MAX_DISTANCE_PERCENT) >= distance) {
+        if (
+          // close distance
+          (textAverageLength * MAX_DISTANCE_PERCENT) >= distance
+          // not already in a group
+          && !alreadyProcessedWords.has(indexesFromNext)
+        ) {
           group.push(indexesFromNext)
           alreadyProcessedWords.add(indexesFromNext)
         }
