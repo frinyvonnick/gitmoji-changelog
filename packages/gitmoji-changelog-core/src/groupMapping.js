@@ -6,7 +6,6 @@ module.exports = [
       'sparkles',
       'tada',
       'white_check_mark',
-      'bookmark',
       'construction_worker',
       'chart_with_upwards_trend',
       'heavy_plus_sign',
@@ -29,7 +28,6 @@ module.exports = [
       'rewind',
       'alien',
       'truck',
-      'boom',
       'bento',
       'wheelchair',
       'speech_balloon',
@@ -37,6 +35,13 @@ module.exports = [
       'children_crossing',
       'building_construction',
       'iphone',
+    ],
+  },
+  {
+    group: 'breaking_changes',
+    label: 'Breaking changes',
+    emojis: [
+      'boom',
     ],
   },
   {
@@ -68,6 +73,13 @@ module.exports = [
     group: 'security',
     label: 'Security',
     emojis: ['lock'],
+  },
+  {
+    group: 'useless',
+    label: 'Useless',
+    emojis: [
+      'bookmark',
+    ],
   },
   {
     group: 'misc',

@@ -15,7 +15,7 @@ const { groupSentencesByDistance } = require('./utils')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
-const COMMIT_FORMAT = '%n%H%n%cI%n%s%n%b'
+const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 
 function getCommits(from, to) {
   return new Promise((resolve) => {
@@ -58,6 +58,11 @@ function sanitizeVersion(version) {
   })
 }
 
+function filterCommits(commits) {
+  return commits
+    .filter(commit => commit.group !== 'useless')
+}
+
 async function generateVersion(options) {
   const {
     from,
@@ -65,8 +70,8 @@ async function generateVersion(options) {
     version,
     groupSimilarCommits,
   } = options
+  let commits = filterCommits(await getCommits(from, to))
 
-  let commits = await getCommits(from, to)
   if (groupSimilarCommits) {
     commits = groupSentencesByDistance(commits.map(commit => commit.message))
       .map(indexes => indexes.map(index => commits[index]))

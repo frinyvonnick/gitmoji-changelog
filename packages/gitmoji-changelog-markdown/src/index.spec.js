@@ -2,7 +2,12 @@
 const fs = require('fs')
 const { Writable, Readable } = require('stream')
 
-const { buildMarkdownFile, autolink, getShortHash } = require('./index')
+const {
+  buildMarkdownFile,
+  matchVersionBreakpoint,
+  autolink,
+  getShortHash,
+} = require('./index')
 
 describe('Markdown converter', () => {
   it('should generate full changelog into markdown from scratch', async () => {
@@ -29,6 +34,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
@@ -50,6 +56,7 @@ describe('Markdown converter', () => {
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+                  author: 'John Doe',
                   date: '2018-08-28T10:06:00+02:00',
                   subject: ':sparkles: Upgrade brand new feature',
                   emoji: '✨',
@@ -75,7 +82,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>
@@ -83,7 +90,63 @@ describe('Markdown converter', () => {
 
 ### Added
 
-- ✨ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f))
+- ✨ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f)]
+
+
+`)
+  })
+
+  it('should generate full changelog into markdown from scratch with author', async () => {
+    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
+
+    const changelog = {
+      meta: {
+        repository: {
+          type: 'github',
+          domain: 'github.com',
+          user: 'frinyvonnick',
+          project: 'gitmoji-changelog',
+          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
+          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+        },
+      },
+      changes: [
+        {
+          version: 'next',
+          groups: [
+            {
+              group: 'changed',
+              label: 'Changed',
+              commits: [
+                {
+                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
+                  date: '2018-08-28T10:07:00+02:00',
+                  subject: ':recycle: Upgrade brand new feature',
+                  emoji: '♻️',
+                  message: 'Upgrade brand new feature',
+                  body: 'Waouh this is awesome 3',
+                  siblings: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+
+    await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md', author: true })
+
+    expect(fs.writeFile).toHaveBeenCalledTimes(1)
+    expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
+    expect(fs.writeFile.mock.calls[0][1]).toEqual(`# Changelog
+
+<a name="next"></a>
+## next
+
+### Changed
+
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
 
 
 `)
@@ -142,11 +205,13 @@ I am the last version
               commits: [
                 {
                   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                  author: 'John Doe',
                   date: '2018-08-28T10:07:00+02:00',
                   subject: ':recycle: Upgrade brand new feature',
                   emoji: '♻️',
                   message: 'Upgrade brand new feature',
                   body: 'Waouh this is awesome 3',
+                  siblings: [],
                 },
               ],
             },
@@ -165,13 +230,12 @@ I am the last version
 
 ### Changed
 
-- ♻️ Upgrade brand new feature ([c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c))
+- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>
 ## 1.0.0
 I am the last version
-
 `)
   })
 })
@@ -223,5 +287,22 @@ describe('autolink', () => {
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
     expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [#456](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
+  })
+})
+
+describe('matchVersionBreakpoint', () => {
+  it('should return true if match with the given version breakpoint', () => {
+    const result = matchVersionBreakpoint('<a name="1.0.0"></a>', '1.0.0')
+    expect(result).toBe(true)
+  })
+
+  it('should return true if match with any version breakpoint', () => {
+    const result = matchVersionBreakpoint('<a name="next"></a>')
+    expect(result).toBe(true)
+  })
+
+  it('should return false if no match with a version breakpoint', () => {
+    const result = matchVersionBreakpoint('hello world', '1.0.0')
+    expect(result).toBe(false)
   })
 })

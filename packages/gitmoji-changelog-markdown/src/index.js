@@ -15,34 +15,35 @@ function buildMarkdownFile(changelog = {}, options = {}) {
   return markdownIncremental(changelog, options)
 }
 
-function autoLinkCommit(meta) {
+function mapCommit(meta, options) {
+  const { author } = options
+
   return commit => ({
     ...commit,
     hash: getShortHash(commit.hash, meta.repository),
     subject: autolink(commit.subject, meta.repository),
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
-    siblings: commit.siblings.map(autoLinkCommit(meta)),
+    author: author ? commit.author : null,
+    siblings: commit.siblings.map(mapCommit(meta, options)),
   })
 }
 
-function toMarkdown({ meta, changes }) {
+function toMarkdown({ meta, changes }, options) {
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
-
   const compileTemplate = handlebars.compile(template)
-
-  const changelog = update(changes, '[:].groups[:].commits[:]', autoLinkCommit(meta))
+  const changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(meta, options))
 
   return compileTemplate({ changelog })
 }
 
 function markdownFromScratch({ meta, changes }, options) {
-  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes })}`)
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes }, options)}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
   const { lastVersion } = meta
-  const { output, release } = options
+  const { output } = options
 
   const tempFile = `${output}.tmp`
 
@@ -52,6 +53,7 @@ function markdownIncremental({ meta, changes }, options) {
 
     let previousNextFound = false
     let previousVersionFound = false
+    let nextVersionWritten = false
 
     readStream
       .pipe(new Transform({
@@ -62,23 +64,26 @@ function markdownIncremental({ meta, changes }, options) {
             null,
             string.split('\n')
               .reduce(
-                (content, nextLine) => {
-                  previousNextFound = previousNextFound || nextLine.startsWith(`<a name="${release}"></a>`)
-                  previousVersionFound = nextLine.startsWith(`<a name="${lastVersion}"></a>`)
+                (content, nextLine, index, array) => {
+                  previousVersionFound = matchVersionBreakpoint(nextLine, lastVersion)
+                  previousNextFound = previousNextFound || matchVersionBreakpoint(nextLine)
 
                   // Remove old release (next version)
-                  if (previousNextFound && !previousVersionFound) {
+                  if (previousNextFound && !previousVersionFound && !nextVersionWritten) {
                     return content
                   }
 
                   // Rewrite the release (next version)
-                  if (previousVersionFound) {
-                    previousNextFound = false
-                    return `${content}${toMarkdown({ meta, changes })}${nextLine}\n`
+                  if (previousVersionFound && !nextVersionWritten) {
+                    nextVersionWritten = true
+                    return `${content}${toMarkdown({ meta, changes }, options)}${nextLine}\n`
                   }
 
                   // Just push the line without changing anything
-                  return `${content}${nextLine}\n`
+                  if (index !== array.length - 1) {
+                    return `${content}${nextLine}\n`
+                  }
+                  return `${content}${nextLine}`
                 },
                 '',
               )
@@ -91,6 +96,11 @@ function markdownIncremental({ meta, changes }, options) {
         fs.rename(tempFile, output, resolve)
       })
   })
+}
+
+function matchVersionBreakpoint(tested, version = '.*') {
+  const regex = new RegExp(`<a name="${version}"></a>`)
+  return regex.test(tested)
 }
 
 function getShortHash(hash, repository) {
@@ -118,6 +128,7 @@ function autolink(message, repository) {
 
 module.exports = {
   buildMarkdownFile,
+  matchVersionBreakpoint,
   getShortHash,
   autolink,
 }

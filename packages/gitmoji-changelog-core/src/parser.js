@@ -1,33 +1,28 @@
 const splitLines = require('split-lines')
-const { invert } = require('lodash')
+const nodeEmoji = require('node-emoji')
 const groupMapping = require('./groupMapping')
-const emojiMapping = require('./emojiMapping')
-
-const emojiMappingInvert = invert(emojiMapping)
 
 function parseSubject(subject) {
   if (!subject) return {}
 
-  let emojiCode
-  let message = subject
+  const unemojified = nodeEmoji.unemojify(subject)
 
-  const matches = subject.match(/:(\w*):(.*)/)
+  const matches = unemojified.match(/:(\w*):(.*)/)
+
   if (matches) {
-    // extract textual emoji
-    [, emojiCode, message] = matches
-  } else {
-    // extract unicode emoji
-    const emoji = subject.substr(0, 1)
-    emojiCode = emojiMappingInvert[emoji]
-    if (emojiCode) {
-      message = subject.substr(1, subject.length)
+    const [, emojiCode, message] = matches
+
+    if (nodeEmoji.hasEmoji(emojiCode)) {
+      return {
+        emojiCode,
+        emoji: nodeEmoji.get(emojiCode),
+        message: nodeEmoji.emojify(message.trim()),
+      }
     }
   }
 
   return {
-    emojiCode,
-    emoji: emojiMapping[emojiCode] || '¿',
-    message: message.trim(),
+    message: subject,
   }
 }
 
@@ -39,12 +34,13 @@ function getCommitGroup(emojiCode) {
 
 function parseCommit(commit) {
   const lines = splitLines(commit)
-  const [hash, date, subject, ...body] = lines.splice(1, lines.length - 2)
+  const [hash, author, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, emojiCode, message } = parseSubject(subject)
   const group = getCommitGroup(emojiCode)
 
   return {
     hash,
+    author,
     date,
     subject,
     emojiCode,
