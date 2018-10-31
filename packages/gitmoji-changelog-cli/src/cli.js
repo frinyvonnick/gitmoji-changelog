@@ -29,6 +29,12 @@ async function main(options = {}) {
     }
   } catch (e) { /* ignore error */ }
 
+  if (options.groupSimilarCommits) {
+    logger.warn('⚗️  You are using a beta option, please be patient if it doesn\'t works as expected')
+    logger.warn('Feel free to open issues or PR into gitmoji-changelog')
+    logger.warn('\t> https://github.com/frinyvonnick/gitmoji-changelog')
+  }
+
   try {
     const changelog = await generateChangelog(options)
 
