@@ -1,7 +1,20 @@
+const { deburr } = require('lodash')
 const levenshtein = require('fast-levenshtein')
 
+// this is a magic number, this comes from various testing
+// feel free to tweak it
+const MAX_DISTANCE_PERCENT = 0.15
+
 function groupSentencesByDistance(texts = []) {
-  const textsWithSortedWords = texts.map(text => text.split(' ').sort().join(''))
+  const textsWithSortedWords = texts
+    .map(text => (
+      deburr(text)
+        .replace(/[^\w\s]/gi, ' ')
+        .split(' ')
+        .filter(word => word.length > 3)
+        .sort()
+        .join('')
+    ))
 
   const alreadyProcessedWords = new Set()
   const keyGroups = []
@@ -21,14 +34,12 @@ function groupSentencesByDistance(texts = []) {
         indexesFromNext < textsWithSortedWords.length;
         indexesFromNext += 1
       ) {
-        const distance = levenshtein.get(
-          textsWithSortedWords[indexesFromStart],
-          textsWithSortedWords[indexesFromNext],
-        )
+        const textA = textsWithSortedWords[indexesFromStart]
+        const textB = textsWithSortedWords[indexesFromNext]
+        const distance = levenshtein.get(textA, textB)
+        const textAverageLength = (textA.length + textB.length) / 2
 
-        // this is a magic number, this comes from various testing
-        // feel free to tweak it
-        if (distance < 10) {
+        if ((textAverageLength * MAX_DISTANCE_PERCENT) > distance) {
           group.push(indexesFromNext)
           alreadyProcessedWords.add(indexesFromNext)
         }
