@@ -7,6 +7,9 @@
 
 {{#each commits}}
 - {{emoji}} {{message}} [{{hash}}]{{#if author}} (by {{author}}){{/if}}
+  {{#each siblings}}
+    * {{emoji}} {{message}} ({{hash}})
+  {{/each}}
 {{/each}}
 
 {{/each}}

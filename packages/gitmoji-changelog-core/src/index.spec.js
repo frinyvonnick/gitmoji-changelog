@@ -19,24 +19,26 @@ const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
   author: 'John Doe',
   date: '2018-08-28T10:06:00+02:00',
-  subject: ':sparkles: Upgrade brand new feature',
+  subject: ':sparkles: Add a brand new feature',
   body: 'Waouh this is awesome 2',
   emoji: '✨',
   emojiCode: 'sparkles',
   group: 'added',
-  message: 'Upgrade brand new feature',
+  message: 'Add a brand new feature',
+  siblings: [],
 }
 
 const recycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
   author: 'John Doe',
   date: '2018-08-01T10:07:00+02:00',
-  subject: ':recycle: Upgrade brand new feature',
+  subject: ':recycle: Make some reworking on code',
   body: 'Waouh this is awesome 3',
   emoji: '♻️',
   emojiCode: 'recycle',
   group: 'changed',
-  message: 'Upgrade brand new feature',
+  message: 'Make some reworking on code',
+  siblings: [],
 }
 
 const secondRecycleCommit = {
@@ -49,6 +51,7 @@ const secondRecycleCommit = {
   emojiCode: 'recycle',
   group: 'changed',
   message: 'Upgrade another brand new feature',
+  siblings: [],
 }
 
 const lipstickCommit = {
@@ -61,6 +64,7 @@ const lipstickCommit = {
   emojiCode: 'lipstick',
   group: 'changed',
   message: 'Change graphics for a feature',
+  siblings: [],
 }
 
 const secondLipstickCommit = {
@@ -73,6 +77,7 @@ const secondLipstickCommit = {
   emojiCode: 'lipstick',
   group: 'changed',
   message: 'Change more graphics for a feature',
+  siblings: [],
 }
 
 describe('changelog', () => {
@@ -111,7 +116,12 @@ describe('changelog', () => {
           {
             group: 'changed',
             label: 'Changed',
-            commits: [lipstickCommit, secondLipstickCommit, recycleCommit, secondRecycleCommit],
+            commits: [
+              lipstickCommit,
+              secondLipstickCommit,
+              recycleCommit,
+              secondRecycleCommit,
+            ],
           },
         ],
       },
@@ -126,6 +136,23 @@ describe('changelog', () => {
           },
         ],
       },
+    ])
+  })
+
+  it('should group similar commits', async () => {
+    mockGroups()
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
+
+    const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
+
+    expect(changes[0].groups[0].commits).toEqual([
+      {
+        ...lipstickCommit,
+        siblings: [secondLipstickCommit],
+      },
+      recycleCommit,
+      secondRecycleCommit,
     ])
   })
 

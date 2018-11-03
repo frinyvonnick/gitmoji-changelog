@@ -15,19 +15,24 @@ function buildMarkdownFile(changelog = {}, options = {}) {
   return markdownIncremental(changelog, options)
 }
 
-function toMarkdown({ meta, changes }, { author }) {
-  const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
+function mapCommit(meta, options) {
+  const { author } = options
 
-  const compileTemplate = handlebars.compile(template)
-
-  const changelog = update(changes, '[:].groups[:].commits[:]', commit => ({
+  return commit => ({
     ...commit,
     hash: getShortHash(commit.hash, meta.repository),
     subject: autolink(commit.subject, meta.repository),
     message: autolink(commit.message, meta.repository),
     body: autolink(commit.body, meta.repository),
     author: author ? commit.author : null,
-  }))
+    siblings: commit.siblings.map(mapCommit(meta, options)),
+  })
+}
+
+function toMarkdown({ meta, changes }, options) {
+  const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
+  const compileTemplate = handlebars.compile(template)
+  const changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(meta, options))
 
   return compileTemplate({ changelog })
 }

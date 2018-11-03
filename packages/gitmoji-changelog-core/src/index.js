@@ -11,6 +11,7 @@ const { parseCommit } = require('./parser')
 const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
+const { groupSentencesByDistance } = require('./utils')
 
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
@@ -62,24 +63,39 @@ function filterCommits(commits) {
     .filter(commit => commit.group !== 'useless')
 }
 
-async function generateVersion({ from, to, version }) {
-  const commits = filterCommits(await getCommits(from, to))
-  const lastCommitDate = getLastCommitDate(commits)
+async function generateVersion(options) {
+  const {
+    from,
+    to,
+    version,
+    groupSimilarCommits,
+  } = options
+  let commits = filterCommits(await getCommits(from, to))
+
+  if (groupSimilarCommits) {
+    commits = groupSentencesByDistance(commits.map(commit => commit.message))
+      .map(indexes => indexes.map(index => commits[index]))
+      .map(([first, ...siblings]) => ({
+        ...first,
+        siblings,
+      }))
+  }
 
   return {
     version,
-    date: version !== 'next' ? lastCommitDate : undefined,
+    date: version !== 'next' ? getLastCommitDate(commits) : undefined,
     groups: makeGroups(commits),
   }
 }
 
-async function generateVersions(tags) {
+async function generateVersions({ tags, groupSimilarCommits }) {
   let nextTag = ''
 
   return Promise.all(
     [...tags, '']
       .map(tag => {
         const params = {
+          groupSimilarCommits,
           from: tag,
           to: nextTag,
           version: nextTag ? sanitizeVersion(nextTag) : 'next',
@@ -97,7 +113,7 @@ async function generateVersions(tags) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode, release } = options
+  const { mode, release, groupSimilarCommits } = options
 
   const packageInfo = await getPackageInfo()
 
@@ -116,9 +132,10 @@ async function generateChangelog(options = {}) {
   const lastTag = head(tags)
 
   if (mode === 'init') {
-    changes = await generateVersions(tags)
+    changes = await generateVersions({ tags, groupSimilarCommits })
   } else {
     const lastChanges = await generateVersion({
+      groupSimilarCommits,
       from: lastTag,
       version,
     })
