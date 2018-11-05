@@ -86,7 +86,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'update', release: 'next' })
+    const { changes } = await generateChangelog({ from: '', to: 'next' })
 
     expect(changes).toEqual([
       {
@@ -107,7 +107,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog({ from: '' })
 
     expect(changes).toEqual([
       {
@@ -144,7 +144,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
+    const { changes } = await generateChangelog({ from: '', groupSimilarCommits: true })
 
     expect(changes[0].groups[0].commits).toEqual([
       {
@@ -162,7 +162,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog({ from: '' })
 
     expect(changes).toEqual([
       expect.objectContaining({
@@ -182,7 +182,7 @@ describe('changelog', () => {
 
     let message = false
     try {
-      await generateChangelog({ mode: 'update', release: 'next' })
+      await generateChangelog({ from: '', to: 'next' })
     } catch (e) {
       message = e.message
     }
@@ -195,7 +195,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
 
-    await generateChangelog({ mode: 'init' })
+    await generateChangelog({ from: '' })
 
     expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: '' }))
     expect(gitRawCommits).toHaveBeenCalledWith(
@@ -212,7 +212,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', '1.0.0', 'v1.1.1']))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog({ from: '' })
 
     // inputs has 4 group (4 versions)
     // but output should only has 3, since the 3rd is empty

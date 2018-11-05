@@ -1,8 +1,18 @@
 const fs = require('fs')
-
+const { promisify } = require('util')
 const libnpm = require('libnpm')
+const semver = require('semver')
 const semverCompare = require('semver-compare')
-const { generateChangelog, logger } = require('@gitmoji-changelog/core')
+const { head } = require('lodash')
+const gitSemverTags = require('git-semver-tags')
+const gitSemverTagsAsync = promisify(gitSemverTags)
+
+const {
+  sanitizeVersion,
+  getPackageInfo,
+  generateChangelog,
+  logger,
+} = require('@gitmoji-changelog/core')
 const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
 
 const pkg = require('../package.json')
@@ -36,7 +46,22 @@ async function main(options = {}) {
   }
 
   try {
-    const changelog = await generateChangelog(options)
+    const tags = await gitSemverTagsAsync()
+    const lastTag = head(tags)
+
+    const from = options.mode === 'init' ? '' : lastTag
+    const packageInfo = await getPackageInfo()
+
+    let to = options.release === 'from-package' ? packageInfo.to : options.release
+    if (to && to !== 'next') {
+      if (!semver.valid(to)) {
+        throw new Error(`${to} is not a valid semver to.`)
+      }
+
+      to = sanitizeVersion(to)
+    }
+
+    const changelog = await generateChangelog({ ...options, from, to })
 
     if (changelog.meta.package) {
       const { name, version } = changelog.meta.package

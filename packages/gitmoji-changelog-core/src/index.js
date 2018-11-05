@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { head, isEmpty } = require('lodash')
+const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -54,7 +54,7 @@ function makeGroups(commits) {
 function sanitizeVersion(version) {
   return semver.valid(version, {
     loose: false,
-    includePrerelease: true,
+    includePreto: true,
   })
 }
 
@@ -113,49 +113,40 @@ async function generateVersions({ tags, groupSimilarCommits }) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode, release, groupSimilarCommits } = options
-
-  const packageInfo = await getPackageInfo()
-
-  let version = release === 'from-package' ? packageInfo.version : release
-  if (version && version !== 'next') {
-    if (!semver.valid(version)) {
-      throw new Error(`${version} is not a valid semver version.`)
-    }
-
-    version = sanitizeVersion(version)
-  }
+  const { from, to, groupSimilarCommits } = options
 
   let changes = []
 
   const tags = await gitSemverTagsAsync()
-  const lastTag = head(tags)
 
-  if (mode === 'init') {
+  if (from === '') {
     changes = await generateVersions({ tags, groupSimilarCommits })
   } else {
     const lastChanges = await generateVersion({
       groupSimilarCommits,
-      from: lastTag,
-      version,
+      from,
+      to,
     })
-
-    if (isEmpty(lastChanges.groups)) {
-      throw new Error('No changes found. You may need to fetch or pull the last changes.')
-    }
 
     changes.push(lastChanges)
   }
 
+  const packageInfo = await getPackageInfo()
   const repository = await getRepoInfo(packageInfo)
+
+  const filteredChanges = changes.filter(({ groups }) => groups.length)
+
+  if (isEmpty(filteredChanges)) {
+    throw new Error('No changes found. You may need to fetch or pull the last changes.')
+  }
 
   return {
     meta: {
       package: packageInfo,
       repository,
-      lastVersion: sanitizeVersion(lastTag),
+      lastVersion: from,
     },
-    changes: changes.filter(({ groups }) => groups.length),
+    changes: filteredChanges,
   }
 }
 
@@ -176,4 +167,6 @@ function getLastCommitDate(commits) {
 module.exports = {
   generateChangelog,
   logger,
+  getPackageInfo,
+  sanitizeVersion,
 }
