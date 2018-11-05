@@ -54,7 +54,7 @@ function makeGroups(commits) {
 function sanitizeVersion(version) {
   return semver.valid(version, {
     loose: false,
-    includePreto: true,
+    includePrerelease: true,
   })
 }
 
