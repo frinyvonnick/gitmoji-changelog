@@ -52,7 +52,7 @@ async function main(options = {}) {
     const from = options.mode === 'init' ? '' : lastTag
     const packageInfo = await getPackageInfo()
 
-    let to = options.release === 'from-package' ? packageInfo.to : options.release
+    let to = options.release === 'from-package' ? packageInfo.release : options.release
     if (to && to !== 'next') {
       if (!semver.valid(to)) {
         throw new Error(`${to} is not a valid semver to.`)
