@@ -218,6 +218,98 @@ describe('changelog', () => {
     // but output should only has 3, since the 3rd is empty
     expect(changes).toHaveLength(3)
   })
+
+  describe('Handle prerelease versions like alpha, beta, rc...', () => {
+    describe('For init mode', () => {
+      it('should merge commits of previous prerelease if there is a matching release', async () => {
+        mockGroup([sparklesCommit]) // v1.0.0-alpha
+        mockGroup([recycleCommit]) // v1.0.0-beta
+        mockGroup([lipstickCommit]) // v1.0.0
+        mockGroup([]) // next version
+
+        gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0-alpha', 'v1.0.0-beta', 'v1.0.0']))
+
+        const { changes } = await generateChangelog({ mode: 'init', mergePrerelease: true })
+
+        // the project has 3 tags (2 prerelease and 1 release)
+        // output should only has 1, since 3rd one is the final release of the 2 other prereleases
+        expect(changes).toHaveLength(1)
+        expect(changes[0].version).toBe('1.0.0')
+        // TODO check merged commits count
+      })
+
+      it('should not merge commits of previous prerelease if no matching release found', async () => {
+        mockGroup([sparklesCommit]) // v1.0.0
+        mockGroup([recycleCommit]) // v1.1.0-alpha
+        mockGroup([lipstickCommit]) // v1.1.0-beta
+        mockGroup([]) // next version
+
+        gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', 'v1.1.0-alpha', 'v1.1.0-beta']))
+
+        const { changes } = await generateChangelog({ mode: 'init', mergePrerelease: true })
+
+        // the project has 3 tags (1 release, 2 higher prereleases)
+        // output should has 3, since the final release is not released yet
+        expect(changes).toHaveLength(3)
+        expect(changes[0].version).toBe('1.0.0')
+        expect(changes[1].version).toBe('1.1.0-alpha')
+        expect(changes[2].version).toBe('1.1.0-beta')
+        // TODO check merged commits count
+      })
+
+      it('what should we do if an unexpected release was done after prereleases', async () => {
+        mockGroup([sparklesCommit]) // v1.0.0-alpha
+        mockGroup([recycleCommit]) // v1.0.0-beta
+        mockGroup([lipstickCommit]) // v2.0.0
+        mockGroup([]) // next version
+
+        gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0-alpha', 'v1.0.0-beta', 'v2.0.0']))
+
+        const { changes } = await generateChangelog({ mode: 'init', mergePrerelease: true })
+
+        // the project has 3 tags (2 prerelease and 1 unexpected release)
+        // What happens in that case ?
+        //  expect(changes).toHaveLength(1) merged
+        // or
+        //  expect(changes).toHaveLength(3) not merged
+        // I think the second one is better
+      })
+    })
+
+    describe('For update mode', () => {
+      it('should merge previous prerelease commits with the final release commits', async () => {
+        mockGroup([sparklesCommit]) // v1.0.0-alpha
+        mockGroup([recycleCommit]) // v1.0.0-beta
+        mockGroup([lipstickCommit]) // v1.0.0
+
+        gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0-alpha', 'v1.0.0-beta']))
+
+        const { changes } = await generateChangelog({ mode: 'update', release: '1.0.0', mergePrerelease: true })
+
+        // the project has 2 prerelease tags
+        // output should has 1 release with commits of previous prerelease and the new one
+        expect(changes).toHaveLength(1)
+        expect(changes[0].version).toBe('1.0.0')
+        // TODO check merged commits count
+      })
+
+      it('should not merge previous prerelease commits with the new prerelease commits', async () => {
+        mockGroup([sparklesCommit]) // v1.0.0-alpha
+        mockGroup([recycleCommit]) // v1.0.0-beta
+
+        gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0-alpha']))
+
+        const { changes } = await generateChangelog({ mode: 'update', release: '1.0.0-beta', mergePrerelease: true })
+
+        // the project has already 1 prerelease tags
+        // output should has 2 prerelease with commits
+        expect(changes).toHaveLength(2)
+        expect(changes[0].version).toBe('1.0.0-alpha')
+        expect(changes[1].version).toBe('1.0.0-beta')
+        // TODO check merged commits count
+      })
+    })
+  })
 })
 
 jest.mock('git-raw-commits')
