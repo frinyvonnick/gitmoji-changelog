@@ -112,12 +112,45 @@ async function generateVersions({ tags, groupSimilarCommits }) {
     }))
 }
 
-async function generateChangelog(options = {}) {
-  const { mode, release, groupSimilarCommits } = options
+function getLastCommitDate(commits) {
+  if (isEmpty(commits)) return null
 
-  const packageInfo = await getPackageInfo()
+  return commits
+    .map((commit) => new Date(commit.date))
+    .reduce((lastCommitDate, currentCommitDate) => {
+      if (currentCommitDate > lastCommitDate) {
+        return currentCommitDate
+      }
+      return lastCommitDate
+    })
+    .toISOString().split('T')[0]
+}
 
-  let version = release === 'from-package' ? packageInfo.version : release
+const setExistChangelog = (context = {}) => () => {
+  if (context.exist) return
+
+  const outputFile = 
+  const existsOuput = fs.existsSync(output)
+  const mode = existsOuput ? 'update' : 'init'
+  context.existChangelog = true
+}
+
+function getOutputFile({ output, format }) {
+  if (output) {
+    return output
+  }
+  if (format === 'json') {
+    return './CHANGELOG.json'
+  }
+  return './CHANGELOG.md'
+}
+
+
+async function generateChangelog(context = {}) {
+  const { options } = context;
+  const { release, groupSimilarCommits } = options
+
+  let version = release
   if (version && version !== 'next') {
     if (!semver.valid(version)) {
       throw new Error(`${version} is not a valid semver version.`)
@@ -157,20 +190,6 @@ async function generateChangelog(options = {}) {
     },
     changes: changes.filter(({ groups }) => groups.length),
   }
-}
-
-function getLastCommitDate(commits) {
-  if (isEmpty(commits)) return null
-
-  return commits
-    .map((commit) => new Date(commit.date))
-    .reduce((lastCommitDate, currentCommitDate) => {
-      if (currentCommitDate > lastCommitDate) {
-        return currentCommitDate
-      }
-      return lastCommitDate
-    })
-    .toISOString().split('T')[0]
 }
 
 module.exports = {

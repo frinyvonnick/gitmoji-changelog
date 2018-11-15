@@ -8,14 +8,18 @@ const { isEmpty } = require('lodash')
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
 
-function buildMarkdownFile(changelog = {}, options = {}) {
+function buildMarkdownFile(context = {}) {
+  const { changelog, options } = context
+  
   if (options.mode === 'init') {
-    return markdownFromScratch(changelog, options)
+    return markdownFromScratch(context)
   }
-  return markdownIncremental(changelog, options)
+  return markdownIncremental(context) // TODO:
 }
 
-function mapCommit(meta, options) {
+const mapCommit = (context = {}) = (commit) => {
+  const { changelog, options, commit } = context
+  const { meta } = changelog
   const { author } = options
 
   return commit => ({
@@ -29,16 +33,20 @@ function mapCommit(meta, options) {
   })
 }
 
-function toMarkdown({ meta, changes }, options) {
+function toMarkdown(context) {
+  const { meta, changes, options } = context
+
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
   const compileTemplate = handlebars.compile(template)
-  const changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(meta, options))
+  
+  context.changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(context))
 
-  return compileTemplate({ changelog })
+  return compileTemplate(context)
 }
 
-function markdownFromScratch({ meta, changes }, options) {
-  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown({ meta, changes }, options)}`)
+function markdownFromScratch(context = {}) {
+  const { meta, changes, options } = context
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown(context)}`)
 }
 
 function markdownIncremental({ meta, changes }, options) {
@@ -103,7 +111,10 @@ function matchVersionBreakpoint(tested, version = '.*') {
   return regex.test(tested)
 }
 
-function getShortHash(hash, repository) {
+const getShortHash = (context = {}) => (hash, repository) => {
+  const { changelog } = context;
+  const { meta } = changelo
+
   if (!hash) return null
 
   const shortHash = hash.slice(0, 7)
