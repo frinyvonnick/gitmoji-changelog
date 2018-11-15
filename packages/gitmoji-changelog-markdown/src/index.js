@@ -4,54 +4,89 @@ const path = require('path')
 const { Transform } = require('stream')
 const handlebars = require('handlebars')
 const { update } = require('immutadot')
-const { isEmpty } = require('lodash')
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
+const ISSUE_REGEXP = /#{1}(\d+)/gm
 
-function buildMarkdownFile(context = {}) {
-  const { changelog, options } = context
-  
-  if (options.mode === 'init') {
-    return markdownFromScratch(context)
-  }
-  return markdownIncremental(context) // TODO:
+const getShortHash = (context) => (commit) => {
+  const {
+    repository: {
+      originUrl,
+    },
+  } = context
+
+  const {
+    hash,
+  } = commit
+
+  if (!hash) return null
+
+  const shortHash = hash.slice(0, 7)
+
+  if (!originUrl) return shortHash
+
+  return `[${shortHash}](${originUrl}/commit/${hash})`
 }
 
-const mapCommit = (context = {}) = (commit) => {
-  const { changelog, options, commit } = context
-  const { meta } = changelog
-  const { author } = options
+const autolink = (context) => (string) => {
+  const {
+    repository: {
+      bugsUrl,
+    },
+  } = context
 
-  return commit => ({
+
+  if (!string) return undefined
+  return string.replace(ISSUE_REGEXP, `[#$1](${bugsUrl}/$1)`)
+}
+
+const matchVersionBreakpoint = () => (nextLine, lastVersion = '.*') => { // TODO:
+  const regex = new RegExp(`<a name="${lastVersion}"></a>`)
+
+  return regex.test(nextLine)
+}
+
+const mapCommit = (context) => (commit) => {
+  const {
+    options,
+  } = context
+
+  return {
     ...commit,
-    hash: getShortHash(commit.hash, meta.repository),
-    subject: autolink(commit.subject, meta.repository),
-    message: autolink(commit.message, meta.repository),
-    body: autolink(commit.body, meta.repository),
-    author: author ? commit.author : null,
-    siblings: commit.siblings.map(mapCommit(meta, options)),
-  })
+    message: autolink(context)(commit.message),
+    subject: autolink(context)(commit.subject),
+    body: autolink(context)(commit.body),
+    hash: getShortHash(context)(commit),
+    author: options.author ? commit.author : null,
+    siblings: commit.siblings.map(mapCommit(context)),
+  }
 }
 
-function toMarkdown(context) {
-  const { meta, changes, options } = context
+const toMarkdown = (context) => () => {
+  const { changes } = context
 
   const template = fs.readFileSync(MARKDOWN_TEMPLATE, 'utf-8')
   const compileTemplate = handlebars.compile(template)
-  
-  context.changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(context))
 
-  return compileTemplate(context)
+  const changelog = update(changes, '[:].groups[:].commits[:]', mapCommit(context))
+
+  return compileTemplate({ changelog })
 }
 
-function markdownFromScratch(context = {}) {
-  const { meta, changes, options } = context
-  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown(context)}`)
+const markdownFromScratch = (context) => () => {
+  const {
+    options,
+  } = context
+
+  return promisify(fs.writeFile)(options.output, `# Changelog\n\n${toMarkdown(context)()}`)
 }
 
-function markdownIncremental({ meta, changes }, options) {
-  const { lastVersion } = meta
-  const { output } = options
+const markdownIncremental = (context) => () => {
+  const {
+    options: {
+      output,
+    },
+  } = context
 
   const tempFile = `${output}.tmp`
 
@@ -73,8 +108,8 @@ function markdownIncremental({ meta, changes }, options) {
             string.split('\n')
               .reduce(
                 (content, nextLine, index, array) => {
-                  previousVersionFound = matchVersionBreakpoint(nextLine, lastVersion)
-                  previousNextFound = previousNextFound || matchVersionBreakpoint(nextLine)
+                  previousVersionFound = matchVersionBreakpoint(context)(nextLine)
+                  previousNextFound = previousNextFound || matchVersionBreakpoint(context)(nextLine)
 
                   // Remove old release (next version)
                   if (previousNextFound && !previousVersionFound && !nextVersionWritten) {
@@ -84,7 +119,7 @@ function markdownIncremental({ meta, changes }, options) {
                   // Rewrite the release (next version)
                   if (previousVersionFound && !nextVersionWritten) {
                     nextVersionWritten = true
-                    return `${content}${toMarkdown({ meta, changes }, options)}${nextLine}\n`
+                    return `${content}${toMarkdown(context)()}${nextLine}\n`
                   }
 
                   // Just push the line without changing anything
@@ -106,35 +141,15 @@ function markdownIncremental({ meta, changes }, options) {
   })
 }
 
-function matchVersionBreakpoint(tested, version = '.*') {
-  const regex = new RegExp(`<a name="${version}"></a>`)
-  return regex.test(tested)
-}
+const buildMarkdownFile = (context) => () => {
+  const {
+    exists,
+  } = context
 
-const getShortHash = (context = {}) => (hash, repository) => {
-  const { changelog } = context;
-  const { meta } = changelo
-
-  if (!hash) return null
-
-  const shortHash = hash.slice(0, 7)
-
-  if (isEmpty(repository) || !repository.url) return shortHash
-
-  return `[${shortHash}](${repository.url}/commit/${hash})`
-}
-
-const ISSUE_REGEXP = /#{1}(\d+)/gm
-
-function autolink(message, repository) {
-  if (!message) return null
-
-  if (isEmpty(repository) || !repository.bugsUrl) return message
-
-  const matches = message.match(ISSUE_REGEXP)
-  if (!matches) return message
-
-  return message.replace(ISSUE_REGEXP, `[#$1](${repository.bugsUrl}/$1)`)
+  if (exists) {
+    return markdownIncremental(context)()
+  }
+  return markdownFromScratch(context)()
 }
 
 module.exports = {

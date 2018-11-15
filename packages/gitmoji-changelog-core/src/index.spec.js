@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+const fs = require('fs')
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
 
@@ -81,14 +82,27 @@ const secondLipstickCommit = {
 }
 
 describe('changelog', () => {
+  const { existsSync } = fs
+
+  afterEach(() => {
+    fs.existsSync = existsSync
+  })
+
   it('should generate changelog for next release', async () => {
     mockGroups()
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'update', release: 'next' })
+    const options = {
+      release: 'next',
+    }
 
-    expect(changes).toEqual([
+    // set existing file
+    fs.existsSync = jest.fn(() => true)
+
+    const context = await generateChangelog(options)
+
+    expect(context.changes).toEqual([
       {
         version: 'next',
         groups: [
@@ -107,21 +121,19 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    // set existing file
+    fs.existsSync = jest.fn(() => false)
 
-    expect(changes).toEqual([
+    const context = await generateChangelog()
+
+    expect(context.changes).toEqual([
       {
         version: 'next',
         groups: [
           {
             group: 'changed',
             label: 'Changed',
-            commits: [
-              lipstickCommit,
-              secondLipstickCommit,
-              recycleCommit,
-              secondRecycleCommit,
-            ],
+            commits: [lipstickCommit, secondLipstickCommit, recycleCommit, secondRecycleCommit],
           },
         ],
       },
@@ -144,9 +156,16 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
+    // set existing file
+    fs.existsSync = jest.fn(() => false)
 
-    expect(changes[0].groups[0].commits).toEqual([
+    const options = {
+      groupSimilarCommits: true,
+    }
+
+    const context = await generateChangelog(options)
+
+    expect(context.changes[0].groups[0].commits).toEqual([
       {
         ...lipstickCommit,
         siblings: [secondLipstickCommit],
@@ -162,7 +181,9 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    fs.existsSync = jest.fn(() => false)
+
+    const { changes } = await generateChangelog()
 
     expect(changes).toEqual([
       expect.objectContaining({
@@ -175,48 +196,32 @@ describe('changelog', () => {
     ])
   })
 
-  it('should throw an error if no commits', async () => {
-    mockNoCommits()
-
-    gitSemverTags.mockImplementation(cb => cb(null, []))
-
-    let message = false
-    try {
-      await generateChangelog({ mode: 'update', release: 'next' })
-    } catch (e) {
-      message = e.message
-    }
-    expect(message).toBeTruthy()
-  })
-
   it('should get previous tag in from', async () => {
     mockGroups()
     mockGroup([sparklesCommit])
-
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
+    fs.existsSync = jest.fn(() => false) // init
 
-    await generateChangelog({ mode: 'init' })
+    await generateChangelog()
 
-    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: '' }))
-    expect(gitRawCommits).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'v1.0.0', to: 'v1.0.1' })
-    )
+    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: 'HEAD' }))
+    expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.0', to: 'v1.0.1' }))
     expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: '', to: 'v1.0.0' }))
   })
 
-  it('should filter empty groups out', async () => {
+  it.only('should filter empty groups out', async () => {
     mockGroup([sparklesCommit])
     mockGroup([recycleCommit])
     mockGroup([]) // empty group
     mockGroup([lipstickCommit])
-
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', '1.0.0', 'v1.1.1']))
+    fs.existsSync = jest.fn(() => false) // init
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const context = await generateChangelog()
 
     // inputs has 4 group (4 versions)
     // but output should only has 3, since the 3rd is empty
-    expect(changes).toHaveLength(3)
+    expect(context.changes).toHaveLength(3)
   })
 })
 
@@ -233,18 +238,6 @@ function mockGroup(commits) {
       } = commit
       readable.push(`\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`)
     })
-    readable.push(null)
-    readable.emit('close')
-    return readable
-  })
-}
-
-function mockNoCommits() {
-  gitRawCommits.mockReset()
-
-  gitRawCommits.mockImplementationOnce(() => {
-    const stream = require('stream')
-    const readable = new stream.Readable()
     readable.push(null)
     readable.emit('close')
     return readable

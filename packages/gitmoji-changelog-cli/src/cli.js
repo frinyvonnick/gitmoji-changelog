@@ -26,14 +26,15 @@ async function getLatestVersion() {
  * @param {String} context.options.output
  * @param {Boolean} context.options.author
  * @param {Boolean} context.options.groupSimilarCommits
- * @param {Object} context.changelog.meta
- * @param {Object} context.changelog.meta.repository
- * @param {String} context.changelog.meta.repository.url
+ * @param {Object} context.repository
+ * @param {String} context.repository.url
+ * @param {String} context.repository.originUrl
+ * @param {String} context.repository.bugsUrl
+ * @param {String[]} context.tags
  * @param {Object} context.changes
- * @param {Object} context.commit
+ * @param {Boolean} context.exists
  */
-const main = (context = {}) => async () => {
-  const { options = {} } = context
+const main = (options = {}) => async () => {
   logger.start(`gitmoji-changelog v${pkg.version}`)
   logger.info(`${options.mode} ${options.output}`)
 
@@ -53,19 +54,22 @@ const main = (context = {}) => async () => {
   }
 
   try {
-    context.changelog = await generateChangelog(context)
-    const { changelog } = context
+    const context = await generateChangelog(options)
+    const {
+      changes,
+      repository,
+    } = context
 
-    if (changelog.meta.repository) {
-      logger.info(changelog.meta.repository.url)
+    if (repository) {
+      logger.info(repository.url)
     }
 
     switch (options.format) {
       case 'json':
-        fs.writeFileSync(options.output, JSON.stringify(changelog))
+        fs.writeFileSync(options.output, JSON.stringify(changes))
         break
       default:
-        await buildMarkdownFile(context) // TODO: change buildMarkdownFile
+        await buildMarkdownFile(context)() // TODO: change buildMarkdownFile
     }
     logger.success(`changelog updated into ${options.output}`)
   } catch (e) {

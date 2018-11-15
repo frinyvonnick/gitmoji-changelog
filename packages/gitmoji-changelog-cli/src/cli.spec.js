@@ -15,13 +15,13 @@ describe('cli', () => {
   it('should throw an error if changelog generation fails', async () => {
     generateChangelog.mockRejectedValue(new Error())
 
-    await main()
+    await main()()
 
     expect(logger.error).toHaveBeenCalled()
   })
 
   it('should call process.exit explicitly so promises are not waited for', async () => {
-    await main()
+    await main()()
 
     expect(process.exit).toHaveBeenCalledTimes(1)
   })
@@ -31,7 +31,7 @@ describe('cli', () => {
 
     it('should print a warning about a new version', async () => {
       manifest.mockReturnValueOnce(Promise.resolve({ version: '2.0.0' }))
-      await main()
+      await main()()
 
       expect(findOutdatedMessage()).toBeTruthy()
     })
@@ -39,11 +39,11 @@ describe('cli', () => {
     it('should NOT print a warning about a new version', async () => {
       // older version in npm registry
       manifest.mockReturnValueOnce(Promise.resolve({ version: '0.5.0' }))
-      await main()
+      await main()()
 
       // same version in npm registry
       manifest.mockReturnValueOnce(Promise.resolve({ version: '1.0.0' }))
-      await main()
+      await main()()
 
       expect(manifest).toHaveBeenCalledTimes(2)
       expect(findOutdatedMessage()).toBeFalsy()
@@ -51,14 +51,14 @@ describe('cli', () => {
 
     it('should NOT print a warning about a new version when request took to much time', async () => {
       manifest.mockImplementationOnce(() => new Promise((resolve) => { setTimeout(resolve, 1000, { version: '2.0.0' }) }))
-      await main()
+      await main()()
 
       expect(findOutdatedMessage()).toBeFalsy()
     })
 
     it('should NOT print a warning about a new version when request is on error', async () => {
       manifest.mockReturnValueOnce(Promise.reject(new Error('faked error (manifest)')))
-      await main()
+      await main()()
 
       expect(findOutdatedMessage()).toBeFalsy()
     })

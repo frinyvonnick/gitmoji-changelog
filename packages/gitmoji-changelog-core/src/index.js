@@ -1,3 +1,4 @@
+const fs = require('fs')
 const semver = require('semver')
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
@@ -8,7 +9,7 @@ const { head, isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getPackageInfo, getRepoInfo } = require('./metaInfo')
+const { setRepositoryInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
@@ -63,13 +64,13 @@ function filterCommits(commits) {
     .filter(commit => commit.group !== 'useless')
 }
 
-async function generateVersion(options) {
+const generateVersion = (context) => async (from, to, version) => {
   const {
-    from,
-    to,
-    version,
-    groupSimilarCommits,
-  } = options
+    options: {
+      groupSimilarCommits,
+    },
+  } = context
+
   let commits = filterCommits(await getCommits(from, to))
 
   if (groupSimilarCommits) {
@@ -83,33 +84,48 @@ async function generateVersion(options) {
 
   return {
     version,
-    date: version !== 'next' ? getLastCommitDate(commits) : undefined,
+    date: to !== 'HEAD' ? getLastCommitDate(commits) : undefined,
     groups: makeGroups(commits),
   }
 }
 
-async function generateVersions({ tags, groupSimilarCommits }) {
-  let nextTag = ''
+const generateVersions = (context) => async () => {
+  const {
+    options: { from, to },
+    tags,
+  } = context
 
-  return Promise.all(
-    [...tags, '']
+
+  const indexFrom = tags.includes(from) ? tags.indexOf(from) : tags.length - 1
+  const indexTo = tags.includes(to) ? tags.indexOf(to) : 0
+
+  let versionsRange = tags.slice(indexTo, indexFrom - indexTo + 1)
+  if (to === 'HEAD') {
+    versionsRange = ['HEAD', ...versionsRange]
+  }
+
+  let firstTag = tags.includes(from) ? from : ''
+
+  const changes = await Promise.all(
+    versionsRange
+      .reverse()
       .map(tag => {
         const params = {
-          groupSimilarCommits,
-          from: tag,
-          to: nextTag,
-          version: nextTag ? sanitizeVersion(nextTag) : 'next',
+          from: firstTag,
+          to: tag,
+          version: tag !== 'HEAD' ? sanitizeVersion(tag) : 'next',
         }
-        nextTag = tag
+        firstTag = tag
         return params
       })
-      .map(generateVersion)
+      .map(params => generateVersion(context)(params.from, params.to, params.version))
   )
-    .then(versions => versions.sort((c1, c2) => {
-      if (c1.version === 'next') return -1
-      if (c2.version === 'next') return 1
-      return semverCompare(c2.version, c1.version)
-    }))
+
+  context.changes = changes.sort((c1, c2) => {
+    if (c1.version === 'next') return -1
+    if (c2.version === 'next') return 1
+    return semverCompare(c2.version, c1.version)
+  }).filter(({ groups }) => groups.length)
 }
 
 function getLastCommitDate(commits) {
@@ -126,70 +142,104 @@ function getLastCommitDate(commits) {
     .toISOString().split('T')[0]
 }
 
-const setExistChangelog = (context = {}) => () => {
-  if (context.exist) return
-
-  const outputFile = 
-  const existsOuput = fs.existsSync(output)
-  const mode = existsOuput ? 'update' : 'init'
-  context.existChangelog = true
-}
-
-function getOutputFile({ output, format }) {
-  if (output) {
-    return output
-  }
-  if (format === 'json') {
-    return './CHANGELOG.json'
-  }
-  return './CHANGELOG.md'
-}
-
-
-async function generateChangelog(context = {}) {
-  const { options } = context;
-  const { release, groupSimilarCommits } = options
-
-  let version = release
-  if (version && version !== 'next') {
-    if (!semver.valid(version)) {
-      throw new Error(`${version} is not a valid semver version.`)
-    }
-
-    version = sanitizeVersion(version)
-  }
-
-  let changes = []
-
-  const tags = await gitSemverTagsAsync()
-  const lastTag = head(tags)
-
-  if (mode === 'init') {
-    changes = await generateVersions({ tags, groupSimilarCommits })
-  } else {
-    const lastChanges = await generateVersion({
-      groupSimilarCommits,
-      from: lastTag,
-      version,
-    })
-
-    if (isEmpty(lastChanges.groups)) {
-      throw new Error('No changes found. You may need to fetch or pull the last changes.')
-    }
-
-    changes.push(lastChanges)
-  }
-
-  const repository = await getRepoInfo(packageInfo)
-
-  return {
-    meta: {
-      package: packageInfo,
-      repository,
-      lastVersion: sanitizeVersion(lastTag),
+const setExist = (context) => () => {
+  const {
+    exists,
+    options: {
+      output,
     },
-    changes: changes.filter(({ groups }) => groups.length),
+  } = context
+
+  if (exists) return
+
+  if (output) {
+    context.exists = fs.existsSync(output)
   }
+}
+
+const setOutputFile = (context) => () => {
+  const {
+    options: {
+      output,
+      format,
+    },
+  } = context
+
+  if (output) return
+
+  if (format === 'json') {
+    context.options.output = './CHANGELOG.json'
+  }
+
+  if (format === 'markdown') {
+    context.options.output = './CHANGELOG.md'
+  }
+}
+
+const setRelease = (context) => () => {
+  const {
+    options: {
+      release,
+    },
+  } = context
+
+  if (release === 'next') return
+
+  if (!release) {
+    context.options.release = 'next'
+    return
+  }
+
+  if (!semver.valid(release)) {
+    throw new Error(`${release} is not a valid semver version.`)
+  }
+
+  context.options.release = sanitizeVersion(release)
+}
+
+const setTags = (context) => async () => {
+  const tags = await gitSemverTagsAsync()
+  context.tags = tags
+}
+
+const setBounds = (context) => () => {
+  const {
+    exists,
+    tags,
+    options: { from, to },
+  } = context
+
+  if (!from && to) {
+    return
+  }
+
+  if (from && !to) {
+    context.options.to = 'HEAD'
+    return
+  }
+
+  if (exists) {
+    context.options.from = head(tags) || ''
+    context.options.to = 'HEAD'
+  } else {
+    context.options.from = ''
+    context.options.to = 'HEAD'
+  }
+}
+
+const generateChangelog = async (options = {}) => {
+  const context = { options }
+
+  setRelease(context)()
+  setOutputFile(context)()
+  setExist(context)()
+  await setTags(context)()
+  setBounds(context)()
+  await setRepositoryInfo(context)()
+
+  await generateVersions(context)()
+
+  return context
 }
 
 module.exports = {

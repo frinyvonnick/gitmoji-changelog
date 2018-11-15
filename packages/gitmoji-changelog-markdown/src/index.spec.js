@@ -10,68 +10,89 @@ const {
 } = require('./index')
 
 describe('Markdown converter', () => {
-  it('should generate full changelog into markdown from scratch', async () => {
-    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
+  const {
+    writeFile,
+    createWriteStream,
+    createReadStream,
+    rename,
+  } = fs
 
-    const changelog = {
-      meta: {
-        repository: {
-          type: 'github',
-          domain: 'github.com',
-          user: 'frinyvonnick',
-          project: 'gitmoji-changelog',
-          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
-          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
-        },
+  afterEach(() => {
+    fs.writeFile = writeFile
+    fs.createWriteStream = createWriteStream
+    fs.createReadStream = createReadStream
+    fs.rename = rename
+  })
+
+  beforeEach(() => {
+    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
+    fs.rename = jest.fn((path, content, cb) => cb(null, 'done'))
+  })
+
+  it('should generate full changelog into markdown from scratch', async () => {
+    const changes = [
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              {
+                hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                author: 'John Doe',
+                date: '2018-08-28T10:07:00+02:00',
+                subject: ':recycle: Upgrade brand new feature',
+                emoji: '♻️',
+                message: 'Upgrade brand new feature',
+                body: 'Waouh this is awesome 3',
+                siblings: [],
+              },
+            ],
+          },
+        ],
       },
-      changes: [
-        {
-          version: 'next',
-          groups: [
-            {
-              group: 'changed',
-              label: 'Changed',
-              commits: [
-                {
-                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-                  author: 'John Doe',
-                  date: '2018-08-28T10:07:00+02:00',
-                  subject: ':recycle: Upgrade brand new feature',
-                  emoji: '♻️',
-                  message: 'Upgrade brand new feature',
-                  body: 'Waouh this is awesome 3',
-                  siblings: [],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          version: '1.0.0',
-          date: '2018-08-28',
-          groups: [
-            {
-              group: 'added',
-              label: 'Added',
-              commits: [
-                {
-                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
-                  author: 'John Doe',
-                  date: '2018-08-28T10:06:00+02:00',
-                  subject: ':sparkles: Upgrade brand new feature',
-                  emoji: '✨',
-                  message: 'Upgrade brand new feature',
-                  body: 'Waouh this is awesome 2',
-                  siblings: [],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      {
+        version: '1.0.0',
+        date: '2018-08-28',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: [
+              {
+                hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+                author: 'John Doe',
+                date: '2018-08-28T10:06:00+02:00',
+                subject: ':sparkles: Upgrade brand new feature',
+                emoji: '✨',
+                message: 'Upgrade brand new feature',
+                body: 'Waouh this is awesome 2',
+                siblings: [],
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    const repository = {
+      type: 'github',
+      domain: 'github.com',
+      user: 'frinyvonnick',
+      project: 'gitmoji-changelog',
+      originUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     }
 
-    await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md' })
+    await buildMarkdownFile({
+      exists: false,
+      changes,
+      repository,
+      options: {
+        output: './CHANGELOG.md',
+      },
+    })()
 
     expect(fs.writeFile).toHaveBeenCalledTimes(1)
     expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
@@ -97,45 +118,48 @@ describe('Markdown converter', () => {
   })
 
   it('should generate full changelog into markdown from scratch with author', async () => {
-    fs.writeFile = jest.fn((path, content, cb) => cb(null, 'done'))
-
-    const changelog = {
-      meta: {
-        repository: {
-          type: 'github',
-          domain: 'github.com',
-          user: 'frinyvonnick',
-          project: 'gitmoji-changelog',
-          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
-          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
-        },
-      },
-      changes: [
-        {
-          version: 'next',
-          groups: [
-            {
-              group: 'changed',
-              label: 'Changed',
-              commits: [
-                {
-                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-                  author: 'John Doe',
-                  date: '2018-08-28T10:07:00+02:00',
-                  subject: ':recycle: Upgrade brand new feature',
-                  emoji: '♻️',
-                  message: 'Upgrade brand new feature',
-                  body: 'Waouh this is awesome 3',
-                  siblings: [],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+    const repository = {
+      type: 'github',
+      domain: 'github.com',
+      user: 'frinyvonnick',
+      project: 'gitmoji-changelog',
+      originUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     }
 
-    await buildMarkdownFile(changelog, { mode: 'init', output: './CHANGELOG.md', author: true })
+    const changes = [
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              {
+                hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                author: 'John Doe',
+                date: '2018-08-28T10:07:00+02:00',
+                subject: ':recycle: Upgrade brand new feature',
+                emoji: '♻️',
+                message: 'Upgrade brand new feature',
+                body: 'Waouh this is awesome 3',
+                siblings: [],
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    await buildMarkdownFile({
+      exists: false,
+      changes,
+      repository,
+      options: {
+        output: './CHANGELOG.md',
+        author: true,
+      },
+    })()
 
     expect(fs.writeFile).toHaveBeenCalledTimes(1)
     expect(fs.writeFile.mock.calls[0][0]).toBe('./CHANGELOG.md')
@@ -183,44 +207,47 @@ I am the last version
     })
     fs.rename = jest.fn((fileA, fileB, cb) => cb(null, 'done'))
 
-    const changelog = {
-      meta: {
-        repository: {
-          type: 'github',
-          domain: 'github.com',
-          user: 'frinyvonnick',
-          project: 'gitmoji-changelog',
-          url: 'https://github.com/frinyvonnick/gitmoji-changelog',
-          bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
-        },
-        lastVersion: '1.0.0',
-      },
-      changes: [
-        {
-          version: 'next',
-          groups: [
-            {
-              group: 'changed',
-              label: 'Changed',
-              commits: [
-                {
-                  hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
-                  author: 'John Doe',
-                  date: '2018-08-28T10:07:00+02:00',
-                  subject: ':recycle: Upgrade brand new feature',
-                  emoji: '♻️',
-                  message: 'Upgrade brand new feature',
-                  body: 'Waouh this is awesome 3',
-                  siblings: [],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+    const repository = {
+      type: 'github',
+      domain: 'github.com',
+      user: 'frinyvonnick',
+      project: 'gitmoji-changelog',
+      originUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     }
 
-    await buildMarkdownFile(changelog, { release: 'next', mode: 'incremental', output: './CHANGELOG.md' })
+    const changes = [
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              {
+                hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+                author: 'John Doe',
+                date: '2018-08-28T10:07:00+02:00',
+                subject: ':recycle: Upgrade brand new feature',
+                emoji: '♻️',
+                message: 'Upgrade brand new feature',
+                body: 'Waouh this is awesome 3',
+                siblings: [],
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    await buildMarkdownFile({
+      exists: true,
+      changes,
+      repository,
+      options: {
+        output: './CHANGELOG.md',
+      },
+    })()
 
     expect(result).toEqual(`# Changelog
 > Custom header
@@ -242,67 +269,94 @@ I am the last version
 
 describe('getHashUrl', () => {
   it('should return null if no hash given', () => {
-    const result = getShortHash()
+    const result = getShortHash({ repository: {} })({})
     expect(result).toBeNull()
   })
 
   it('should return short hash if no gitInfo given', () => {
-    const result = getShortHash('xxxxxxxxxxxxxxxxx')
+    const result = getShortHash({ repository: {} })({ hash: 'xxxxxxxxxxxxxxxxx' })
     expect(result).toBe('xxxxxxx')
   })
 
   it('should return short hash markdown with repo url', () => {
-    const result = getShortHash('xxxxxxxxxxxxxxxxx', {
-      url: 'https://github.com/frinyvonnick/gitmoji-changelog',
-    })
+    const context = {
+      repository: {
+        originUrl: 'https://github.com/frinyvonnick/gitmoji-changelog',
+      },
+    }
+
+    const result = getShortHash(context)({ hash: 'xxxxxxxxxxxxxxxxx' })
     expect(result).toBe('[xxxxxxx](https://github.com/frinyvonnick/gitmoji-changelog/commit/xxxxxxxxxxxxxxxxx)')
   })
 })
 
 describe('autolink', () => {
   it('should return null if no message given', () => {
-    const result = autolink()
-    expect(result).toBeNull()
+    const context = {
+      repository: {
+      },
+    }
+
+    const result = autolink(context)()
+    expect(result).toBeUndefined()
   })
 
   it('should return the message if no gitInfo given', () => {
-    const result = autolink('message without gitinfo')
+    const context = {
+      repository: {
+      },
+    }
+
+    const result = autolink(context)('message without gitinfo')
     expect(result).toBe('message without gitinfo')
   })
 
   it('should return the message if nothing match', () => {
-    const result = autolink('nothing match in this message')
+    const context = {
+      repository: {
+      },
+    }
+
+    const result = autolink(context)('nothing match in this message')
     expect(result).toBe('nothing match in this message')
   })
 
   it('should autolink with markdown one hashtag issue in message', () => {
-    const result = autolink(':bug: fix issue #123', {
-      bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
-    })
+    const context = {
+      repository: {
+        bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+      },
+    }
+
+    const result = autolink(context)(':bug: fix issue #123')
     expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)')
   })
 
   it('should autolink with markdown severals hashtag issues in message', () => {
-    const result = autolink(':bug: fix issue #123 and #456', {
-      bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
-    })
+    const context = {
+      repository: {
+        bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
+      },
+    }
+
+    const result = autolink(context)(':bug: fix issue #123 and #456')
     expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [#456](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
   })
 })
 
 describe('matchVersionBreakpoint', () => {
   it('should return true if match with the given version breakpoint', () => {
-    const result = matchVersionBreakpoint('<a name="1.0.0"></a>', '1.0.0')
+    const result = matchVersionBreakpoint()('<a name="1.0.0"></a>', '1.0.0')
     expect(result).toBe(true)
   })
 
   it('should return true if match with any version breakpoint', () => {
-    const result = matchVersionBreakpoint('<a name="next"></a>')
+    const result = matchVersionBreakpoint()('<a name="next"></a>')
     expect(result).toBe(true)
   })
 
   it('should return false if no match with a version breakpoint', () => {
-    const result = matchVersionBreakpoint('hello world', '1.0.0')
+    const result = matchVersionBreakpoint()('hello world', '1.0.0')
     expect(result).toBe(false)
   })
 })
