@@ -31,17 +31,6 @@
 
 - 🐛 Prevent having right commits by version ([#30](https://github.com/frinyvonnick/gitmoji-changelog/issues/30)) ([de06319](https://github.com/frinyvonnick/gitmoji-changelog/commit/de063192baefebad16e05ce79061d815888a442f))
 - 🐛 Get correct commit ranges from tags ([#32](https://github.com/frinyvonnick/gitmoji-changelog/issues/32)) ([573a2d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/573a2d0b583b426d358c388af0ba1dc48a4e0ddf))
-- 🐛 Remove empty versions ([#51](https://github.com/frinyvonnick/gitmoji-changelog/issues/51)) ([64ac5a7](https://github.com/frinyvonnick/gitmoji-changelog/commit/64ac5a72fe78877625a8b3cb77183a227a5fb881))
-- 🐛 Parse unicode emoji in commit ([#49](https://github.com/frinyvonnick/gitmoji-changelog/issues/49)) ([4d52747](https://github.com/frinyvonnick/gitmoji-changelog/commit/4d52747a585e46f118d39b4b1df199b41888b9c2))
-- 🐛 fix duplication with incremental update ([#60](https://github.com/frinyvonnick/gitmoji-changelog/issues/60)) ([c4ffc59](https://github.com/frinyvonnick/gitmoji-changelog/commit/c4ffc59c708452a5b9ed0d86f88031442ec44b82))
-- 🐛 Fix emojies not identified in some commits ([#65](https://github.com/frinyvonnick/gitmoji-changelog/issues/65)) ([6a3b1b6](https://github.com/frinyvonnick/gitmoji-changelog/commit/6a3b1b642cb05c376079f4ad4a00a92445808722))
-
-### Miscellaneous
-
-- ⚗ Group similar commits together ([#50](https://github.com/frinyvonnick/gitmoji-changelog/issues/50)) ([06c8f3c](https://github.com/frinyvonnick/gitmoji-changelog/commit/06c8f3c5d9a28bbf2606cbe54b96f8932110fb10))
-- 📝 Update changelog ([e28ea9a](https://github.com/frinyvonnick/gitmoji-changelog/commit/e28ea9aabf6b3605e03f2987254be479f2fd428c))
-- 🐳 Init dockerfile ([#61](https://github.com/frinyvonnick/gitmoji-changelog/issues/61)) ([afa7021](https://github.com/frinyvonnick/gitmoji-changelog/commit/afa70219878d39623f8337d479547a2cbadc4c4b))
-- 🐳 Do not generate lockfile and fail if update needed ([#69](https://github.com/frinyvonnick/gitmoji-changelog/issues/69)) ([36c0e06](https://github.com/frinyvonnick/gitmoji-changelog/commit/36c0e061429e93b5ba6cb898f15ea874e4a60e67))
 
 
 <a name="1.0.0"></a>
