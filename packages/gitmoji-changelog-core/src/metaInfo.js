@@ -3,6 +3,8 @@ const gitRemoteOriginUrl = require('git-remote-origin-url')
 const { isEmpty } = require('lodash')
 
 const setRepositoryInfo = (context) => async () => {
+  context.repository = { ...context.repository }
+
   try {
     const url = await gitRemoteOriginUrl()
     if (!url) return

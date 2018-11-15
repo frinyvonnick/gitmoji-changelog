@@ -12,7 +12,7 @@ yargs
       desc: 'Next release version',
       default: 'next',
     })
-  }, options => main({ options })())
+  }, (options) => main(options)())
 
   .option('from', { desc: 'previous tag' })
   .option('to', { desc: 'next tag', default: 'HEAD' })
