@@ -117,10 +117,10 @@ describe('changelog', () => {
             group: 'changed',
             label: 'Changed',
             commits: [
-              lipstickCommit,
-              secondLipstickCommit,
-              recycleCommit,
               secondRecycleCommit,
+              secondLipstickCommit,
+              lipstickCommit,
+              recycleCommit,
             ],
           },
         ],
@@ -147,12 +147,12 @@ describe('changelog', () => {
     const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
 
     expect(changes[0].groups[0].commits).toEqual([
+      secondRecycleCommit,
       {
         ...lipstickCommit,
         siblings: [secondLipstickCommit],
       },
       recycleCommit,
-      secondRecycleCommit,
     ])
   })
 
@@ -217,6 +217,37 @@ describe('changelog', () => {
     // inputs has 4 group (4 versions)
     // but output should only has 3, since the 3rd is empty
     expect(changes).toHaveLength(3)
+  })
+
+  it('should sort commits by date', async () => {
+    mockGroup([
+      { date: '2019-02-02T00:00:00+00:00', body: '3' },
+      { date: '2019-02-01T01:01:00+00:00', body: '7' },
+      { date: '2019-02-03T00:00:00+00:00', body: '2' },
+      { date: '2019-02-04T00:00:00+00:00', body: '1' },
+      { date: '2019-02-01T01:01:01+01:01', body: '4' },
+      { date: '2019-02-01T00:00:00+00:00', body: '9' },
+      { date: '2019-02-01T01:01:01+01:00', body: '5' },
+      { date: '2019-02-01T01:00:00+00:00', body: '8' },
+      { date: '2019-02-01T01:01:01+00:00', body: '6' },
+    ])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog({ mode: 'init' })
+
+    expect(changes[0].groups[0].commits.map(({ date, body }) => ({ date, body })))
+      .toEqual([
+        { date: '2019-02-04T00:00:00+00:00', body: '1' },
+        { date: '2019-02-03T00:00:00+00:00', body: '2' },
+        { date: '2019-02-02T00:00:00+00:00', body: '3' },
+        { date: '2019-02-01T01:01:01+01:01', body: '4' },
+        { date: '2019-02-01T01:01:01+01:00', body: '5' },
+        { date: '2019-02-01T01:01:01+00:00', body: '6' },
+        { date: '2019-02-01T01:01:00+00:00', body: '7' },
+        { date: '2019-02-01T01:00:00+00:00', body: '8' },
+        { date: '2019-02-01T00:00:00+00:00', body: '9' },
+      ])
   })
 })
 
