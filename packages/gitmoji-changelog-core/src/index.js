@@ -40,13 +40,7 @@ function makeGroups(commits) {
       label,
       commits: commits
         .filter(commit => commit.group === group)
-        .sort((first, second) => {
-          if (!first.emojiCode) return -1
-
-          const emojiCriteria = first.emojiCode.localeCompare(second.emojiCode)
-          if (emojiCriteria !== 0) return emojiCriteria
-          return first.date.localeCompare(second.date)
-        }),
+        .sort((first, second) => second.date.localeCompare(first.date)),
     }))
     .filter(group => group.commits.length)
 }
