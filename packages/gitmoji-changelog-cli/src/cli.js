@@ -4,6 +4,7 @@ const libnpm = require('libnpm')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
+const { executeInteractiveMode } = require('./interactiveMode')
 
 const pkg = require('../package.json')
 
@@ -36,7 +37,11 @@ async function main(options = {}) {
   }
 
   try {
-    const changelog = await generateChangelog(options)
+    let changelog = await generateChangelog(options)
+
+    if (options.interactive) {
+      changelog = await executeInteractiveMode(changelog)
+    }
 
     if (changelog.meta.package) {
       const { name, version } = changelog.meta.package
