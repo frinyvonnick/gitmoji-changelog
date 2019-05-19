@@ -2,6 +2,12 @@ const { get, isEmpty, cloneDeep } = require('lodash')
 const inquirer = require('inquirer')
 const { set } = require('immutadot')
 
+const interactiveMode = {
+  buildFormattedChoices,
+  getFilteredChangelog,
+  executeInteractiveMode,
+}
+
 function buildFormattedChoices(changelog) {
   const formattedChoices = []
 
@@ -45,7 +51,7 @@ function getFilteredChangelog(changelog, selectedCommitsHashes) {
 
 async function executeInteractiveMode(initialChangelog) {
   const initialChangelogCopy = cloneDeep(initialChangelog)
-  const formattedChoices = buildFormattedChoices(initialChangelogCopy)
+  const formattedChoices = interactiveMode.buildFormattedChoices(initialChangelogCopy)
   const prompt = inquirer.createPromptModule()
   const question = {
     type: 'checkbox',
@@ -57,7 +63,7 @@ async function executeInteractiveMode(initialChangelog) {
 
   const { selectedCommitsHashes } = await prompt(question)
 
-  return getFilteredChangelog(initialChangelogCopy, selectedCommitsHashes)
+  return interactiveMode.getFilteredChangelog(initialChangelogCopy, selectedCommitsHashes)
 }
 
-module.exports = { executeInteractiveMode }
+module.exports = interactiveMode
