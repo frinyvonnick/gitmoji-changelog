@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { head, isEmpty } = require('lodash')
+const { head, isEmpty, get } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -123,22 +123,34 @@ async function generateChangelog(options = {}) {
   let changes = []
 
   const tags = await gitSemverTagsAsync()
-  const lastTag = head(tags)
+  const lastTag = get(options, 'meta.lastVersion', head(tags))
 
   if (mode === 'init') {
     changes = await generateVersions({ tags, groupSimilarCommits })
   } else {
-    const lastChanges = await generateVersion({
-      groupSimilarCommits,
-      from: lastTag,
-      version,
-    })
+    if (lastTag === head(tags)) {
+      const lastChanges = await generateVersion({
+        groupSimilarCommits,
+        from: lastTag,
+        version,
+      })
 
-    if (isEmpty(lastChanges.groups)) {
-      throw new Error('No changes found. You may need to fetch or pull the last changes.')
+      if (isEmpty(lastChanges.groups)) {
+        throw new Error('No changes found. You may need to fetch or pull the last changes.')
+      }
+
+      changes.push(lastChanges)
+      return changes
     }
 
-    changes.push(lastChanges)
+    const lastTagIndex = tags.findIndex(tag => tag === lastTag)
+    const missingTags = tags.splice(lastTagIndex)
+
+    const lastChanges = generateVersions({ tags: missingTags, groupSimilarCommits })
+    return [
+      ...changes,
+      ...lastChanges,
+    ]
   }
 
   const repository = await getRepoInfo(packageInfo)

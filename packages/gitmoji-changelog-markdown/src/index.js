@@ -116,7 +116,7 @@ function getLatestVersion(markdownFile) {
 
   if (!result) return null
 
-  return result[1]
+  return `v${result[1]}`
 }
 
 function getShortHash(hash, repository) {

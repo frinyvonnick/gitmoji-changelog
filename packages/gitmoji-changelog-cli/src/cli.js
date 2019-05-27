@@ -37,23 +37,35 @@ async function main(options = {}) {
   }
 
   try {
-    const changelog = await generateChangelog(options)
-
-    if (changelog.meta.package) {
-      const { name, version } = changelog.meta.package
-      logger.info(`${name} v${version}`)
-    }
-    if (changelog.meta.repository) {
-      logger.info(changelog.meta.repository.url)
-    }
-
     switch (options.format) {
-      case 'json':
+      case 'json': {
+        const changelog = await generateChangelog(options)
+
+        if (changelog.meta.package) {
+          const { name, version } = changelog.meta.package
+          logger.info(`${name} v${version}`)
+        }
+        if (changelog.meta.repository) {
+          logger.info(changelog.meta.repository.url)
+        }
+
         fs.writeFileSync(options.output, JSON.stringify(changelog))
         break
+      }
       default: {
         const lastVersion = getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
+
+        const changelog = await generateChangelog(newOptions)
+
+        if (changelog.meta.package) {
+          const { name, version } = changelog.meta.package
+          logger.info(`${name} v${version}`)
+        }
+        if (changelog.meta.repository) {
+          logger.info(changelog.meta.repository.url)
+        }
+
         await buildMarkdownFile(changelog, newOptions)
       }
     }
