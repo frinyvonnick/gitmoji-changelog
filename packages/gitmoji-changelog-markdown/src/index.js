@@ -112,7 +112,7 @@ function getLatestVersion(markdownFile) {
     return null
   }
 
-  const result = markdownContent.match(/<a name="([\w\.]+?)"><\/a>/)
+  const result = markdownContent.match(/<a name="([\w.]+?)"><\/a>/)
 
   if (!result) return null
 
