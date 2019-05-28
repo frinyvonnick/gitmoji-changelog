@@ -82,11 +82,12 @@ async function generateVersion(options) {
   }
 }
 
-async function generateVersions({ tags, groupSimilarCommits }) {
+async function generateVersions({ tags, groupSimilarCommits, meta }) {
   let nextTag = ''
 
+  const initialFrom = meta && meta.lastVersion ? meta.lastVersion : ''
   return Promise.all(
-    [...tags, '']
+    [...tags, initialFrom]
       .map(tag => {
         const params = {
           groupSimilarCommits,
@@ -107,7 +108,12 @@ async function generateVersions({ tags, groupSimilarCommits }) {
 }
 
 async function generateChangelog(options = {}) {
-  const { mode, release, groupSimilarCommits } = options
+  const {
+    mode,
+    release,
+    groupSimilarCommits,
+    meta,
+  } = options
 
   const packageInfo = await getPackageInfo()
 
@@ -127,27 +133,24 @@ async function generateChangelog(options = {}) {
 
   if (mode === 'init') {
     changes = await generateVersions({ tags, groupSimilarCommits })
-  } else {
-    if (lastTag === head(tags)) {
-      const lastChanges = await generateVersion({
-        groupSimilarCommits,
-        from: lastTag,
-        version,
-      })
+  } else if (lastTag === head(tags)) {
+    const lastChanges = await generateVersion({
+      groupSimilarCommits,
+      from: lastTag,
+      version,
+    })
 
-      if (isEmpty(lastChanges.groups)) {
-        throw new Error('No changes found. You may need to fetch or pull the last changes.')
-      }
-
-      changes.push(lastChanges)
-      return changes
+    if (isEmpty(lastChanges.groups)) {
+      throw new Error('No changes found. You may need to fetch or pull the last changes.')
     }
 
+    changes.push(lastChanges)
+  } else {
     const lastTagIndex = tags.findIndex(tag => tag === lastTag)
-    const missingTags = tags.splice(lastTagIndex)
+    const missingTags = tags.splice(0, lastTagIndex)
 
-    const lastChanges = generateVersions({ tags: missingTags, groupSimilarCommits })
-    return [
+    const lastChanges = await generateVersions({ tags: missingTags, groupSimilarCommits, meta })
+    changes = [
       ...changes,
       ...lastChanges,
     ]
