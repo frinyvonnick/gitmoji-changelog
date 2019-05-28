@@ -57,7 +57,6 @@ async function main(options = {}) {
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
         const changelog = await generateChangelog(newOptions)
-        console.log('[CHANGELOG]', JSON.stringify(changelog, undefined, 2))
 
         if (changelog.meta.package) {
           const { name, version } = changelog.meta.package
