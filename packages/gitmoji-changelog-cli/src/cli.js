@@ -41,13 +41,7 @@ async function main(options = {}) {
       case 'json': {
         const changelog = await generateChangelog(options)
 
-        if (changelog.meta.package) {
-          const { name, version } = changelog.meta.package
-          logger.info(`${name} v${version}`)
-        }
-        if (changelog.meta.repository) {
-          logger.info(changelog.meta.repository.url)
-        }
+        logMetaData(changelog)
 
         fs.writeFileSync(options.output, JSON.stringify(changelog))
         break
@@ -58,13 +52,7 @@ async function main(options = {}) {
 
         const changelog = await generateChangelog(newOptions)
 
-        if (changelog.meta.package) {
-          const { name, version } = changelog.meta.package
-          logger.info(`${name} v${version}`)
-        }
-        if (changelog.meta.repository) {
-          logger.info(changelog.meta.repository.url)
-        }
+        logMetaData(changelog)
 
         await buildMarkdownFile(changelog, newOptions)
       }
@@ -76,6 +64,16 @@ async function main(options = {}) {
 
   // force quit (if the latest version request is pending, we don't wait for it)
   process.exit(0)
+}
+
+function logMetaData(changelog) {
+  if (changelog.meta.package) {
+    const { name, version } = changelog.meta.package
+    logger.info(`${name} v${version}`)
+  }
+  if (changelog.meta.repository) {
+    logger.info(changelog.meta.repository.url)
+  }
 }
 
 module.exports = { main }
