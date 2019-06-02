@@ -1,13 +1,14 @@
 const fs = require('fs')
-
+const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
-const { buildMarkdownFile } = require('@gitmoji-changelog/markdown')
+const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
+
 
 const pkg = require('../package.json')
 
-async function getLatestVersion() {
+async function getGitmojiChangelogLatestVersion() {
   const watchdog = new Promise(resolve => setTimeout(resolve, 500, { version: pkg.version }))
   const request = libnpm.manifest('gitmoji-changelog@latest')
 
@@ -21,7 +22,7 @@ async function main(options = {}) {
   logger.info(`${options.mode} ${options.output}`)
 
   try {
-    const latestVersion = await getLatestVersion()
+    const latestVersion = await getGitmojiChangelogLatestVersion()
     if (semverCompare(latestVersion, pkg.version) > 0) {
       logger.warn(`You got an outdated version of gitmoji-changelog, please update! (yours: ${pkg.version}, latest: ${latestVersion})`)
       logger.warn('Just do the following npm command to update it:')
@@ -36,22 +37,25 @@ async function main(options = {}) {
   }
 
   try {
-    const changelog = await generateChangelog(options)
-
-    if (changelog.meta.package) {
-      const { name, version } = changelog.meta.package
-      logger.info(`${name} v${version}`)
-    }
-    if (changelog.meta.repository) {
-      logger.info(changelog.meta.repository.url)
-    }
-
     switch (options.format) {
-      case 'json':
+      case 'json': {
+        const changelog = await generateChangelog(options)
+
+        logMetaData(changelog)
+
         fs.writeFileSync(options.output, JSON.stringify(changelog))
         break
-      default:
-        await buildMarkdownFile(changelog, options)
+      }
+      default: {
+        const lastVersion = getLatestVersion(options.output)
+        const newOptions = set(options, 'meta.lastVersion', lastVersion)
+
+        const changelog = await generateChangelog(newOptions)
+
+        logMetaData(changelog)
+
+        await buildMarkdownFile(changelog, newOptions)
+      }
     }
     logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
@@ -60,6 +64,16 @@ async function main(options = {}) {
 
   // force quit (if the latest version request is pending, we don't wait for it)
   process.exit(0)
+}
+
+function logMetaData(changelog) {
+  if (changelog.meta.package) {
+    const { name, version } = changelog.meta.package
+    logger.info(`${name} v${version}`)
+  }
+  if (changelog.meta.repository) {
+    logger.info(changelog.meta.repository.url)
+  }
 }
 
 module.exports = { main }

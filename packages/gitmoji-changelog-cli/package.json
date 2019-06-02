@@ -35,10 +35,14 @@
     "@gitmoji-changelog/markdown": "^1.1.0",
     "libnpm": "^1.0.0",
     "semver-compare": "^1.0.0",
+    "simple-git": "^1.113.0",
     "yargs": "^12.0.1"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "fs-extra": "^8.0.1"
   }
 }
