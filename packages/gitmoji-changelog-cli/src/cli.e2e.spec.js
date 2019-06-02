@@ -16,7 +16,7 @@ expect.extend({
   },
 })
 
-describe('E2E Cli', () => {
+describe('generate changelog', () => {
   let testDir
   let repo
 
@@ -36,7 +36,7 @@ describe('E2E Cli', () => {
     removeSync(testDir)
   })
 
-  it('failing test', async () => {
+  it('should generate changelog even if user doesn\'t call cli at each tag', async () => {
     await newVersion('1.0.0')
     await gitmojiChangelog()
 
