@@ -39,7 +39,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        const changelog = getChangelog(options)
+        const changelog = await getChangelog(options)
 
         logMetaData(changelog)
 
@@ -50,7 +50,7 @@ async function main(options = {}) {
         const lastVersion = getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
-        const changelog = getChangelog(newOptions)
+        const changelog = await getChangelog(newOptions)
 
         logMetaData(changelog)
 
