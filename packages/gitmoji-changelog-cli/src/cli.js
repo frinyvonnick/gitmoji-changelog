@@ -39,11 +39,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        let changelog = await generateChangelog(options)
-
-        if (options.interactive) {
-          changelog = await executeInteractiveMode(changelog)
-        }
+        const changelog = getChangelog(options)
 
         logMetaData(changelog)
 
@@ -54,11 +50,7 @@ async function main(options = {}) {
         const lastVersion = getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
-        let changelog = await generateChangelog(newOptions)
-
-        if (options.interactive) {
-          changelog = await executeInteractiveMode(changelog)
-        }
+        const changelog = getChangelog(newOptions)
 
         logMetaData(changelog)
 
@@ -72,6 +64,16 @@ async function main(options = {}) {
 
   // force quit (if the latest version request is pending, we don't wait for it)
   process.exit(0)
+}
+
+async function getChangelog(options) {
+  let changelog = await generateChangelog(options)
+
+  if (options.interactive) {
+    changelog = await executeInteractiveMode(changelog)
+  }
+
+  return changelog
 }
 
 function logMetaData(changelog) {
