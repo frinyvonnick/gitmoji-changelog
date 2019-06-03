@@ -103,6 +103,22 @@ function matchVersionBreakpoint(tested, version = '.*') {
   return regex.test(tested)
 }
 
+function getLatestVersion(markdownFile) {
+  let markdownContent
+
+  try {
+    markdownContent = fs.readFileSync(markdownFile, 'utf-8')
+  } catch (err) {
+    return null
+  }
+
+  const result = markdownContent.match(/<a name="([\w.]+?)"><\/a>/)
+
+  if (!result) return null
+
+  return `v${result[1]}`
+}
+
 function getShortHash(hash, repository) {
   if (!hash) return null
 
@@ -131,4 +147,5 @@ module.exports = {
   matchVersionBreakpoint,
   getShortHash,
   autolink,
+  getLatestVersion,
 }
