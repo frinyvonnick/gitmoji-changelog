@@ -4,7 +4,7 @@ const libnpm = require('libnpm')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
-
+const { executeInteractiveMode } = require('./interactiveMode')
 
 const pkg = require('../package.json')
 
@@ -39,7 +39,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        const changelog = await generateChangelog(options)
+        const changelog = await getChangelog(options)
 
         logMetaData(changelog)
 
@@ -50,7 +50,7 @@ async function main(options = {}) {
         const lastVersion = getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
-        const changelog = await generateChangelog(newOptions)
+        const changelog = await getChangelog(newOptions)
 
         logMetaData(changelog)
 
@@ -64,6 +64,16 @@ async function main(options = {}) {
 
   // force quit (if the latest version request is pending, we don't wait for it)
   process.exit(0)
+}
+
+async function getChangelog(options) {
+  let changelog = await generateChangelog(options)
+
+  if (options.interactive) {
+    changelog = await executeInteractiveMode(changelog)
+  }
+
+  return changelog
 }
 
 function logMetaData(changelog) {

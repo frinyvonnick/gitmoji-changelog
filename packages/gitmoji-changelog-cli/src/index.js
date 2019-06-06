@@ -50,6 +50,7 @@ yargs
   .option('output', { desc: 'output changelog file' })
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
   .option('author', { default: false, desc: 'add the author in changelog lines' })
+  .option('interactive', { default: false, desc: 'select commits manually', alias: 'i' })
 
   .help('help')
   .epilog(`For more information visit: ${homepage}`)
