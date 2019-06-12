@@ -1,5 +1,30 @@
 # Changelog
 
+<a name="2.0.0-alpha.1"></a>
+## 2.0.0-alpha.1 (2019-06-12)
+
+### Added
+
+- ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)]
+
+### Changed
+
+- 🔧 Add configuration for release message [[eabc61f](https://github.com/frinyvonnick/gitmoji-changelog/commit/eabc61fc08616c9c62079462d4bbf4ce83090cf5)]
+- ⬆️ Bump js-yaml from 3.12.0 to 3.13.1 ([#88](https://github.com/frinyvonnick/gitmoji-changelog/issues/88)) [[1c4c422](https://github.com/frinyvonnick/gitmoji-changelog/commit/1c4c422c101e4674c44811cd72d2dbaf66710d38)]
+- ⬆️ Bump fstream from 1.0.11 to 1.0.12 ([#83](https://github.com/frinyvonnick/gitmoji-changelog/issues/83)) [[f814f35](https://github.com/frinyvonnick/gitmoji-changelog/commit/f814f35346e5832f1619514e425952319026cdf6)]
+- ⬆️ Update handlebar to 4.0.14 ([#78](https://github.com/frinyvonnick/gitmoji-changelog/issues/78)) [[b77199f](https://github.com/frinyvonnick/gitmoji-changelog/commit/b77199f96c8570b827dfcb11907d6f4edac98823)]
+
+### Fixed
+
+- 🐛 Use last version from changelog file instead of previous git tag ([#82](https://github.com/frinyvonnick/gitmoji-changelog/issues/82)) [[d3c49d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/d3c49d061cfbe2c271f9aa3739fae750dbf6327c)]
+- 🐛 Fix dates sorting in commits ([#75](https://github.com/frinyvonnick/gitmoji-changelog/issues/75)) [[748e673](https://github.com/frinyvonnick/gitmoji-changelog/commit/748e6732a18f8bc5c529db12a558c0ffb458c8a1)]
+
+### Miscellaneous
+
+- 📦 Add .npmignore file ([#73](https://github.com/frinyvonnick/gitmoji-changelog/issues/73)) [[b0a243f](https://github.com/frinyvonnick/gitmoji-changelog/commit/b0a243ffbfe5a84de4a8173f4aa79f19acc32b95)]
+- 🐳 Optimize context and image size [[a692310](https://github.com/frinyvonnick/gitmoji-changelog/commit/a692310da45654da5485622a189cc0e350684d0c)]
+
+
 <a name="1.1.0"></a>
 ## 1.1.0 (2018-11-10)
 
