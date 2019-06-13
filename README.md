@@ -6,6 +6,19 @@
 - use [gitmoji](https://gitmoji.carloscuesta.me/) for commits convention
 - use [semver](https://semver.org/) for versions and tags convention
 
+## [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is in alpha :tada:
+
+gitmoji-changelog 2.0 in a nutshell:
+- ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)]
+- 🐛 Use last version from changelog file instead of previous git tag ([#82](https://github.com/frinyvonnick/gitmoji-changelog/issues/82)) [[d3c49d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/d3c49d061cfbe2c271f9aa3739fae750dbf6327c)]
+- 🐛 Fix dates sorting in commits ([#75](https://github.com/frinyvonnick/gitmoji-changelog/issues/75)) [[748e673](https://github.com/frinyvonnick/gitmoji-changelog/commit/748e6732a18f8bc5c529db12a558c0ffb458c8a1)]
+
+Test it:
+
+```shell
+npm install -g gitmoji-changelog@alpha
+```
+
 ## Quick start
 
 ```bash
