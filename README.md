@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to gitmoji-changelog 👋</h1>
 <p>
-  <img src="https://img.shields.io/badge/version-2.0.0-alpha.1-blue.svg?cacheSeconds=2592000" />
+  <img src="https://img.shields.io/npm/v/gitmoji-changelog/alpha.svg" />
   <a href="https://github.com/frinyvonnick/gitmoji-changelog#readme">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
