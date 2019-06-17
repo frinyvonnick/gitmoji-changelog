@@ -1,10 +1,23 @@
-# gitmoji-changelog
+<h1 align="center">Welcome to gitmoji-changelog 👋</h1>
+<p>
+  <img src="https://img.shields.io/badge/version-2.0.0-alpha.1-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/frinyvonnick/gitmoji-changelog#readme">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
+  </a>
+  <a href="https://github.com/frinyvonnick/gitmoji-changelog/graphs/commit-activity">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="_blank" />
+  </a>
+  <a href="https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
+  </a>
+  <a href="https://twitter.com/YvonnickFrin">
+    <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
+  </a>
+</p>
 
-> Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention.
+> Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention. 
 
-**Prerequisites:**
-- use [gitmoji](https://gitmoji.carloscuesta.me/) for commits convention
-- use [semver](https://semver.org/) for versions and tags convention
+### 🏠 [Homepage](https://github.com/frinyvonnick/gitmoji-changelog#readme)
 
 ## [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is in alpha :tada:
 
@@ -19,13 +32,16 @@ Test it:
 npm install -g gitmoji-changelog@alpha
 ```
 
-## Quick start
+## Install
 
-```bash
+```sh
 npm install -g gitmoji-changelog
+```
 
+## Usage
+
+```sh
 cd my-project
-
 gitmoji-changelog
 ```
 
@@ -36,6 +52,8 @@ If `CHANGELOG.md` file already exists, _this will not overwrite any previous cha
 All available commands and parameters can be listed using: `gitmoji-changelog --help`
 
 **Here an example output:** [CHANGELOG.md](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/CHANGELOG.md)
+
+_By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits: [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js)_
 
 ## Workflow
 
@@ -51,28 +69,11 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
 7. Push to the remote `git push`
 
-## Customize your changelog
-
-By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits :
-> [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js).
-
-*// TODO: How to override the default mapping with it's own.*
-
-## Usage
-
-### CLI
-
-Full CLI documentation in [gitmoji-changelog-cli package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-cli#gitmoji-changelog-cli)
-
-### API
-
-Full API documentation in [gitmoji-changelog-core package](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-core#gitmoji-changelog-core)
-
 ## Develop and contribute
 
 ### Setup
 
-```bash
+```sh
 git clone git@github.com:frinyvonnick/gitmoji-changelog.git
 
 cd gitmoji-changelog && yarn
@@ -83,26 +84,47 @@ We are using lerna and yarn workspaces to split the library in modules:
 - [gitmoji-changelog-core](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-core) - the core lib generating changelog
 - [gitmoji-changelog-markdown](https://github.com/frinyvonnick/gitmoji-changelog/tree/master/packages/gitmoji-changelog-markdown) - the markdown changelog file writer
 
-**Execute it locally:**
+### Usage locally
 
-```
+```sh
 node [path-to-gitmoji-changelog-folder]/packages/gitmoji-changelog-cli/src/index.js
 ```
 
-**Execute tests:**
+### Run tests
 
-We are using [jest](https://jestjs.io/) to manage unit testing.
-
-```bash
+```sh
 yarn test
-# or
+# or 
 yarn test --watch
 ```
 
-**Execute linter:**
+### Run linter
 
 We are using [airbnb-base](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base) as linter:
 
-```bash
+```sh
 yarn lint
 ```
+
+## Author
+
+👤 **Yvonnick FRIN (https://github.com/frinyvonnick)**
+
+* Twitter: [@YvonnickFrin](https://twitter.com/YvonnickFrin)
+* Github: [@frinyvonnick](https://github.com/frinyvonnick)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/frinyvonnick/gitmoji-changelog/issues).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+Copyright © 2019 [Yvonnick FRIN (https://github.com/frinyvonnick)](https://github.com/frinyvonnick).<br />
+This project is [MIT](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE) licensed.
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
