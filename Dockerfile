@@ -1,12 +1,12 @@
-FROM node:10-alpine
+FROM node:10.16.0-alpine
 
 # install dependencies
-RUN apk add --no-cache git
+RUN apk add --no-cache git=2.20.1-r0
 ENV NODE_ENV=production
 
 # build gitmoji-changelog from source
-COPY . /usr/src/gitmoji-changelog
 WORKDIR /usr/src/gitmoji-changelog
+COPY . .
 RUN yarn --frozen-lockfile && yarn cache clean
 
 # run gitmoji-changelog on /usr/src/app
