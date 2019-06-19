@@ -15,6 +15,10 @@
   </a>
 </p>
 
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
+[![](https://images.microbadger.com/badges/image/yvonnick/gitmoji-changelog.svg)](https://microbadger.com/images/yvonnick/gitmoji-changelog)
+[![Docker Pulls](https://img.shields.io/docker/pulls/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
+
 > Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention. 
 
 ### 🏠 [Homepage](https://github.com/frinyvonnick/gitmoji-changelog#readme)
