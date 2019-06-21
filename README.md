@@ -13,6 +13,9 @@
   <a href="https://twitter.com/YvonnickFrin">
     <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
   </a>
+  <a href="https://gitmoji.carloscuesta.me">
+    <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji">
+  </a>
 </p>
 
 > Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention. 
