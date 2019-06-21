@@ -94,23 +94,6 @@ We are using lerna and yarn workspaces to split the library in modules:
 node [path-to-gitmoji-changelog-folder]/packages/gitmoji-changelog-cli/src/index.js
 ```
 
-### Using Docker image
-
-Launch `gitmoji-changelog` using the official Docker image:
-```sh
-cd /your/project/path
-docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:latest
-```
-
-You can also build the image locally and use it directly:
-```sh
-cd /your/project/path
-# build the image:
-docker image build -t yvonnick/gitmoji-changelog:dev .
-# use it:
-docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:dev
-```
-
 ### Run tests
 
 ```sh
@@ -125,6 +108,21 @@ We are using [airbnb-base](https://github.com/airbnb/javascript/tree/master/pack
 
 ```sh
 yarn lint
+```
+
+### Using Docker image
+
+Launch `gitmoji-changelog` using the official Docker image:
+```sh
+docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:latest
+```
+
+You can also build the image locally and use it directly:
+```sh
+# build the image:
+docker image build -t yvonnick/gitmoji-changelog:dev .
+# use it:
+docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:dev
 ```
 
 ## Author
