@@ -9,5 +9,6 @@ WORKDIR /usr/src/gitmoji-changelog
 COPY . .
 RUN yarn --frozen-lockfile && yarn cache clean
 
-# run gitmoji-changelog on /usr/src/app
-ENTRYPOINT ["/usr/src/gitmoji-changelog/node_modules/.bin/gitmoji-changelog"]
+# run gitmoji-changelog on container startup
+RUN ln -s /usr/src/gitmoji-changelog/node_modules/.bin/gitmoji-changelog /usr/bin
+ENTRYPOINT ["gitmoji-changelog"]

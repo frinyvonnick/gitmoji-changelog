@@ -39,6 +39,10 @@ Test it:
 npm install -g gitmoji-changelog@alpha
 ```
 
+## Supported tags and respective Dockerfile links
+
+* [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
+
 ## Install
 
 ```sh
@@ -111,6 +115,21 @@ We are using [airbnb-base](https://github.com/airbnb/javascript/tree/master/pack
 
 ```sh
 yarn lint
+```
+
+### Using Docker image
+
+Launch `gitmoji-changelog` using the official Docker image:
+```sh
+docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:latest
+```
+
+You can also build the image locally and use it directly:
+```sh
+# build the image:
+docker image build -t yvonnick/gitmoji-changelog:dev .
+# use it:
+docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:dev
 ```
 
 ## Author
