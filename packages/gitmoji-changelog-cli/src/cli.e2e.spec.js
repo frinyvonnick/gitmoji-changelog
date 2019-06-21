@@ -120,6 +120,8 @@ describe('generate changelog', () => {
       gitmojiChangelog()
       await commit(':bookmark: Version 3.0.0')
       await tag('3.0.0')
+
+      expect(getChangelog()).includes(['1.0.0', '2.0.0', '3.0.0'])
     })
   })
 
