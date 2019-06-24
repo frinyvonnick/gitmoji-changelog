@@ -16,13 +16,14 @@
   <a href="https://gitmoji.carloscuesta.me">
     <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg" alt="Gitmoji">
   </a>
+  <img src="https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
 </p>
 
 [![Docker Build Status](https://img.shields.io/docker/cloud/build/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
 [![](https://images.microbadger.com/badges/image/yvonnick/gitmoji-changelog.svg)](https://microbadger.com/images/yvonnick/gitmoji-changelog)
 [![Docker Pulls](https://img.shields.io/docker/pulls/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
 
-> Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention. 
+> Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention.
 
 ### 🏠 [Homepage](https://github.com/frinyvonnick/gitmoji-changelog#readme)
 
@@ -105,7 +106,7 @@ node [path-to-gitmoji-changelog-folder]/packages/gitmoji-changelog-cli/src/index
 
 ```sh
 yarn test
-# or 
+# or
 yarn test --watch
 ```
 
@@ -146,6 +147,15 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+You also can add a badge in the README.md of your repository to promote `gitmoji-changelog`. All you need is to copy/past the code below:
+
+```markdown
+[![gitmoji-changelog](https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg)](https://github.com/frinyvonnick/gitmoji-changelog)
+```
+
+It will add this badge:  [![gitmoji-changelog](https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg)](https://github.com/frinyvonnick/gitmoji-changelog)
+
 
 ## 📝 License
 
