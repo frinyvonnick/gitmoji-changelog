@@ -120,7 +120,7 @@ yarn lint
 
 ### Using Docker image
 
-Launch `gitmoji-changelog` using the official Docker image:
+Launch `gitmoji-changelog` using the [official Docker image](https://hub.docker.com/r/yvonnick/gitmoji-changelog):
 ```sh
 docker container run -it -v $(pwd):/app -w /app --rm yvonnick/gitmoji-changelog:latest
 ```
