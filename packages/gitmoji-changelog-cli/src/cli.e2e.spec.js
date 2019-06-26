@@ -40,9 +40,11 @@ describe('generate changelog', () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
       await bumpVersion('1.0.0')
-      gitmojiChangelog()
+      const output = gitmojiChangelog()
       await commit(':bookmark: Version 1.0.0')
 
+      console.log(output.toString('utf8'))
+      console.log(output.toString('utf8'))
       expect(getChangelog()).includes(['1.0.0'])
     })
 
@@ -53,6 +55,36 @@ describe('generate changelog', () => {
       await commit(':bookmark: Version 1.0.0')
 
       expect(getChangelog()).includes(['1.0.0'])
+    })
+
+    it("should get a next version while initializing changelog by calling cli without arguments and having package.json's version set to 1.0.0", async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0', 'next'])
+    })
+
+    it("should get two versions 1.0.0 and 2.0.0 while initializing changelog by calling cli without and having package.json's version set to 1.0.0", async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      await bumpVersion('2.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 2.0.0')
+
+      expect(getChangelog()).includes(['1.0.0', '2.0.0'])
     })
   })
 
@@ -139,6 +171,9 @@ describe('generate changelog', () => {
   }
 
   function gitmojiChangelog(args = []) {
+    if (!Array.isArray(args)) {
+      args = [args]
+    }
     return childProcess.execFileSync('node', [path.join(__dirname, 'index.js'), ...args], { cwd: testDir })
   }
 
@@ -149,8 +184,8 @@ describe('generate changelog', () => {
   function bumpVersion(to) {
     const pkg = path.join(testDir, 'package.json')
     // eslint-disable-next-line global-require
-    const { version } = require(pkg)
     const content = fs.readFileSync(pkg).toString('utf8')
+    const { version } = JSON.parse(content)
     const updatedContent = content.replace(version, to)
     fs.writeFileSync(pkg, updatedContent)
   }
