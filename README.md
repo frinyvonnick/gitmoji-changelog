@@ -16,7 +16,9 @@
   <a href="https://gitmoji.carloscuesta.me">
     <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg" alt="Gitmoji">
   </a>
-  <img src="https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
+  <a href="https://github.com/frinyvonnick/gitmoji-changelog">
+    <img src="https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
+  </a>
 </p>
 
 [![Docker Build Status](https://img.shields.io/docker/cloud/build/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
