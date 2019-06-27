@@ -75,76 +75,43 @@ async function generateVersion(options) {
       }))
   }
 
-  return {
+  const result = {
     version,
-    date: version !== 'next' ? getLastCommitDate(commits) : undefined,
     groups: makeGroups(commits),
   }
+
+  if (version !== 'next') {
+    result.date = getLastCommitDate(commits)
+  }
+
+  return result
 }
-
-async function generateVersions({ tags, groupSimilarCommits, meta }) {
-  const HEAD = ''
-  let nextTag = HEAD
-
-  const initialFrom = meta && meta.lastVersion ? meta.lastVersion : ''
-  return Promise.all(
-    [...tags, initialFrom]
-      .map(tag => {
-        console.log('tag', tag)
-        const params = {
-          groupSimilarCommits,
-          from: tag,
-          to: nextTag,
-          version: nextTag ? sanitizeVersion(nextTag) : 'next',
-        }
-        nextTag = tag
-        return params
-      })
-      .map(generateVersion)
-  )
-    .then(versions => versions.sort((c1, c2) => {
-      if (c1.version === 'next') return -1
-      if (c2.version === 'next') return 1
-      return semverCompare(c2.version, c1.version)
-    }))
-}
-
 async function generateChangelog(options = {}) {
   const {
     mode,
     release,
+    groupSimilarCommits,
   } = options
 
-  console.log('OPTIONS', options)
-
   if (mode === 'init') {
-    console.log('INIT MODE')
     const packageInfo = await getPackageInfo()
     let requestedVersion = release === 'from-package' ? packageInfo.version : release
 
-    const tags = await gitSemverTagsAsync()
-    tags.push('')
+    let tags = [...await gitSemverTagsAsync(), '']
 
-    const hasNext = tags.includes(`v${requestedVersion}`)
+    const hasNext = tags.includes(`v${requestedVersion}`) || !requestedVersion
 
     const HEAD = ''
     let nextTag = HEAD
     const changes = await Promise.all(tags.map(async tag => {
-      let version = tag
-      if (!tag) {
+      let version = sanitizeVersion(nextTag)
+      if (!nextTag) {
         version = hasNext ? 'next' : requestedVersion
       }
       const from = tag
       const to = nextTag
       nextTag = tag
-      const commits = await getCommits(from, to)
-      const groups = makeGroups(commits)
-
-      return {
-        version,
-        date: getLastCommitDate(commits),
-        groups,
-      }
+      return generateVersion({ from, to, version, groupSimilarCommits })
     }))
       .then(versions => versions.sort((c1, c2) => {
         if (c1.version === 'next') return -1
@@ -160,39 +127,32 @@ async function generateChangelog(options = {}) {
         repository,
         lastVersion: sanitizeVersion(requestedVersion),
       },
-      changes,
+      changes: changes.filter(({ groups }) => groups.length),
     }
   }
-  console.log('UPDATE MODE', options)
 
   const packageInfo = await getPackageInfo()
   let requestedVersion = release === 'from-package' ? packageInfo.version : release
 
-  const { meta: { lastVersion } } = options
+  const { meta } = options
+  const lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
   let tags = await gitSemverTagsAsync()
-  const hasNext = tags.includes(`v${requestedVersion}`)
+  const hasNext = tags.includes(`v${requestedVersion}`) || !requestedVersion
   const lastVersionIndex = tags.findIndex(tag => tag === lastVersion)
-  tags.splice(0, lastVersionIndex + 1)
+  tags.splice(lastVersionIndex)
   tags.push('')
 
   const HEAD = ''
   let nextTag = HEAD
   const changes = await Promise.all(tags.map(async tag => {
-    let version = tag
-    if (!tag) {
+    let version = sanitizeVersion(nextTag)
+    if (!nextTag) {
       version = hasNext ? 'next' : requestedVersion
     }
     const from = tag
     const to = nextTag
     nextTag = tag
-    const commits = await getCommits(from, to)
-    const groups = makeGroups(commits)
-
-    return {
-      version,
-      date: getLastCommitDate(commits),
-      groups,
-    }
+    return generateVersion({ from, to, version, groupSimilarCommits })
   }))
     .then(versions => versions.sort((c1, c2) => {
       if (c1.version === 'next') return -1
@@ -202,7 +162,9 @@ async function generateChangelog(options = {}) {
 
   const repository = await getRepoInfo(packageInfo)
 
-  console.log('CHANGES', JSON.stringify(changes, undefined, 2))
+  if (isEmpty(changes[0].groups)) {
+    throw new Error('No changes found. You may need to fetch or pull the last changes.')
+  }
 
   return {
     meta: {
@@ -210,60 +172,8 @@ async function generateChangelog(options = {}) {
       repository,
       lastVersion: sanitizeVersion(lastVersion),
     },
-    changes,
-  }
-
-  /*
-  let version = release === 'from-package' ? packageInfo.version : release
-  if (version && version !== 'next') {
-    if (!semver.valid(version)) {
-      throw new Error(`${version} is not a valid semver version.`)
-    }
-
-    version = sanitizeVersion(version)
-  }
-
-  let changes = []
-
-  const tags = await gitSemverTagsAsync()
-  const lastTag = get(options, 'meta.lastVersion', head(tags))
-
-  if (mode === 'init') {
-    changes = await generateVersions({ tags, groupSimilarCommits })
-  } else if (lastTag === head(tags)) {
-    const lastChanges = await generateVersion({
-      groupSimilarCommits,
-      from: lastTag,
-      version,
-    })
-
-    if (isEmpty(lastChanges.groups)) {
-      throw new Error('No changes found. You may need to fetch or pull the last changes.')
-    }
-
-    changes.push(lastChanges)
-  } else {
-    const lastTagIndex = tags.findIndex(tag => tag === lastTag)
-    const missingTags = tags.splice(0, lastTagIndex)
-
-    const lastChanges = await generateVersions({ tags: missingTags, groupSimilarCommits, meta })
-    changes = [
-      ...changes,
-      ...lastChanges,
-    ]
-  }
-
-  const repository = await getRepoInfo(packageInfo)
-
-  return {
-    meta: {
-      package: packageinfo,
-      repository,
-      lastversion: sanitizeversion(lasttag),
-    },
     changes: changes.filter(({ groups }) => groups.length),
   }
-  */
 }
 
 function getLastCommitDate(commits) {

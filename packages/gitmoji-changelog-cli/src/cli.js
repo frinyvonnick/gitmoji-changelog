@@ -48,7 +48,6 @@ async function main(options = {}) {
       }
       default: {
         const lastVersion = getLatestVersion(options.output)
-        console.log('CLI - Last version', lastVersion)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
         const changelog = await getChangelog(newOptions)

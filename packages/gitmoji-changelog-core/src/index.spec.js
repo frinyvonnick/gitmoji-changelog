@@ -117,10 +117,10 @@ describe('changelog', () => {
             group: 'changed',
             label: 'Changed',
             commits: [
-              secondRecycleCommit,
-              secondLipstickCommit,
-              lipstickCommit,
-              recycleCommit,
+              expect.objectContaining({ subject: ':recycle: Upgrade another brand new feature' }),
+              expect.objectContaining({ subject: ':lipstick: Change more graphics for a feature' }),
+              expect.objectContaining({ subject: ':lipstick: Change graphics for a feature' }),
+              expect.objectContaining({ subject: ':recycle: Make some reworking on code' }),
             ],
           },
         ],
@@ -132,7 +132,9 @@ describe('changelog', () => {
           {
             group: 'added',
             label: 'Added',
-            commits: [sparklesCommit],
+            commits: [
+              expect.objectContaining({ subject: ':sparkles: Add a brand new feature' }),
+            ],
           },
         ],
       },

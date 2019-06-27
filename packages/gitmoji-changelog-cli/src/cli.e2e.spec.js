@@ -40,11 +40,9 @@ describe('generate changelog', () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
       await bumpVersion('1.0.0')
-      const output = gitmojiChangelog()
+      gitmojiChangelog()
       await commit(':bookmark: Version 1.0.0')
 
-      console.log(output.toString('utf8'))
-      console.log(output.toString('utf8'))
       expect(getChangelog()).includes(['1.0.0'])
     })
 
