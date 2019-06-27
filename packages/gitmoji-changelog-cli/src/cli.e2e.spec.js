@@ -170,6 +170,7 @@ describe('generate changelog', () => {
 
   function gitmojiChangelog(args = []) {
     if (!Array.isArray(args)) {
+      // eslint-disable-next-line no-param-reassign
       args = [args]
     }
     return childProcess.execFileSync('node', [path.join(__dirname, 'index.js'), ...args], { cwd: testDir })

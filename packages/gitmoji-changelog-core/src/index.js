@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { head, isEmpty, get } = require('lodash')
+const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -111,7 +111,9 @@ async function generateChangelog(options = {}) {
       const from = tag
       const to = nextTag
       nextTag = tag
-      return generateVersion({ from, to, version, groupSimilarCommits })
+      return generateVersion({
+        from, to, version, groupSimilarCommits,
+      })
     }))
       .then(versions => versions.sort((c1, c2) => {
         if (c1.version === 'next') return -1
@@ -152,7 +154,9 @@ async function generateChangelog(options = {}) {
     const from = tag
     const to = nextTag
     nextTag = tag
-    return generateVersion({ from, to, version, groupSimilarCommits })
+    return generateVersion({
+      from, to, version, groupSimilarCommits,
+    })
   }))
     .then(versions => versions.sort((c1, c2) => {
       if (c1.version === 'next') return -1
