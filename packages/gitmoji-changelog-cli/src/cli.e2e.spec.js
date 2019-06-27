@@ -153,6 +153,55 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).includes(['1.0.0', '2.0.0', '3.0.0'])
     })
+
+    it('should get three versions 1.0.0, 2.0.0, 3.0.0 and next while updating changelog by calling cli without arguments and skipping two tags creation 2.0.0 and 3.0.0', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      await bumpVersion('2.0.0')
+      await commit(':bookmark: Version 2.0.0')
+      await tag('2.0.0')
+
+      await makeChanges('file3')
+      await commit(':sparkles: Add a third file')
+      await bumpVersion('3.0.0')
+      await commit(':bookmark: Version 3.0.0')
+      await tag('3.0.0')
+
+      await makeChanges('file4')
+      await commit(':sparkles: Add a fourth file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0', '2.0.0', '3.0.0', 'next'])
+    })
+
+    it('should get two versions 1.0.0, 2.0.0 and next while updating changelog by calling cli without arguments', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      await bumpVersion('2.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 2.0.0')
+      await tag('2.0.0')
+
+      await makeChanges('file4')
+      await commit(':sparkles: Add a fourth file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0', '2.0.0', 'next'])
+    })
   })
 
   async function makeChanges(fileName) {

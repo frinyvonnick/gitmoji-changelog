@@ -81,8 +81,29 @@ const secondLipstickCommit = {
 }
 
 describe('changelog', () => {
+  it('should generate changelog for next release on init', async () => {
+    mockGroup([sparklesCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog({ mode: 'init', release: 'next' })
+
+    expect(changes).toEqual([
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
+          },
+        ],
+      },
+    ])
+  })
+
   it('should generate changelog for next release', async () => {
-    mockGroups()
+    mockGroup([sparklesCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
@@ -103,7 +124,8 @@ describe('changelog', () => {
   })
 
   it('should generate changelog for all tags', async () => {
-    mockGroups()
+    mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
+    mockGroup([sparklesCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
@@ -141,8 +163,35 @@ describe('changelog', () => {
     ])
   })
 
+  it('should generate a changelog with only next since lastVersion is provided to v1.0.0', async () => {
+    mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
+
+    const { changes } = await generateChangelog({ mode: 'update', meta: { lastVersion: 'v1.0.0' } })
+
+    expect(changes).toEqual([
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'changed',
+            label: 'Changed',
+            commits: [
+              expect.objectContaining({ subject: ':recycle: Upgrade another brand new feature' }),
+              expect.objectContaining({ subject: ':lipstick: Change more graphics for a feature' }),
+              expect.objectContaining({ subject: ':lipstick: Change graphics for a feature' }),
+              expect.objectContaining({ subject: ':recycle: Make some reworking on code' }),
+            ],
+          },
+        ],
+      },
+    ])
+  })
+
   it('should group similar commits', async () => {
-    mockGroups()
+    mockGroup([])
+    mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
@@ -192,8 +241,9 @@ describe('changelog', () => {
   })
 
   it('should get previous tag in from', async () => {
-    mockGroups()
-    mockGroup([sparklesCommit])
+    mockGroup([])
+    mockGroup([])
+    mockGroup([])
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
 
@@ -282,9 +332,4 @@ function mockNoCommits() {
     readable.emit('close')
     return readable
   })
-}
-
-function mockGroups() {
-  mockGroup([sparklesCommit])
-  mockGroup([recycleCommit, secondRecycleCommit, lipstickCommit, secondLipstickCommit])
 }

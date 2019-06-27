@@ -138,11 +138,18 @@ async function generateChangelog(options = {}) {
 
   const { meta } = options
   const lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
+
   let tags = await gitSemverTagsAsync()
-  const hasNext = tags.includes(`v${requestedVersion}`) || !requestedVersion
-  const lastVersionIndex = tags.findIndex(tag => tag === lastVersion)
-  tags.splice(lastVersionIndex)
-  tags.push('')
+  const hasNext = tags.includes(`v${requestedVersion}`) || !requestedVersion || requestedVersion === 'next'
+
+  if (lastVersion !== undefined) {
+    const lastVersionIndex = tags.findIndex(tag => tag === lastVersion)
+    tags.splice(lastVersionIndex + 1)
+  }
+
+  if (hasNext && isEmpty(tags)) {
+    tags.push('')
+  }
 
   const HEAD = ''
   let nextTag = HEAD
