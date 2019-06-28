@@ -17,7 +17,7 @@ const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 const HEAD = ''
-const FIRST_COMMIT = ''
+const START = ''
 
 function getCommits(from, to) {
   return new Promise((resolve) => {
@@ -140,7 +140,7 @@ async function generateChangelog(options = {}) {
 
   if (mode === 'init') {
     lastVersion = requestedVersion
-    tags = [...tags, FIRST_COMMIT]
+    tags = [...tags, START]
   } else {
     const { meta } = options
     lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
