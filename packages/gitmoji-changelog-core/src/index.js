@@ -8,7 +8,6 @@ const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
@@ -95,21 +94,21 @@ function sortVersions(c1, c2) {
   return semverCompare(c2.version, c1.version)
 }
 
-function hasNextVersion(tags, requestedVersion) {
-  return tags.includes(`v${requestedVersion}`) || !requestedVersion || requestedVersion === 'next'
+function hasNextVersion(tags, release) {
+  return tags.includes(`v${release}`) || !release || release === 'next'
 }
 
 async function generateVersions({
   tags,
   hasNext,
-  requestedVersion,
+  release,
   groupSimilarCommits,
 }) {
   let nextTag = HEAD
   const changes = await Promise.all(tags.map(async tag => {
     let version = sanitizeVersion(nextTag)
     if (!nextTag) {
-      version = hasNext ? 'next' : requestedVersion
+      version = hasNext ? 'next' : release
     }
     const from = tag
     const to = nextTag
@@ -130,17 +129,13 @@ async function generateChangelog(options = {}) {
     groupSimilarCommits,
   } = options
 
-  const packageInfo = await getPackageInfo()
-  const repository = await getRepoInfo(packageInfo)
-  let requestedVersion = release === 'from-package' ? packageInfo.version : release
-
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
-  const hasNext = hasNextVersion(gitTags, requestedVersion)
+  const hasNext = hasNextVersion(gitTags, release)
   let lastVersion
 
   if (mode === 'init') {
-    lastVersion = requestedVersion
+    lastVersion = release
     tagsToProcess = [...tagsToProcess, START]
   } else {
     const { meta } = options
@@ -159,7 +154,7 @@ async function generateChangelog(options = {}) {
   const changes = await generateVersions({
     tags: tagsToProcess,
     hasNext,
-    requestedVersion,
+    release,
     groupSimilarCommits,
   })
 
@@ -169,8 +164,6 @@ async function generateChangelog(options = {}) {
 
   return {
     meta: {
-      package: packageInfo,
-      repository,
       lastVersion: sanitizeVersion(lastVersion),
     },
     changes: changes.filter(({ groups }) => groups.length),

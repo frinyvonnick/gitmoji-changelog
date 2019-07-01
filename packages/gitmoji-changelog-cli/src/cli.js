@@ -6,6 +6,8 @@ const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 const { executeInteractiveMode } = require('./interactiveMode')
 
+const { getPackageInfo, getRepoInfo } = require('./metaInfo')
+
 const pkg = require('../package.json')
 
 async function getGitmojiChangelogLatestVersion() {
@@ -67,11 +69,22 @@ async function main(options = {}) {
 }
 
 async function getChangelog(options) {
-  let changelog = await generateChangelog(options)
+  const packageInfo = await getPackageInfo()
+  const repository = await getRepoInfo(packageInfo)
+
+  const enhancedOptions = {
+    ...options,
+    release: options.release === 'from-package' ? packageInfo.version : options.release,
+  }
+
+  let changelog = await generateChangelog(enhancedOptions)
 
   if (options.interactive) {
     changelog = await executeInteractiveMode(changelog)
   }
+
+  changelog.meta.package = packageInfo
+  changelog.meta.repository = repository
 
   return changelog
 }
