@@ -134,29 +134,30 @@ async function generateChangelog(options = {}) {
   const repository = await getRepoInfo(packageInfo)
   let requestedVersion = release === 'from-package' ? packageInfo.version : release
 
-  let tags = await gitSemverTagsAsync()
-  const hasNext = hasNextVersion(tags, requestedVersion)
+  const gitTags = await gitSemverTagsAsync()
+  let tagsToProcess = [...gitTags]
+  const hasNext = hasNextVersion(gitTags, requestedVersion)
   let lastVersion
 
   if (mode === 'init') {
     lastVersion = requestedVersion
-    tags = [...tags, START]
+    tagsToProcess = [...tagsToProcess, START]
   } else {
     const { meta } = options
     lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
 
     if (lastVersion !== undefined) {
-      const lastVersionIndex = tags.findIndex(tag => tag === lastVersion)
-      tags.splice(lastVersionIndex + 1)
+      const lastVersionIndex = tagsToProcess.findIndex(tag => tag === lastVersion)
+      tagsToProcess.splice(lastVersionIndex + 1)
     }
 
-    if (hasNext && isEmpty(tags)) {
-      tags.push('')
+    if (hasNext && isEmpty(tagsToProcess)) {
+      tagsToProcess.push('')
     }
   }
 
   const changes = await generateVersions({
-    tags,
+    tags: tagsToProcess,
     hasNext,
     requestedVersion,
     groupSimilarCommits,
