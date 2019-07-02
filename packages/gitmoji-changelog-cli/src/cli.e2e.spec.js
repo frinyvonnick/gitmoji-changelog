@@ -15,6 +15,16 @@ expect.extend({
   },
 })
 
+expect.extend({
+  toDisplayError(str) {
+    const pass = str.includes('Error')
+    return {
+      pass,
+      message: () => pass ? 'It passes' : `Expected ${str} to includes Error`,
+    }
+  },
+})
+
 describe('generate changelog', () => {
   let testDir
   let repo
@@ -201,6 +211,38 @@ describe('generate changelog', () => {
       gitmojiChangelog()
 
       expect(getChangelog()).includes(['1.0.0', '2.0.0', 'next'])
+    })
+
+    it('shouldn\'t generate changelog when gimoji-changelog if there isn\'t any changes', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+      const output = gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0'])
+      expect(output.toString('utf8')).toDisplayError()
+    })
+
+    it('should get two versions 1.0.0 and next after two generation while updating changelog by calling cli without arguments', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      gitmojiChangelog()
+
+      await makeChanges('file4')
+      await commit(':sparkles: Add a fourth file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0', 'next'])
     })
   })
 
