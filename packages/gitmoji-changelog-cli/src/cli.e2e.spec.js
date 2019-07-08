@@ -244,6 +244,25 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).includes(['1.0.0', 'next'])
     })
+
+    it('should get two versions 1.0.0 and 1.1.0 after three generations while updating changelog by calling cli with version 1.1.0', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      gitmojiChangelog()
+
+      await makeChanges('file4')
+      await commit(':sparkles: Add a fourth file')
+      gitmojiChangelog('1.1.0')
+
+      expect(getChangelog()).includes(['1.0.0', '1.1.0'])
+    })
   })
 
   async function makeChanges(fileName) {

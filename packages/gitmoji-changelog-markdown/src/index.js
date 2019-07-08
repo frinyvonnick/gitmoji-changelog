@@ -112,11 +112,17 @@ function getLatestVersion(markdownFile) {
     return null
   }
 
-  const result = markdownContent.match(/<a name="([\w.]+?)"><\/a>/)
+  const versions = markdownContent.match(/<a name="([\w.]+?)"><\/a>/g)
 
-  if (!result) return null
+  if (!versions) return null
 
-  return `v${result[1]}`
+  const [lastVersion, previousVersion] = versions
+
+  const result = lastVersion.match(/<a name="([\w.]+?)"><\/a>/)
+  if (result[1] !== 'next') return `v${result[1]}`
+
+  const previousResult = previousVersion.match(/<a name="([\w.]+?)"><\/a>/)
+  return `v${previousResult[1]}`
 }
 
 function getShortHash(hash, repository) {
