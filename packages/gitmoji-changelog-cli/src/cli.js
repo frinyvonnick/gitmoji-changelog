@@ -1,6 +1,7 @@
 const fs = require('fs')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
+const semver = require('semver')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
@@ -72,9 +73,15 @@ async function getChangelog(options) {
   const packageInfo = await getPackageInfo()
   const repository = await getRepoInfo(packageInfo)
 
+  const release = options.release === 'from-package' ? packageInfo.version : options.release
+
+  if (!semver.valid(release)) {
+    throw new Error(`${release} is not a valid semver version.`)
+  }
+
   const enhancedOptions = {
     ...options,
-    release: options.release === 'from-package' ? packageInfo.version : options.release,
+    release,
   }
 
   let changelog = await generateChangelog(enhancedOptions)

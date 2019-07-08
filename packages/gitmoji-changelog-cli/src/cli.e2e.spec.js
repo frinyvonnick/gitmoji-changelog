@@ -263,6 +263,12 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).includes(['1.0.0', '1.1.0'])
     })
+
+    it('should display an error if requested version isn\'t semver', async () => {
+      const output = gitmojiChangelog('awesomeversion')
+
+      expect(output.toString('utf8')).toDisplayError()
+    })
   })
 
   async function makeChanges(fileName) {
