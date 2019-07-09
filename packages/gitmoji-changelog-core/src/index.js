@@ -151,8 +151,6 @@ async function generateChangelog(options = {}) {
     }
   }
 
-  console.log('LAST VERSION', lastVersion)
-
   const changes = await generateVersions({
     tags: tagsToProcess,
     hasNext,
