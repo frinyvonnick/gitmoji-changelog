@@ -50,7 +50,7 @@ async function main(options = {}) {
         break
       }
       default: {
-        const lastVersion = getLatestVersion(options.output)
+        const lastVersion = await getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
         const changelog = await getChangelog(newOptions)

@@ -5,6 +5,9 @@ const { Transform } = require('stream')
 const handlebars = require('handlebars')
 const { update } = require('immutadot')
 const { isEmpty } = require('lodash')
+const gitSemverTags = require('git-semver-tags')
+
+const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const MARKDOWN_TEMPLATE = path.join(__dirname, 'template.md')
 
@@ -103,7 +106,7 @@ function matchVersionBreakpoint(tested, version = '.*') {
   return regex.test(tested)
 }
 
-function getLatestVersion(markdownFile) {
+async function getLatestVersion(markdownFile) {
   let markdownContent
 
   try {
@@ -118,8 +121,10 @@ function getLatestVersion(markdownFile) {
 
   const [lastVersion, previousVersion] = versions
 
+  const tags = await gitSemverTagsAsync()
   const result = lastVersion.match(/<a name="([\w.]+?)"><\/a>/)
-  if (result[1] !== 'next') return `v${result[1]}`
+  const isNext = result[1] === 'next' || !tags.includes(`v${result[1]}`)
+  if (!isNext) return `v${result[1]}`
 
   const previousResult = previousVersion.match(/<a name="([\w.]+?)"><\/a>/)
   return `v${previousResult[1]}`

@@ -10,7 +10,9 @@ expect.extend({
     const pass = items.every(item => str.includes(item))
     return {
       pass,
-      message: () => pass ? 'It passes' : `Expected ${str} to includes ${items.join(', ')}`,
+      message: () => pass
+        ? `Expected ${str} to not includes ${items.join(', ')}`
+        : `Expected ${str} to includes ${items.join(', ')}`,
     }
   },
 })
@@ -262,6 +264,40 @@ describe('generate changelog', () => {
       gitmojiChangelog('1.1.0')
 
       expect(getChangelog()).includes(['1.0.0', '1.1.0'])
+    })
+
+    it('should get two versions 1.0.0 and next after three generations while updating changelog by calling cli without arguments', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      gitmojiChangelog('1.1.0')
+      gitmojiChangelog()
+
+      expect(getChangelog()).not.includes(['1.1.0'])
+      expect(getChangelog()).includes(['1.0.0', 'next'])
+    })
+
+    it('should get two versions 1.0.0 and 1.2.0 after three generations while updating changelog by calling cli without arguments', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      gitmojiChangelog('1.1.0')
+      gitmojiChangelog('1.2.0')
+
+      expect(getChangelog()).not.includes(['1.1.0'])
+      expect(getChangelog()).includes(['1.0.0', '1.2.0'])
     })
 
     it('should display an error if requested version isn\'t semver', async () => {
