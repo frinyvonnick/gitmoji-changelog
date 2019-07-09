@@ -95,7 +95,7 @@ function sortVersions(c1, c2) {
 }
 
 function hasNextVersion(tags, release) {
-  return tags.includes(`v${release}`) || !release || release === 'next'
+  return tags.some(tag => semver.eq(tag, release)) || !release || release === 'next'
 }
 
 async function generateVersions({
