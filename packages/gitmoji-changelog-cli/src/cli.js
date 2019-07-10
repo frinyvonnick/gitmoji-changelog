@@ -1,10 +1,13 @@
 const fs = require('fs')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
+const semver = require('semver')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 const { executeInteractiveMode } = require('./interactiveMode')
+
+const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 
 const pkg = require('../package.json')
 
@@ -47,7 +50,7 @@ async function main(options = {}) {
         break
       }
       default: {
-        const lastVersion = getLatestVersion(options.output)
+        const lastVersion = await getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
         const changelog = await getChangelog(newOptions)
@@ -67,11 +70,28 @@ async function main(options = {}) {
 }
 
 async function getChangelog(options) {
-  let changelog = await generateChangelog(options)
+  const packageInfo = await getPackageInfo()
+  const repository = await getRepoInfo(packageInfo)
+
+  const release = options.release === 'from-package' ? packageInfo.version : options.release
+
+  if (!semver.valid(release)) {
+    throw new Error(`${release} is not a valid semver version.`)
+  }
+
+  const enhancedOptions = {
+    ...options,
+    release,
+  }
+
+  let changelog = await generateChangelog(enhancedOptions)
 
   if (options.interactive) {
     changelog = await executeInteractiveMode(changelog)
   }
+
+  changelog.meta.package = packageInfo
+  changelog.meta.repository = repository
 
   return changelog
 }

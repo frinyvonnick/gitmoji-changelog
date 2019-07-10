@@ -4,3 +4,4 @@ cache: yarn
 script:
   - yarn lint
   - yarn test
+  - yarn test:e2e

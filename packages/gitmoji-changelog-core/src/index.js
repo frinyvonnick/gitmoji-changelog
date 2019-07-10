@@ -4,11 +4,10 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { head, isEmpty, get } = require('lodash')
+const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
-const { getPackageInfo, getRepoInfo } = require('./metaInfo')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
@@ -16,6 +15,8 @@ const { groupSentencesByDistance } = require('./utils')
 const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
+const HEAD = ''
+const START = ''
 
 function getCommits(from, to) {
   return new Promise((resolve) => {
@@ -75,36 +76,51 @@ async function generateVersion(options) {
       }))
   }
 
-  return {
+  const result = {
     version,
-    date: version !== 'next' ? getLastCommitDate(commits) : undefined,
     groups: makeGroups(commits),
   }
+
+  if (version !== 'next') {
+    result.date = getLastCommitDate(commits)
+  }
+
+  return result
 }
 
-async function generateVersions({ tags, groupSimilarCommits, meta }) {
-  let nextTag = ''
+function sortVersions(c1, c2) {
+  if (c1.version === 'next') return -1
+  if (c2.version === 'next') return 1
+  return semverCompare(c2.version, c1.version)
+}
 
-  const initialFrom = meta && meta.lastVersion ? meta.lastVersion : ''
-  return Promise.all(
-    [...tags, initialFrom]
-      .map(tag => {
-        const params = {
-          groupSimilarCommits,
-          from: tag,
-          to: nextTag,
-          version: nextTag ? sanitizeVersion(nextTag) : 'next',
-        }
-        nextTag = tag
-        return params
-      })
-      .map(generateVersion)
-  )
-    .then(versions => versions.sort((c1, c2) => {
-      if (c1.version === 'next') return -1
-      if (c2.version === 'next') return 1
-      return semverCompare(c2.version, c1.version)
-    }))
+function hasNextVersion(tags, release) {
+  if (!release || release === 'next') return true
+  return tags.some(tag => semver.eq(tag, release))
+}
+
+async function generateVersions({
+  tags,
+  hasNext,
+  release,
+  groupSimilarCommits,
+}) {
+  let nextTag = HEAD
+  const changes = await Promise.all(tags.map(async tag => {
+    let version = sanitizeVersion(nextTag)
+    if (!nextTag) {
+      version = hasNext ? 'next' : release
+    }
+    const from = tag
+    const to = nextTag
+    nextTag = tag
+    return generateVersion({
+      from, to, version, groupSimilarCommits,
+    })
+  }))
+    .then(versions => versions.sort(sortVersions))
+
+  return changes
 }
 
 async function generateChangelog(options = {}) {
@@ -112,57 +128,44 @@ async function generateChangelog(options = {}) {
     mode,
     release,
     groupSimilarCommits,
-    meta,
   } = options
 
-  const packageInfo = await getPackageInfo()
-
-  let version = release === 'from-package' ? packageInfo.version : release
-  if (version && version !== 'next') {
-    if (!semver.valid(version)) {
-      throw new Error(`${version} is not a valid semver version.`)
-    }
-
-    version = sanitizeVersion(version)
-  }
-
-  let changes = []
-
-  const tags = await gitSemverTagsAsync()
-  const lastTag = get(options, 'meta.lastVersion', head(tags))
+  const gitTags = await gitSemverTagsAsync()
+  let tagsToProcess = [...gitTags]
+  const hasNext = hasNextVersion(gitTags, release)
+  let lastVersion
 
   if (mode === 'init') {
-    changes = await generateVersions({ tags, groupSimilarCommits })
-  } else if (lastTag === head(tags)) {
-    const lastChanges = await generateVersion({
-      groupSimilarCommits,
-      from: lastTag,
-      version,
-    })
+    lastVersion = release
+    tagsToProcess = [...tagsToProcess, START]
+  } else {
+    const { meta } = options
+    lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
 
-    if (isEmpty(lastChanges.groups)) {
-      throw new Error('No changes found. You may need to fetch or pull the last changes.')
+    if (lastVersion !== undefined) {
+      const lastVersionIndex = tagsToProcess.findIndex(tag => semver.eq(tag, lastVersion))
+      tagsToProcess.splice(lastVersionIndex + 1)
     }
 
-    changes.push(lastChanges)
-  } else {
-    const lastTagIndex = tags.findIndex(tag => tag === lastTag)
-    const missingTags = tags.splice(0, lastTagIndex)
-
-    const lastChanges = await generateVersions({ tags: missingTags, groupSimilarCommits, meta })
-    changes = [
-      ...changes,
-      ...lastChanges,
-    ]
+    if (hasNext && isEmpty(tagsToProcess)) {
+      tagsToProcess.push('')
+    }
   }
 
-  const repository = await getRepoInfo(packageInfo)
+  const changes = await generateVersions({
+    tags: tagsToProcess,
+    hasNext,
+    release,
+    groupSimilarCommits,
+  })
+
+  if (mode === 'update' && isEmpty(changes[0].groups)) {
+    throw new Error('No changes found. You may need to fetch or pull the last changes.')
+  }
 
   return {
     meta: {
-      package: packageInfo,
-      repository,
-      lastVersion: sanitizeVersion(lastTag),
+      lastVersion: sanitizeVersion(lastVersion),
     },
     changes: changes.filter(({ groups }) => groups.length),
   }
