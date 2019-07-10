@@ -95,7 +95,8 @@ function sortVersions(c1, c2) {
 }
 
 function hasNextVersion(tags, release) {
-  return tags.some(tag => semver.eq(tag, release)) || !release || release === 'next'
+  if (!release || release === 'next') return true
+  return tags.some(tag => semver.eq(tag, release))
 }
 
 async function generateVersions({
@@ -142,7 +143,7 @@ async function generateChangelog(options = {}) {
     lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
 
     if (lastVersion !== undefined) {
-      const lastVersionIndex = tagsToProcess.findIndex(tag => tag === lastVersion)
+      const lastVersionIndex = tagsToProcess.findIndex(tag => semver.eq(tag, lastVersion))
       tagsToProcess.splice(lastVersionIndex + 1)
     }
 

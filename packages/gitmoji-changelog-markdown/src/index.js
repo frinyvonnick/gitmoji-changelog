@@ -1,3 +1,4 @@
+const semver = require('semver')
 const { promisify } = require('util')
 const fs = require('fs')
 const path = require('path')
@@ -123,11 +124,11 @@ async function getLatestVersion(markdownFile) {
 
   const tags = await gitSemverTagsAsync()
   const result = lastVersion.match(/<a name="([\w.]+?)"><\/a>/)
-  const isNext = result[1] === 'next' || !tags.includes(`v${result[1]}`)
-  if (!isNext) return `v${result[1]}`
+  const isNext = result[1] === 'next' || !tags.some(tag => semver.eq(tag, result[1]))
+  if (!isNext) return result[1]
 
   const previousResult = previousVersion.match(/<a name="([\w.]+?)"><\/a>/)
-  return `v${previousResult[1]}`
+  return previousResult[1]
 }
 
 function getShortHash(hash, repository) {
