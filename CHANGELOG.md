@@ -1,7 +1,41 @@
 # Changelog
 
+<a name="2.0.0-alpha.2"></a>
+## 2.0.0-alpha.2 (2019-07-10)
+
+### Changed
+
+- 💄 Remove flat square style [[7a3e230](https://github.com/frinyvonnick/gitmoji-changelog/commit/7a3e230d674e197b56a05a75dca418b8184600b4)]
+
+### Fixed
+
+- 🐛 Fix all cli workflows ([#101](https://github.com/frinyvonnick/gitmoji-changelog/issues/101)) [[e74919a](https://github.com/frinyvonnick/gitmoji-changelog/commit/e74919ad4a13e93cc880523c3588c51d13963a41)]
+
+### Miscellaneous
+
+- 🐳 Improve Dockerfile and update docker image usage ([#109](https://github.com/frinyvonnick/gitmoji-changelog/issues/109)) [[55e24c2](https://github.com/frinyvonnick/gitmoji-changelog/commit/55e24c2bf8ae3ad2fd238b8480862498aa1a134e)]
+- 📝 Add badge link ([#107](https://github.com/frinyvonnick/gitmoji-changelog/issues/107)) [[0dfa1bb](https://github.com/frinyvonnick/gitmoji-changelog/commit/0dfa1bbd91fa13269633f7badf69d1f01bce7a6d)]
+- 📝 Add a link to DockerHub [[92514e5](https://github.com/frinyvonnick/gitmoji-changelog/commit/92514e5cf15e5fae51a15d1b7b2c513cddbb9231)]
+- 📝 Propose to add badge to our users ([#103](https://github.com/frinyvonnick/gitmoji-changelog/issues/103)) [[f5981cb](https://github.com/frinyvonnick/gitmoji-changelog/commit/f5981cbeb102c8b6d36427c64f5e4f31932a938a)]
+- 📝 doc/add docker usage doc ([#99](https://github.com/frinyvonnick/gitmoji-changelog/issues/99)) [[53c96bc](https://github.com/frinyvonnick/gitmoji-changelog/commit/53c96bcd8c66f7a05e38739a1bde82585a3fee86)]
+- 🐳 Fix dependencies versions in Dockerfile ([#97](https://github.com/frinyvonnick/gitmoji-changelog/issues/97)) [[719541d](https://github.com/frinyvonnick/gitmoji-changelog/commit/719541dd414b62bba59178259a0830626ec70b2e)]
+- 📝 Add some docker image badges to readme ([#96](https://github.com/frinyvonnick/gitmoji-changelog/issues/96)) [[73f1f37](https://github.com/frinyvonnick/gitmoji-changelog/commit/73f1f37c73528d352a6305941b4dc199f8791190)]
+- 📝 Add gitmoji badge [[175a6f9](https://github.com/frinyvonnick/gitmoji-changelog/commit/175a6f92744db92b2ecdb19bf315f5fa36f56ae7)]
+- 📝 Use npm badge with tag alpha [[b0a26d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/b0a26d0cdfe819f3bb330399db992839be84afd9)]
+- 📝 Update readme using readme-md-generator [[e7782d4](https://github.com/frinyvonnick/gitmoji-changelog/commit/e7782d4b30bb96bb2f3daaea802255643cea8e50)]
+- 📝 Add installation procedure for alpha version ([#92](https://github.com/frinyvonnick/gitmoji-changelog/issues/92)) [[d3164d8](https://github.com/frinyvonnick/gitmoji-changelog/commit/d3164d8c0dbaa3db2cfb233e130fa817b893a9f8)]
+
+
 <a name="2.0.0-alpha.1"></a>
 ## 2.0.0-alpha.1 (2019-06-12)
+
+### Changed
+
+- 🔧 Add configuration for release message [[eabc61f](https://github.com/frinyvonnick/gitmoji-changelog/commit/eabc61fc08616c9c62079462d4bbf4ce83090cf5)]
+
+
+<a name="2.0.0-alpha.0"></a>
+## 2.0.0-alpha.0 (2019-06-12)
 
 ### Added
 
@@ -9,7 +43,6 @@
 
 ### Changed
 
-- 🔧 Add configuration for release message [[eabc61f](https://github.com/frinyvonnick/gitmoji-changelog/commit/eabc61fc08616c9c62079462d4bbf4ce83090cf5)]
 - ⬆️ Bump js-yaml from 3.12.0 to 3.13.1 ([#88](https://github.com/frinyvonnick/gitmoji-changelog/issues/88)) [[1c4c422](https://github.com/frinyvonnick/gitmoji-changelog/commit/1c4c422c101e4674c44811cd72d2dbaf66710d38)]
 - ⬆️ Bump fstream from 1.0.11 to 1.0.12 ([#83](https://github.com/frinyvonnick/gitmoji-changelog/issues/83)) [[f814f35](https://github.com/frinyvonnick/gitmoji-changelog/commit/f814f35346e5832f1619514e425952319026cdf6)]
 - ⬆️ Update handlebar to 4.0.14 ([#78](https://github.com/frinyvonnick/gitmoji-changelog/issues/78)) [[b77199f](https://github.com/frinyvonnick/gitmoji-changelog/commit/b77199f96c8570b827dfcb11907d6f4edac98823)]
@@ -21,6 +54,7 @@
 
 ### Miscellaneous
 
+-  v2.0.0-alpha.0 [[a911830](https://github.com/frinyvonnick/gitmoji-changelog/commit/a911830efb63326a410100cc3d971037e6c4fe82)]
 - 📦 Add .npmignore file ([#73](https://github.com/frinyvonnick/gitmoji-changelog/issues/73)) [[b0a243f](https://github.com/frinyvonnick/gitmoji-changelog/commit/b0a243ffbfe5a84de4a8173f4aa79f19acc32b95)]
 - 🐳 Optimize context and image size [[a692310](https://github.com/frinyvonnick/gitmoji-changelog/commit/a692310da45654da5485622a189cc0e350684d0c)]
 
