@@ -1,4 +1,7 @@
 <h1 align="center">Welcome to gitmoji-changelog 👋</h1>
+
+![gitmoji-changelog logo](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/logo.png)
+
 <p>
   <img src="https://img.shields.io/npm/v/gitmoji-changelog/alpha.svg" />
   <a href="https://github.com/frinyvonnick/gitmoji-changelog#readme">
@@ -58,6 +61,8 @@ npm install -g gitmoji-changelog
 cd my-project
 gitmoji-changelog
 ```
+
+![gitmoji-changelog usage example](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/example.gif)
 
 If `CHANGELOG.md` file doesn't exist, it will generate all previous changelog based on semver tags of your repo.
 
