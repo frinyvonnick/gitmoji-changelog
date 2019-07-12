@@ -1,5 +1,3 @@
-<h1 align="center">Welcome to gitmoji-changelog 👋</h1>
-
 ![gitmoji-changelog logo](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/logo.png)
 
 <p>
