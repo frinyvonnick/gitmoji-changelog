@@ -11,6 +11,8 @@
   <a href="https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
   </a>
+</p>
+<p>
   <a href="https://twitter.com/YvonnickFrin">
     <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
   </a>
