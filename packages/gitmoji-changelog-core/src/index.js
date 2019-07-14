@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { isEmpty } = require('lodash')
+const { get, isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -16,7 +16,7 @@ const gitSemverTagsAsync = promisify(gitSemverTags)
 
 const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 const HEAD = ''
-const START = ''
+const TAIL = ''
 
 function getCommits(from, to) {
   return new Promise((resolve) => {
@@ -106,11 +106,9 @@ async function generateVersions({
   groupSimilarCommits,
 }) {
   let nextTag = HEAD
+  const targetVersion = hasNext ? 'next' : sanitizeVersion(release)
   const changes = await Promise.all(tags.map(async tag => {
-    let version = sanitizeVersion(nextTag)
-    if (!nextTag) {
-      version = hasNext ? 'next' : release
-    }
+    const version = sanitizeVersion(nextTag) || targetVersion
     const from = tag
     const to = nextTag
     nextTag = tag
@@ -137,10 +135,10 @@ async function generateChangelog(options = {}) {
 
   if (mode === 'init') {
     lastVersion = release
-    tagsToProcess = [...tagsToProcess, START]
+    tagsToProcess = [...tagsToProcess, TAIL]
   } else {
     const { meta } = options
-    lastVersion = meta && meta.lastVersion ? meta.lastVersion : undefined
+    lastVersion = get(meta, 'lastVersion')
 
     if (lastVersion !== undefined) {
       const lastVersionIndex = tagsToProcess.findIndex(tag => semver.eq(tag, lastVersion))
@@ -148,7 +146,7 @@ async function generateChangelog(options = {}) {
     }
 
     if (hasNext && isEmpty(tagsToProcess)) {
-      tagsToProcess.push('')
+      tagsToProcess.push(HEAD)
     }
   }
 
