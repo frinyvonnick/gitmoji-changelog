@@ -113,7 +113,6 @@ async function generateVersions({
     }
     const from = tag
     const to = nextTag
-    console.log({ from, to })
     nextTag = tag
     return generateVersion({
       from, to, version, groupSimilarCommits,
@@ -134,7 +133,6 @@ async function generateChangelog(options = {}) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, release)
-  console.log({ hasNext, gitTags, release })
   let lastVersion
 
   if (mode === 'init') {
