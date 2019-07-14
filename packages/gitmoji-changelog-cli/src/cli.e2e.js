@@ -129,8 +129,7 @@ describe('generate changelog', () => {
       expect(getChangelog()).includes(['1.0.0', '2.0.0'])
     })
 
-
-    it.only('should get two versions 1.0.0 and 2.0.0 while updating changelog after tagging a version 2.0.0', async () => {
+    it('should get two versions 1.0.0 and 2.0.0 while updating changelog after tagging a version 2.0.0', async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
       await bumpVersion('1.0.0')
