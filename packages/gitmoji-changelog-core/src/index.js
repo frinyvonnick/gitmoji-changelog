@@ -113,6 +113,7 @@ async function generateVersions({
     }
     const from = tag
     const to = nextTag
+    console.log({ from, to })
     nextTag = tag
     return generateVersion({
       from, to, version, groupSimilarCommits,
@@ -133,6 +134,7 @@ async function generateChangelog(options = {}) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, release)
+  console.log({ hasNext, gitTags, release })
   let lastVersion
 
   if (mode === 'init') {
@@ -159,7 +161,7 @@ async function generateChangelog(options = {}) {
     groupSimilarCommits,
   })
 
-  if (mode === 'update' && isEmpty(changes[0].groups)) {
+  if (mode === 'update' && changes.length === 1 && isEmpty(changes[0].groups)) {
     throw new Error('No changes found. You may need to fetch or pull the last changes.')
   }
 
