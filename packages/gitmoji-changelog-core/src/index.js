@@ -159,7 +159,7 @@ async function generateChangelog(options = {}) {
     groupSimilarCommits,
   })
 
-  if (mode === 'update' && isEmpty(changes[0].groups)) {
+  if (mode === 'update' && changes.length === 1 && isEmpty(changes[0].groups)) {
     throw new Error('No changes found. You may need to fetch or pull the last changes.')
   }
 

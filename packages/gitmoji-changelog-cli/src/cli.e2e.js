@@ -128,6 +128,24 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).includes(['1.0.0', '2.0.0'])
     })
+
+    it('should get two versions 1.0.0 and 2.0.0 while updating changelog after tagging a version 2.0.0', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      await bumpVersion('2.0.0')
+      await tag('2.0.0')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['1.0.0', '2.0.0'])
+    })
+
     it("should get two versions 1.0.0 and 2.0.0 while updating changelog by calling cli with 2.0.0 and having package.json's version set to 1.0.0", async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
