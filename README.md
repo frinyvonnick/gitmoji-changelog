@@ -49,15 +49,21 @@ npm install -g gitmoji-changelog@alpha
 
 * [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
 
-## Install
+
+## 🚀 Usage (with npx)
+
+Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
+
+Just run the following command at the root of your project and answer questions:
+```sh
+npx gitmoji-changelog
+```
+
+## 🚀 Usage (with npm)
 
 ```sh
 npm install -g gitmoji-changelog
-```
 
-## Usage
-
-```sh
 cd my-project
 gitmoji-changelog
 ```
