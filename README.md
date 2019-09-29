@@ -2,19 +2,8 @@
 
 <p>
   <img src="https://img.shields.io/npm/v/gitmoji-changelog/alpha.svg" />
-  <a href="https://github.com/frinyvonnick/gitmoji-changelog#readme">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/frinyvonnick/gitmoji-changelog/graphs/commit-activity">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="_blank" />
-  </a>
   <a href="https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
-  </a>
-</p>
-<p>
-  <a href="https://twitter.com/YvonnickFrin">
-    <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
   </a>
   <a href="https://gitmoji.carloscuesta.me">
     <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg" alt="Gitmoji">
@@ -22,11 +11,10 @@
   <a href="https://github.com/frinyvonnick/gitmoji-changelog">
     <img src="https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
   </a>
+  <a href="https://twitter.com/YvonnickFrin">
+    <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
+  </a>
 </p>
-
-[![Docker Build Status](https://img.shields.io/docker/cloud/build/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
-[![](https://images.microbadger.com/badges/image/yvonnick/gitmoji-changelog.svg)](https://microbadger.com/images/yvonnick/gitmoji-changelog)
-[![Docker Pulls](https://img.shields.io/docker/pulls/yvonnick/gitmoji-changelog.svg)](https://hub.docker.com/r/yvonnick/gitmoji-changelog/)
 
 > Generate changelog for repositories using [gitmoji](https://gitmoji.carloscuesta.me/) commits convention.
 
