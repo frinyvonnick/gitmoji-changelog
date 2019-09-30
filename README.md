@@ -54,7 +54,7 @@ npm install -g gitmoji-changelog@alpha
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
 
-Just run the following command at the root of your project and answer questions:
+Run the following command at the root of your project and answer questions:
 ```sh
 npx gitmoji-changelog
 ```
