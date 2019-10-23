@@ -116,18 +116,18 @@ async function getLatestVersion(markdownFile) {
     return null
   }
 
-  const versions = markdownContent.match(/<a name="([\w.]+?)"><\/a>/g)
+  const versions = markdownContent.match(/<a name="([\w.-]+?)"><\/a>/g)
 
   if (!versions) return null
 
   const [lastVersion, previousVersion] = versions
 
   const tags = await gitSemverTagsAsync()
-  const result = lastVersion.match(/<a name="([\w.]+?)"><\/a>/)
+  const result = lastVersion.match(/<a name="([\w.-]+?)"><\/a>/)
   const isNext = result[1] === 'next' || !tags.some(tag => semver.eq(tag, result[1]))
   if (!isNext) return result[1]
 
-  const previousResult = previousVersion.match(/<a name="([\w.]+?)"><\/a>/)
+  const previousResult = previousVersion.match(/<a name="([\w.-]+?)"><\/a>/)
   return previousResult[1]
 }
 
