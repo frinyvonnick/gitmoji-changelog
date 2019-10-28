@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { get } = require('lodash')
+const path = require('path')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semver = require('semver')
@@ -8,7 +9,7 @@ const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 const { executeInteractiveMode } = require('./interactiveMode')
 
-const { getPackageInfo, getRepoInfo } = require('./metaInfo')
+const { getRepoInfo } = require('./metaInfo')
 
 const pkg = require('../package.json')
 
@@ -34,6 +35,21 @@ async function main(options = {}) {
     }
   } catch (e) { /* ignore error */ }
 
+  let metaInfo
+  try {
+    logger.info(`load preset ${options.preset}`)
+    if (!fs.existsSync(path.join(__dirname, 'presets', `${options.preset}.js`))) {
+      throw Error(`The preset ${options.preset} doesn't exist`)
+    }
+    // eslint-disable-next-line global-require
+    const loadMetaInfo = require(`./presets/${options.preset}.js`)
+    metaInfo = await loadMetaInfo()
+  } catch (e) {
+    logger.error(e)
+    // Force quit if the requested preset doesn't exist
+    process.exit(0)
+  }
+
   if (options.groupSimilarCommits) {
     logger.warn('⚗️  You are using a beta feature - may not working as expected')
     logger.warn('Feel free to open issues or PR into gitmoji-changelog')
@@ -43,7 +59,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        const changelog = await getChangelog(options)
+        const changelog = await getChangelog(options, metaInfo)
 
         logMetaData(changelog)
 
@@ -54,7 +70,7 @@ async function main(options = {}) {
         const lastVersion = await getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
-        const changelog = await getChangelog(newOptions)
+        const changelog = await getChangelog(newOptions, metaInfo)
 
         logMetaData(changelog)
 
@@ -70,11 +86,10 @@ async function main(options = {}) {
   process.exit(0)
 }
 
-async function getChangelog(options) {
-  const packageInfo = await getPackageInfo()
-  const repository = await getRepoInfo(packageInfo)
+async function getChangelog(options, metaInfo) {
+  const repository = await getRepoInfo()
 
-  const release = options.release === 'from-package' ? packageInfo.version : options.release
+  const release = options.release === 'from-package' ? metaInfo.version : options.release
 
   if (!semver.valid(release)) {
     throw new Error(`${release} is not a valid semver version.`)
@@ -100,7 +115,7 @@ async function getChangelog(options) {
     changelog = await executeInteractiveMode(changelog)
   }
 
-  changelog.meta.package = packageInfo
+  changelog.meta.package = metaInfo
   changelog.meta.repository = repository
 
   return changelog

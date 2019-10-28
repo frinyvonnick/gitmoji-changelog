@@ -47,12 +47,20 @@ describe('generate changelog', () => {
     removeSync(testDir)
   })
 
+  describe('presets', () => {
+    it("should throw an error if the requested preset doesn't exist", () => {
+      const output = gitmojiChangelog(['--preset=unknown'])
+
+      expect(output.toString('utf8')).includes(["The preset unknown doesn't exist"])
+    })
+  })
+
   describe('init', () => {
     it("should get a 1.0.0 version while initializing changelog by calling cli without arguments and having package.json's version set to 1.0.0", async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
       await bumpVersion('1.0.0')
-      gitmojiChangelog()
+      await gitmojiChangelog()
       await commit(':bookmark: Version 1.0.0')
 
       expect(getChangelog()).includes(['1.0.0'])
