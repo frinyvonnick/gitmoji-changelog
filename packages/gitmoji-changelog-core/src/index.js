@@ -121,29 +121,17 @@ async function generateVersions({
   return changes
 }
 
-async function generateChangelog(options = {}) {
-  const {
-    mode,
-    release,
-    groupSimilarCommits,
-  } = options
-
+// eslint-disable-next-line no-underscore-dangle
+async function _generateChangelog(from, to, { groupSimilarCommits }) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
-  const hasNext = hasNextVersion(gitTags, release)
-  let lastVersion
+  const hasNext = hasNextVersion(gitTags, to)
 
-  if (mode === 'init') {
-    lastVersion = release
+  if (from === '') {
     tagsToProcess = [...tagsToProcess, TAIL]
   } else {
-    const { meta } = options
-    lastVersion = get(meta, 'lastVersion')
-
-    if (lastVersion !== undefined) {
-      const lastVersionIndex = tagsToProcess.findIndex(tag => semver.eq(tag, lastVersion))
-      tagsToProcess.splice(lastVersionIndex + 1)
-    }
+    const fromIndex = tagsToProcess.findIndex(tag => semver.eq(tag, from))
+    tagsToProcess.splice(fromIndex + 1)
 
     if (hasNext && isEmpty(tagsToProcess)) {
       tagsToProcess.push(HEAD)
@@ -153,20 +141,36 @@ async function generateChangelog(options = {}) {
   const changes = await generateVersions({
     tags: tagsToProcess,
     hasNext,
-    release,
+    release: to,
     groupSimilarCommits,
   })
 
-  if (mode === 'update' && changes.length === 1 && isEmpty(changes[0].groups)) {
+  if (from !== '' && changes.length === 1 && isEmpty(changes[0].groups)) {
     throw new Error('No changes found. You may need to fetch or pull the last changes.')
   }
 
   return {
     meta: {
-      lastVersion: sanitizeVersion(lastVersion),
+      lastVersion: sanitizeVersion(from),
     },
     changes: changes.filter(({ groups }) => groups.length),
   }
+}
+
+async function generateChangelog(options = {}) {
+  const {
+    mode,
+    release,
+    groupSimilarCommits,
+  } = options
+  if (mode === 'init') {
+    return _generateChangelog('', release, { groupSimilarCommits })
+  }
+
+  const { meta } = options
+  const lastVersion = get(meta, 'lastVersion')
+
+  return _generateChangelog(lastVersion, release, { groupSimilarCommits })
 }
 
 function getLastCommitDate(commits) {
