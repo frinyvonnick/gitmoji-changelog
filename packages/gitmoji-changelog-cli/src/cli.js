@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { get } = require('lodash')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semver = require('semver')
@@ -84,7 +85,16 @@ async function getChangelog(options) {
     release,
   }
 
-  let changelog = await generateChangelog(enhancedOptions)
+  // let changelog = await generateChangelog(enhancedOptions)
+  let changelog
+  if (options.mode === 'init') {
+    changelog = await generateChangelog('', release, enhancedOptions)
+  } else {
+    const { meta } = options
+    const lastVersion = get(meta, 'lastVersion')
+
+    changelog = await generateChangelog(lastVersion, release, enhancedOptions)
+  }
 
   if (options.interactive) {
     changelog = await executeInteractiveMode(changelog)

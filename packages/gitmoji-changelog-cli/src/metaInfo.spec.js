@@ -1,34 +1,7 @@
 /* eslint-disable global-require */
-const readPkgUp = require('read-pkg-up')
 const gitRemoteOriginUrl = require('git-remote-origin-url')
 
-const { getPackageInfo, getRepoInfo } = require('./metaInfo')
-
-describe('getPackageInfo', () => {
-  it('should extract github repo info from package.json', async () => {
-    readPkgUp.mockImplementationOnce(() => Promise.resolve({
-      pkg: {
-        name: 'gitmoji-changelog',
-        version: '0.0.1',
-        repository: {
-          type: 'git',
-          url: 'git+https://github.com/frinyvonnick/gitmoji-changelog.git',
-        },
-      },
-    }))
-
-    const result = await getPackageInfo()
-
-    expect(result).toEqual({
-      name: 'gitmoji-changelog',
-      version: '0.0.1',
-      repository: {
-        type: 'git',
-        url: 'git+https://github.com/frinyvonnick/gitmoji-changelog.git',
-      },
-    })
-  })
-})
+const { getRepoInfo } = require('./metaInfo')
 
 describe('getRepoInfo', () => {
   it('should extract github repo info from package.json', async () => {

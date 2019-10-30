@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { get, isEmpty } = require('lodash')
+const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -121,13 +121,12 @@ async function generateVersions({
   return changes
 }
 
-// eslint-disable-next-line no-underscore-dangle
-async function _generateChangelog(from, to, { groupSimilarCommits }) {
+async function generateChangelog(from, to, { groupSimilarCommits } = {}) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, to)
 
-  if (from === '') {
+  if (from === TAIL) {
     tagsToProcess = [...tagsToProcess, TAIL]
   } else {
     const fromIndex = tagsToProcess.findIndex(tag => semver.eq(tag, from))
@@ -145,7 +144,7 @@ async function _generateChangelog(from, to, { groupSimilarCommits }) {
     groupSimilarCommits,
   })
 
-  if (from !== '' && changes.length === 1 && isEmpty(changes[0].groups)) {
+  if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {
     throw new Error('No changes found. You may need to fetch or pull the last changes.')
   }
 
@@ -155,22 +154,6 @@ async function _generateChangelog(from, to, { groupSimilarCommits }) {
     },
     changes: changes.filter(({ groups }) => groups.length),
   }
-}
-
-async function generateChangelog(options = {}) {
-  const {
-    mode,
-    release,
-    groupSimilarCommits,
-  } = options
-  if (mode === 'init') {
-    return _generateChangelog('', release, { groupSimilarCommits })
-  }
-
-  const { meta } = options
-  const lastVersion = get(meta, 'lastVersion')
-
-  return _generateChangelog(lastVersion, release, { groupSimilarCommits })
 }
 
 function getLastCommitDate(commits) {

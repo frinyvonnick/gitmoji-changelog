@@ -375,4 +375,9 @@ describe('generate changelog', () => {
     const updatedContent = content.replace(version, to)
     fs.writeFileSync(pkg, updatedContent)
   }
+
+  // eslint-disable-next-line no-unused-vars
+  function logOutput(changelog) {
+    console.log(changelog.toString('utf8'))
+  }
 })
