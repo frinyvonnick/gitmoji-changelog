@@ -1,13 +1,13 @@
 /* eslint-disable global-require */
 const gitRemoteOriginUrl = require('git-remote-origin-url')
 
-const { getRepoInfo } = require('./metaInfo')
+const getRepositoryInfo = require('./repository')
 
-describe('getRepoInfo', () => {
+describe('getRepositoryInfo', () => {
   it('should return null if no git info found', async () => {
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve(null))
 
-    const result = await getRepoInfo()
+    const result = await getRepositoryInfo()
 
     expect(result).toBeNull()
   })
@@ -15,7 +15,7 @@ describe('getRepoInfo', () => {
   it('should extract GitHub info', async () => {
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve('git+https://github.com/frinyvonnick/gitmoji-changelog.git'))
 
-    const result = await getRepoInfo()
+    const result = await getRepositoryInfo()
 
     expect(result).toEqual({
       type: 'github',
@@ -29,7 +29,7 @@ describe('getRepoInfo', () => {
 
   it('should extract gitlab repo info', async () => {
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve('git+https://gitlab.com/gitlab-user/gitlab-project.git'))
-    const result = await getRepoInfo()
+    const result = await getRepositoryInfo()
 
     expect(result).toEqual({
       type: 'gitlab',
@@ -43,7 +43,7 @@ describe('getRepoInfo', () => {
 
   it('should extract bitbucket repo info', async () => {
     gitRemoteOriginUrl.mockImplementationOnce(() => Promise.resolve('https://username@bitbucket.org/bitbucket-account/bitbucket-project.git'))
-    const result = await getRepoInfo()
+    const result = await getRepositoryInfo()
 
     expect(result).toEqual({
       type: 'bitbucket',

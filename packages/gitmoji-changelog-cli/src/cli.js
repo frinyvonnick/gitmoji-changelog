@@ -9,7 +9,7 @@ const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 const { executeInteractiveMode } = require('./interactiveMode')
 
-const { getRepoInfo } = require('./metaInfo')
+const getRepositoryInfo = require('./repository')
 
 const pkg = require('../package.json')
 
@@ -35,15 +35,15 @@ async function main(options = {}) {
     }
   } catch (e) { /* ignore error */ }
 
-  let metaInfo
+  let projectInfo
   try {
     logger.info(`use preset ${options.preset}`)
     if (!fs.existsSync(path.join(__dirname, 'presets', `${options.preset}.js`))) {
       throw Error(`The preset ${options.preset} doesn't exist`)
     }
     // eslint-disable-next-line global-require
-    const loadMetaInfo = require(`./presets/${options.preset}.js`)
-    metaInfo = await loadMetaInfo()
+    const loadProjectInfo = require(`./presets/${options.preset}.js`)
+    projectInfo = await loadProjectInfo()
   } catch (e) {
     logger.error(e)
     // Force quit if the requested preset doesn't exist
@@ -59,7 +59,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        const changelog = await getChangelog(options, metaInfo)
+        const changelog = await getChangelog(options, projectInfo)
 
         logMetaData(changelog)
 
@@ -70,7 +70,7 @@ async function main(options = {}) {
         const lastVersion = await getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
-        const changelog = await getChangelog(newOptions, metaInfo)
+        const changelog = await getChangelog(newOptions, projectInfo)
 
         logMetaData(changelog)
 
@@ -86,10 +86,10 @@ async function main(options = {}) {
   return process.exit(0)
 }
 
-async function getChangelog(options, metaInfo) {
-  const repository = await getRepoInfo()
+async function getChangelog(options, projectInfo) {
+  const repository = await getRepositoryInfo()
 
-  const release = options.release === 'from-package' ? metaInfo.version : options.release
+  const release = options.release === 'from-package' ? projectInfo.version : options.release
 
   if (!semver.valid(release)) {
     throw new Error(`${release} is not a valid semver version.`)
@@ -115,15 +115,15 @@ async function getChangelog(options, metaInfo) {
     changelog = await executeInteractiveMode(changelog)
   }
 
-  changelog.meta.package = metaInfo
+  changelog.meta.project = projectInfo
   changelog.meta.repository = repository
 
   return changelog
 }
 
 function logMetaData(changelog) {
-  if (changelog.meta.package) {
-    const { name, version } = changelog.meta.package
+  if (changelog.meta.project) {
+    const { name, version } = changelog.meta.project
     logger.info(`${name} v${version}`)
   }
   if (changelog.meta.repository) {

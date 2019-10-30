@@ -3,8 +3,7 @@ const hostedGitInfo = require('hosted-git-info')
 
 const { isEmpty } = require('lodash')
 
-// get git repository info
-async function getRepoInfo() {
+async function getRepositoryInfo() {
   try {
     const url = await gitRemoteOriginUrl()
     const repo = hostedGitInfo.fromUrl(url)
@@ -24,6 +23,4 @@ async function getRepoInfo() {
   }
 }
 
-module.exports = {
-  getRepoInfo,
-}
+module.exports = getRepositoryInfo

@@ -47,7 +47,7 @@ yargs
   }, execute('update'))
 
   .option('format', { default: 'markdown', desc: 'changelog format (markdown, json)' })
-  .option('preset', { default: 'node', desc: 'change repository type' })
+  .option('preset', { default: 'node', desc: 'define preset mode (node only for now)' })
   .option('output', { desc: 'output changelog file' })
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
   .option('author', { default: false, desc: 'add the author in changelog lines' })
