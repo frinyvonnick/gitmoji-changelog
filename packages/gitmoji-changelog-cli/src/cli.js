@@ -47,7 +47,7 @@ async function main(options = {}) {
   } catch (e) {
     logger.error(e)
     // Force quit if the requested preset doesn't exist
-    process.exit(0)
+    return process.exit(0)
   }
 
   if (options.groupSimilarCommits) {
@@ -83,7 +83,7 @@ async function main(options = {}) {
   }
 
   // force quit (if the latest version request is pending, we don't wait for it)
-  process.exit(0)
+  return process.exit(0)
 }
 
 async function getChangelog(options, metaInfo) {
