@@ -27,6 +27,12 @@ describe('cli', () => {
     expect(process.exit).toHaveBeenCalledTimes(1)
   })
 
+  it('should call process.exit if preset does not exist', async () => {
+    await main()
+
+    expect(process.exit).toHaveBeenCalledTimes(1)
+  })
+
   describe('version control', () => {
     const findOutdatedMessage = () => logger.warn.mock.calls.find(([message]) => message.includes('outdated'))
 
