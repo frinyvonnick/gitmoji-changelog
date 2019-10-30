@@ -4,6 +4,9 @@ const gitSemverTags = require('git-semver-tags')
 
 const { generateChangelog } = require('./index')
 
+const TAIL = ''
+const HEAD = ''
+
 const uselessCommit = {
   hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd3',
   date: '2018-09-14T21:00:18+02:00',
@@ -86,7 +89,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'init', release: 'next' })
+    const { changes } = await generateChangelog(TAIL, 'next')
 
     expect(changes).toEqual([
       {
@@ -107,7 +110,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'update', release: 'next' })
+    const { changes } = await generateChangelog('v1.0.0', 'next')
 
     expect(changes).toEqual([
       {
@@ -129,7 +132,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog(TAIL, HEAD)
 
     expect(changes).toEqual([
       {
@@ -168,7 +171,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'update', meta: { lastVersion: 'v1.0.0' } })
+    const { changes } = await generateChangelog('v1.0.0', 'next')
 
     expect(changes).toEqual([
       {
@@ -195,7 +198,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0']))
 
-    const { changes } = await generateChangelog({ mode: 'init', groupSimilarCommits: true })
+    const { changes } = await generateChangelog(TAIL, HEAD, { groupSimilarCommits: true })
 
     expect(changes[0].groups[0].commits).toEqual([
       secondRecycleCommit,
@@ -213,7 +216,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog(TAIL, HEAD)
 
     expect(changes).toEqual([
       expect.objectContaining({
@@ -233,7 +236,7 @@ describe('changelog', () => {
 
     let message = false
     try {
-      await generateChangelog({ mode: 'update', release: 'next' })
+      await generateChangelog('v1.0.0', 'next')
     } catch (e) {
       message = e.message
     }
@@ -247,7 +250,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.1', 'v1.0.0']))
 
-    await generateChangelog({ mode: 'init' })
+    await generateChangelog(TAIL, HEAD)
 
     expect(gitRawCommits).toHaveBeenCalledWith(expect.objectContaining({ from: 'v1.0.1', to: '' }))
     expect(gitRawCommits).toHaveBeenCalledWith(
@@ -264,7 +267,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', '1.0.0', 'v1.1.1']))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog(TAIL, HEAD)
 
     // inputs has 4 group (4 versions)
     // but output should only has 3, since the 3rd is empty
@@ -286,7 +289,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog({ mode: 'init' })
+    const { changes } = await generateChangelog(TAIL, HEAD)
 
     expect(changes[0].groups[0].commits.map(({ date, body }) => ({ date, body })))
       .toEqual([

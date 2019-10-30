@@ -4,7 +4,7 @@ const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
 const through = require('through2')
 const concat = require('concat-stream')
-const { get, isEmpty } = require('lodash')
+const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
 const { parseCommit } = require('./parser')
@@ -121,29 +121,16 @@ async function generateVersions({
   return changes
 }
 
-async function generateChangelog(options = {}) {
-  const {
-    mode,
-    release,
-    groupSimilarCommits,
-  } = options
-
+async function generateChangelog(from, to, { groupSimilarCommits } = {}) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
-  const hasNext = hasNextVersion(gitTags, release)
-  let lastVersion
+  const hasNext = hasNextVersion(gitTags, to)
 
-  if (mode === 'init') {
-    lastVersion = release
+  if (from === TAIL) {
     tagsToProcess = [...tagsToProcess, TAIL]
   } else {
-    const { meta } = options
-    lastVersion = get(meta, 'lastVersion')
-
-    if (lastVersion !== undefined) {
-      const lastVersionIndex = tagsToProcess.findIndex(tag => semver.eq(tag, lastVersion))
-      tagsToProcess.splice(lastVersionIndex + 1)
-    }
+    const fromIndex = tagsToProcess.findIndex(tag => semver.eq(tag, from))
+    tagsToProcess.splice(fromIndex + 1)
 
     if (hasNext && isEmpty(tagsToProcess)) {
       tagsToProcess.push(HEAD)
@@ -153,17 +140,17 @@ async function generateChangelog(options = {}) {
   const changes = await generateVersions({
     tags: tagsToProcess,
     hasNext,
-    release,
+    release: to,
     groupSimilarCommits,
   })
 
-  if (mode === 'update' && changes.length === 1 && isEmpty(changes[0].groups)) {
+  if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {
     throw new Error('No changes found. You may need to fetch or pull the last changes.')
   }
 
   return {
     meta: {
-      lastVersion: sanitizeVersion(lastVersion),
+      lastVersion: sanitizeVersion(from),
     },
     changes: changes.filter(({ groups }) => groups.length),
   }

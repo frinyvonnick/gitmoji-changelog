@@ -375,4 +375,12 @@ describe('generate changelog', () => {
     const updatedContent = content.replace(version, to)
     fs.writeFileSync(pkg, updatedContent)
   }
+
+  /*
+   * This function is useful to print cli ouput when debugging tests
+   */
+  // eslint-disable-next-line no-unused-vars
+  function logOutput(ouput) {
+    console.log(ouput.toString('utf8'))
+  }
 })
