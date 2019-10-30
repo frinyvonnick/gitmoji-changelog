@@ -107,7 +107,7 @@ describe('changelog', () => {
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
-    const { changes } = await generateChangelog('', 'next')
+    const { changes } = await generateChangelog('v1.0.0', 'next')
 
     expect(changes).toEqual([
       {
