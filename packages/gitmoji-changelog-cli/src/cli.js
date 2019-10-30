@@ -37,7 +37,7 @@ async function main(options = {}) {
 
   let metaInfo
   try {
-    logger.info(`load preset ${options.preset}`)
+    logger.info(`use preset ${options.preset}`)
     if (!fs.existsSync(path.join(__dirname, 'presets', `${options.preset}.js`))) {
       throw Error(`The preset ${options.preset} doesn't exist`)
     }
