@@ -45,13 +45,15 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
 7. Push to the remote `git push`
 
-## Add a preset
+## Presets 
 
 `gitmoji-changelog` use presets to get project meta data useful for its smooth operation. Here is the list of available presets:
 
 - node (default preset)
 
 You didn't the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/presets) folder in the `cli` package.
+
+### Add a preset
 
 A preset need to export a function. When called this function must return three mandatory information about the project in which the cli has been called. The name of the project, a short description of it and its current version.
 
