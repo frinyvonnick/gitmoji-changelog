@@ -19,19 +19,50 @@ cd my-project
 gitmoji-changelog
 ```
 
-## Behavior
+### Available commands
 
-If `CHANGELOG.md` file doesn't exist, it will generate all previous changelog based on semver tags of your repo.
+```sh
+gitmoji-changelog [release]
+gitmoji-changelog init
+gitmoji-changelog update [release]
+```
 
-If `CHANGELOG.md` file already exists, _this will not overwrite any previous changelog_, it will generate a changelog based on commits since the last semver tag that match.
+The first command listed above is the idiomatic usage of `gitmoji-changelog` (read the `How it works` for more information).
 
-All available commands and parameters can be listed using: `gitmoji-changelog --help`
+`release` argument is by default valued to `from-package`. It will retrieve the version from the selected `preset` (read `Presets` for more information). You can overwrite it with the tag you want to generate in the changelog.
+
+### Options
+
+| option                  | description                             | default value                      |
+|-------------------------|-----------------------------------------|------------------------------------|
+| --version               | display version                         |                                    |
+| --format                | changelog format (markdown, json)       | markdown                           |
+| --preset                | define preset mode                      | node                               |
+| --output                | output file path                        | ./CHANGELOG.md or ./CHANGELOG.json |
+| --group-similar-commits | [⚗️,- beta] try to group similar commits | false                              |
+| --author                | add the author in changelog lines       | false                              |
+| --interactive -i        | select commits manually                 | false                              |
+| --help                  | display help                            |                                    |
+
+### Example
 
 **Here an example output:** [CHANGELOG.md](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/CHANGELOG.md)
 
-_By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits: [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js)_
+## How it works
 
-## Workflow
+### Behavior
+
+`CHANGELOG.md` doesn't exist:
+
+The CLI will generate all previous changelog based on semver tags of your repo.
+
+`CHANGELOG.md` exists:
+
+_All previous semvers tags remain unchanged_. The CLI will add each tag since the last semver tag found in the `CHANGELOG.md` file.
+
+**By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits: [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js)**
+
+### Workflow
 
 Here the recommended workflow to generate your changelog file using `gitmoji-changelog`:
 
@@ -44,6 +75,8 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 5. Commit `package.json` and `CHANGELOG.md` file
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
 7. Push to the remote `git push`
+
+_This workflow is related to the `node` preset but can be adapted to your own technology._
 
 ## Presets 
 
