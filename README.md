@@ -21,12 +21,12 @@
 
 ![gitmoji-changelog usage example](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/example.gif)
 
-## [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is in alpha :tada:
+## [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is out :tada:
 
 gitmoji-changelog 2.0 in a nutshell:
-- ✨ Add interactive option to manually select commits 
-- 💥 Remove package.json reading logic from core package
-- ✨ Add a preset system to enable using `gitmoji-changelog` on all kind of projects
+- ✨ Add a preset system to enable using `gitmoji-changelog` on all kind of projects ([#128](https://github.com/frinyvonnick/gitmoji-changelog/issues/128)) [[24cead9](https://github.com/frinyvonnick/gitmoji-changelog/commit/24cead964ef3e9c1b5b7df9d53bfe357298a9191)]
+- ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)]
+- 💥 Change core function parameters from &quot;mode&quot; to &quot;from&quot; and &quot;to&quot; ([#127](https://github.com/frinyvonnick/gitmoji-changelog/issues/127)) [[42af500](https://github.com/frinyvonnick/gitmoji-changelog/commit/42af500df1b9b9d738bf9d47674537b50dd90870)]
 
 Test it:
 
