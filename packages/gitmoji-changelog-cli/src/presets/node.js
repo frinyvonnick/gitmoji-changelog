@@ -4,7 +4,7 @@ module.exports = async () => {
   try {
     const packageInfo = await readPkgUp()
 
-    if (!packageInfo.pkg) return null
+    if (!packageInfo.pkg) throw Error('Empty package.json')
 
     return {
       name: packageInfo.pkg.name,
