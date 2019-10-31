@@ -28,12 +28,6 @@ gitmoji-changelog 2.0 in a nutshell:
 - ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)]
 - 💥 Change core function parameters from &quot;mode&quot; to &quot;from&quot; and &quot;to&quot; ([#127](https://github.com/frinyvonnick/gitmoji-changelog/issues/127)) [[42af500](https://github.com/frinyvonnick/gitmoji-changelog/commit/42af500df1b9b9d738bf9d47674537b50dd90870)]
 
-Test it:
-
-```shell
-npm install -g gitmoji-changelog@alpha
-```
-
 ## 🚀 Usage
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
