@@ -47,8 +47,6 @@ cd my-project
 gitmoji-changelog
 ```
 
-Read more in our [documentation](DOCUMENTATION.md).
-
 ## :book: Documentation
 
 :point_right: The full documentation is available [here](DOCUMENTATION.md).
