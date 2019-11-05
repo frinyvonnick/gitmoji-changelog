@@ -49,6 +49,10 @@ gitmoji-changelog
 
 Read more in our [documentation](DOCUMENTATION.md).
 
+## :book: Documentation
+
+:point_right: The full documentation is available [here](DOCUMENTATION.md).
+
 ### Using Docker image
 
 Launch `gitmoji-changelog` using the [official Docker image](https://hub.docker.com/r/yvonnick/gitmoji-changelog):
@@ -69,7 +73,6 @@ docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:dev
 #### Supported tags and respective Dockerfile links
 
 * [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
-
 
 ## Author
 
