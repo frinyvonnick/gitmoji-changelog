@@ -51,7 +51,7 @@ gitmoji-changelog
 
 :point_right: The full documentation is available [here](DOCUMENTATION.md).
 
-### Using Docker image
+## :whale: Using Docker image
 
 Launch `gitmoji-changelog` using the [official Docker image](https://hub.docker.com/r/yvonnick/gitmoji-changelog):
 ```sh
@@ -68,7 +68,7 @@ docker image build -t yvonnick/gitmoji-changelog:dev .
 docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:dev
 ```
 
-#### Supported tags and respective Dockerfile links
+### Supported tags and respective Dockerfile links
 
 * [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
 
