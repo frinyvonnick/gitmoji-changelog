@@ -21,7 +21,7 @@
 
 ![gitmoji-changelog usage example](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/example.gif)
 
-## [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is out :tada:
+## 🎉 [2.0](https://github.com/frinyvonnick/gitmoji-changelog/milestone/2) is out!
 
 gitmoji-changelog 2.0 in a nutshell:
 - ✨ Add a preset system to enable using `gitmoji-changelog` on all kind of projects ([#128](https://github.com/frinyvonnick/gitmoji-changelog/issues/128)) [[24cead9](https://github.com/frinyvonnick/gitmoji-changelog/commit/24cead964ef3e9c1b5b7df9d53bfe357298a9191)]
@@ -47,15 +47,11 @@ cd my-project
 gitmoji-changelog
 ```
 
-## :book: Documentation
+## 📖 Documentation
 
 :point_right: The full documentation is available [here](DOCUMENTATION.md).
 
-### Supported tags and respective Dockerfile links
-
-* [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
-
-## Author
+## ✍ Author
 
 👤 **Yvonnick FRIN (https://yvonnickfrin.dev)**
 
@@ -66,7 +62,7 @@ gitmoji-changelog
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/frinyvonnick/gitmoji-changelog/issues). You can also take a look at our [contributing guide](CONTRIBUTING.md).
 
-## Show your support
+## 🙏 Show your support
 
 Give a ⭐️ if this project helped you!
 
