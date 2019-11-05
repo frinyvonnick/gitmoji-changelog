@@ -141,3 +141,25 @@ module.exports = async () => {
 ```
 
 That's it. Feel free to open an issue to ask for a new preset or open a pull request to add one.
+
+## 🐳 Using Docker image
+
+Launch `gitmoji-changelog` using the [official Docker image](https://hub.docker.com/r/yvonnick/gitmoji-changelog):
+```sh
+docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:latest
+```
+
+> `/app` is the directory where gitmoji-changelog expect your project in the container.
+
+You can also build the image locally and use it directly:
+```sh
+# build the image:
+docker image build -t yvonnick/gitmoji-changelog:dev .
+# use it:
+docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:dev
+```
+
+### Supported tags and respective Dockerfile links
+
+* [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
+
