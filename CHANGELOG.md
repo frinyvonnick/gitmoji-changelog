@@ -5,24 +5,37 @@
 
 ### Added
 
-- ✨ Add a presets system to be independent from the package.json ([#128](https://github.com/frinyvonnick/gitmoji-changelog/issues/128)) [[24cead9](https://github.com/frinyvonnick/gitmoji-changelog/commit/24cead964ef3e9c1b5b7df9d53bfe357298a9191)]
-- ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)]
+- ✨ Add a presets system to be independent from the package.json ([#128](https://github.com/frinyvonnick/gitmoji-changelog/issues/128)) [[24cead9](https://github.com/frinyvonnick/gitmoji-changelog/commit/24cead964ef3e9c1b5b7df9d53bfe357298a9191)] (by Yvonnick FRIN)
+- ✨ Add interactive option to manually select commits ([#81](https://github.com/frinyvonnick/gitmoji-changelog/issues/81)) [[d13ca2e](https://github.com/frinyvonnick/gitmoji-changelog/commit/d13ca2e1c77c3cd9694cde926442c303adb47fa3)] (by Franck Abgrall)
 
 ### Changed
 
-- 💥 Change core function parameters from &quot;mode&quot; to &quot;from&quot; and &quot;to&quot; ([#127](https://github.com/frinyvonnick/gitmoji-changelog/issues/127)) [[42af500](https://github.com/frinyvonnick/gitmoji-changelog/commit/42af500df1b9b9d738bf9d47674537b50dd90870)]
+- ♻️ Change core function parameters from &quot;mode&quot; to &quot;from&quot; and &quot;to&quot; ([#127](https://github.com/frinyvonnick/gitmoji-changelog/issues/127)) [[42af500](https://github.com/frinyvonnick/gitmoji-changelog/commit/42af500df1b9b9d738bf9d47674537b50dd90870)] (by Yvonnick FRIN)
+- 🔧 Add editor config file ([#124](https://github.com/frinyvonnick/gitmoji-changelog/issues/124)) [[6c763a2](https://github.com/frinyvonnick/gitmoji-changelog/commit/6c763a2be93908232ffda7ca9d88499d38809c99)] (by quentinncl)
+
+### Removed
+
+- 🔥 Remove some badges [[6d27a32](https://github.com/frinyvonnick/gitmoji-changelog/commit/6d27a32b900a1d1462f39a92d09b5ab1407be25b)] (by Yvonnick FRIN)
 
 ### Fixed
 
-- 🐛 Handle pre-release as latest version in markdown ([#126](https://github.com/frinyvonnick/gitmoji-changelog/issues/126)) [[d22699b](https://github.com/frinyvonnick/gitmoji-changelog/commit/d22699b6226cb03f634b22f65f0f825f980dc666)]
-- 🐛 Use last version from changelog file instead of previous git tag ([#82](https://github.com/frinyvonnick/gitmoji-changelog/issues/82)) [[d3c49d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/d3c49d061cfbe2c271f9aa3739fae750dbf6327c)]
-- 🐛 Fix updating changelog after tagging a version ([#115](https://github.com/frinyvonnick/gitmoji-changelog/issues/115)) [[8df6705](https://github.com/frinyvonnick/gitmoji-changelog/commit/8df6705bc369bbec16cc2dc1ff08c0ae55c20da3)]
-- 🐛 Fix dates sorting in commits ([#75](https://github.com/frinyvonnick/gitmoji-changelog/issues/75)) [[748e673](https://github.com/frinyvonnick/gitmoji-changelog/commit/748e6732a18f8bc5c529db12a558c0ffb458c8a1)]
+- 🐛 Handle pre-release as latest version in markdown ([#126](https://github.com/frinyvonnick/gitmoji-changelog/issues/126)) [[d22699b](https://github.com/frinyvonnick/gitmoji-changelog/commit/d22699b6226cb03f634b22f65f0f825f980dc666)] (by Yvonnick FRIN)
+- 🐛 Fix updating changelog after tagging a version ([#115](https://github.com/frinyvonnick/gitmoji-changelog/issues/115)) [[8df6705](https://github.com/frinyvonnick/gitmoji-changelog/commit/8df6705bc369bbec16cc2dc1ff08c0ae55c20da3)] (by Yvonnick FRIN)
+- 🐛 Use last version from changelog file instead of previous git tag ([#82](https://github.com/frinyvonnick/gitmoji-changelog/issues/82)) [[d3c49d0](https://github.com/frinyvonnick/gitmoji-changelog/commit/d3c49d061cfbe2c271f9aa3739fae750dbf6327c)] (by Franck Abgrall)
+- 🐛 Fix dates sorting in commits ([#75](https://github.com/frinyvonnick/gitmoji-changelog/issues/75)) [[748e673](https://github.com/frinyvonnick/gitmoji-changelog/commit/748e6732a18f8bc5c529db12a558c0ffb458c8a1)] (by Mathieu TUDISCO)
 
 ### Miscellaneous
 
-- 📝 Improve documentation ([#129](https://github.com/frinyvonnick/gitmoji-changelog/issues/129)) [[a2c994e](https://github.com/frinyvonnick/gitmoji-changelog/commit/a2c994e498f1fbb08c7e26eaae874d9c0a13211b)]
-- 📝 Create CODE_OF_CONDUCT.md file [[51c1314](https://github.com/frinyvonnick/gitmoji-changelog/commit/51c1314fb0f6b2770bf2fdbdffc1912b8e06bbf7)]
+- 📝 Add npx instruction on README ([#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)) [[ffcbef5](https://github.com/frinyvonnick/gitmoji-changelog/commit/ffcbef55efd4558335f913d1c38411229a330a58)] (by quentinncl)
+- 📝 Add contributors to README ([#125](https://github.com/frinyvonnick/gitmoji-changelog/issues/125)) [[7580ff9](https://github.com/frinyvonnick/gitmoji-changelog/commit/7580ff9c6598b92aa3375836ce0b568e8378c65f)] (by Franck Abgrall)
+- 📝 Create CODE_OF_CONDUCT.md file [[51c1314](https://github.com/frinyvonnick/gitmoji-changelog/commit/51c1314fb0f6b2770bf2fdbdffc1912b8e06bbf7)] (by Yvonnick FRIN)
+- 📝 Propose to add badge to our users ([#103](https://github.com/frinyvonnick/gitmoji-changelog/issues/103)) [[f5981cb](https://github.com/frinyvonnick/gitmoji-changelog/commit/f5981cbeb102c8b6d36427c64f5e4f31932a938a)] (by Florent Berthelot)
+- 🐳 Add dependency in markdown package to fix docker image [[804a780](https://github.com/frinyvonnick/gitmoji-changelog/commit/804a780a957e2ae6364001331cd8ed818a9580a1)] (by FRIN Yvonnick)
+- 🐳 Improve Dockerfile and update docker image usage ([#109](https://github.com/frinyvonnick/gitmoji-changelog/issues/109)) [[55e24c2](https://github.com/frinyvonnick/gitmoji-changelog/commit/55e24c2bf8ae3ad2fd238b8480862498aa1a134e)] (by Baptiste Gauduchon)
+- 📝 Add docker usage section ([#99](https://github.com/frinyvonnick/gitmoji-changelog/issues/99)) [[53c96bc](https://github.com/frinyvonnick/gitmoji-changelog/commit/53c96bcd8c66f7a05e38739a1bde82585a3fee86)] (by Baptiste Gauduchon)
+- 🐳 Fix dependencies versions in Dockerfile ([#97](https://github.com/frinyvonnick/gitmoji-changelog/issues/97)) [[719541d](https://github.com/frinyvonnick/gitmoji-changelog/commit/719541dd414b62bba59178259a0830626ec70b2e)] (by Baptiste Gauduchon)
+- 📦 Add .npmignore file ([#73](https://github.com/frinyvonnick/gitmoji-changelog/issues/73)) [[b0a243f](https://github.com/frinyvonnick/gitmoji-changelog/commit/b0a243ffbfe5a84de4a8173f4aa79f19acc32b95)] (by Emmanuel DEMEY)
+- 🐳 Optimize context and image size [[a692310](https://github.com/frinyvonnick/gitmoji-changelog/commit/a692310da45654da5485622a189cc0e350684d0c)] (by Fabien JUIF)
 
 <a name="1.1.0"></a>
 ## 1.1.0 (2018-11-10)
