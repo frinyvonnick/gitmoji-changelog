@@ -9,6 +9,10 @@ const rc = require('rc')
 
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
+const envinfo = require('envinfo')
+const newGithubIssueUrl = require('new-github-issue-url')
+const table = require('markdown-table')
+const clipboardy = require('clipboardy')
 
 const { executeInteractiveMode } = require('./interactiveMode')
 const getRepositoryInfo = require('./repository')
@@ -101,7 +105,8 @@ async function main(options = {}) {
     }
     logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
-    logger.error(e)
+    const repository = await getRepositoryInfo()
+    await handleUnexpectedErrors(options, projectInfo, repository, e)
   }
 
   // force quit (if the latest version request is pending, we don't wait for it)
@@ -149,6 +154,64 @@ function logMetaData(changelog) {
   }
   if (changelog.meta.repository) {
     logger.info(changelog.meta.repository.url)
+  }
+}
+
+async function handleUnexpectedErrors(options, projectInfo, repository, e) {
+  const envInfo = await envinfo.run(
+    {
+      System: ['OS'],
+      Binaries: ['Node', 'Yarn', 'npm'],
+    },
+    { markdown: true }
+  )
+
+  const copyToClipboard =
+    // Clipboard is not accessible when on a linux tty
+    process.platform === 'linux' && !process.env.DISPLAY
+      ? false
+      : true
+
+
+  const issueBody = `${envInfo}
+
+## Stack trace
+
+\`\`\`
+${e.stack}
+\`\`\`
+
+## CLI options
+
+${table([
+  ['Option', 'Value'],
+  ...Object.entries(options),
+])}
+
+## Project info
+
+${table([
+  ['Key', 'Value'],
+  ...Object.entries(projectInfo),
+])}
+
+## Repository info
+
+${table([
+  ['Key', 'Value'],
+  ...Object.entries(repository),
+])}`
+
+  const url = newGithubIssueUrl({
+    user: 'frinyvonnick',
+    repo: 'gitmoji-changelog',
+    body: 'Thank you for reporting your issue :+1:\n\nThe bug report is in your clipboard, please paste it here.',
+  })
+  if (copyToClipboard) {
+    clipboardy.writeSync(issueBody)
+    logger.error(`Whoops, something went wrong, please click on the following link to create an issue \n${url}. A bug report has been copied into your clipboard.`)
+  } else {
+    logger.error(`Whoops, something went wrong, please click on the following link to create an issue \n${url}. Add the following bug report into the issue to give use some context.\n\n${issueBody}`)
   }
 }
 
