@@ -135,6 +135,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "christopherkade",
+      "name": "Christopher Kade",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/15229355?v=4",
+      "profile": "https://christopherkade.com",
+      "contributions": [
+        "blog"
+      ]
     }
   ],
   "contributorsPerLine": 7
