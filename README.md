@@ -80,8 +80,7 @@ It will add this badge:  [![gitmoji-changelog](https://img.shields.io/badge/Chan
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
+<!-- prettier-ignore -->
 <table>
   <tr>
     <td align="center"><a href="https://yvonnickfrin.dev"><img src="https://avatars0.githubusercontent.com/u/13099512?v=4" width="100px;" alt="Yvonnick FRIN"/><br /><sub><b>Yvonnick FRIN</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=frinyvonnick" title="Code">💻</a></td>
@@ -101,10 +100,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/FBerthelot"><img src="https://avatars1.githubusercontent.com/u/6927852?v=4" width="100px;" alt="Florent Berthelot"/><br /><sub><b>Florent Berthelot</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=FBerthelot" title="Code">💻</a></td>
     <td align="center"><a href="http://gillespie59.github.io/"><img src="https://avatars2.githubusercontent.com/u/555768?v=4" width="100px;" alt="Emmanuel DEMEY"/><br /><sub><b>Emmanuel DEMEY</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=EmmanuelDemey" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://christopherkade.com"><img src="https://avatars3.githubusercontent.com/u/15229355?v=4" width="100px;" alt="Christopher Kade"/><br /><sub><b>Christopher Kade</b></sub></a><br /><a href="#blog-christopherkade" title="Blogposts">📝</a></td>
+  </tr>
 </table>
 
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
