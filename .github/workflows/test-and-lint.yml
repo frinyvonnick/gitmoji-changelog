@@ -1,0 +1,30 @@
+name: Test and lint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10]
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+      - name: Unit tests
+        run: yarn test
+      - name: End to end tests
+        run: |
+          git config --global user.email "test@example.com"
+          git config --global user.name "Test gitmoji"
+          yarn test:e2e
