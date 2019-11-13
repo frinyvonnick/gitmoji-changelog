@@ -1,6 +1,9 @@
 name: Canary release
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
