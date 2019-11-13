@@ -13,6 +13,7 @@ const envinfo = require('envinfo')
 const newGithubIssueUrl = require('new-github-issue-url')
 const table = require('markdown-table')
 const clipboardy = require('clipboardy')
+const handlebars = require('handlebars')
 
 const { executeInteractiveMode } = require('./interactiveMode')
 const getRepositoryInfo = require('./repository')
@@ -166,41 +167,44 @@ async function handleUnexpectedErrors(options, projectInfo, repository, e) {
     { markdown: true }
   )
 
-  const copyToClipboard =
-    // Clipboard is not accessible when on a linux tty
-    process.platform === 'linux' && !process.env.DISPLAY
-      ? false
-      : true
+  // Clipboard is not accessible when on a linux tty
+  const copyToClipboard = !(process.platform === 'linux' && !process.env.DISPLAY)
 
-
-  const issueBody = `${envInfo}
+  const template = `{{environment}}
 
 ## Stack trace
 
 \`\`\`
-${e.stack}
+{{stack}}
 \`\`\`
 
 ## CLI options
 
-${table([
-  ['Option', 'Value'],
-  ...Object.entries(options),
-])}
+{{options}}
 
 ## Project info
 
-${table([
-  ['Key', 'Value'],
-  ...Object.entries(projectInfo),
-])}
+{{project}}
 
 ## Repository info
 
-${table([
-  ['Key', 'Value'],
-  ...Object.entries(repository),
-])}`
+{{repository}}`
+
+  const compileTemplate = handlebars.compile(template)
+  const makeMarkdownTable = (columns, obj) => {
+    return table([
+      columns,
+      ...Object.entries(obj),
+    ])
+  }
+
+  const issueBody = compileTemplate({
+    environment: envInfo,
+    stack: e.stack,
+    options: makeMarkdownTable(['Option', 'Value'], options),
+    project: makeMarkdownTable(['Key', 'Value'], projectInfo),
+    repository: makeMarkdownTable(['Key', 'Value'], repository),
+  })
 
   const url = newGithubIssueUrl({
     user: 'frinyvonnick',
