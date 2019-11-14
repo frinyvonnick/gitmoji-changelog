@@ -163,3 +163,18 @@ docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:dev
 
 * [yvonnick/gitmoji-changelog:latest](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/Dockerfile)
 
+
+## 🐥 Canary version
+
+If you want to test the incoming release of gitmoji-changelog, you can use or install the canary version.
+Be aware, it's a development in progress version, feel free to report bug or give feedback.
+
+with npx:
+```sh
+npx gitmoji-changelog@canary --version
+```
+
+with npm:
+```sh
+npm install -g gitmoji-changelog@canary
+```
