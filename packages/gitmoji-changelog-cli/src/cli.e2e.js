@@ -66,18 +66,6 @@ describe('generate changelog', () => {
       expect(getChangelog()).includes(['1.0.0'])
     })
 
-    it("should get a 1.0.0 version while initializing changelog by calling cli without arguments two times and having package.json's version set to 1.0.0", async () => {
-      await bumpVersion('1.0.0')
-      await makeChanges('file1')
-      await commit(':sparkles: Add some file')
-      gitmojiChangelog()
-      await makeChanges('file2')
-      await commit(':sparkles: Add a second file')
-      logOutput(gitmojiChangelog())
-
-      expect(getChangelog()).includes(['second file'])
-    })
-
     it("should get a 1.0.0 version while initializing changelog by calling cli with 1.0.0 and having package.json's version set to 0.0.1", async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
@@ -119,6 +107,18 @@ describe('generate changelog', () => {
   })
 
   describe('update', () => {
+    it("should get a 1.0.0 version while initializing changelog by calling cli without arguments two times and having package.json's version set to 1.0.0", async () => {
+      await bumpVersion('1.0.0')
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      gitmojiChangelog()
+      await makeChanges('file2')
+      await commit(':sparkles: Add a second file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['second file'])
+    })
+
     it("should get two versions 1.0.0 and next while updating changelog by calling cli without arguments and having package.json's version set to 1.0.0", async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')

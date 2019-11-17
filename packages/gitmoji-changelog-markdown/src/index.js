@@ -127,6 +127,8 @@ async function getLatestVersion(markdownFile) {
   const isNext = result[1] === 'next' || !tags.some(tag => semver.eq(tag, result[1]))
   if (!isNext) return result[1]
 
+  if (!previousVersion) return null
+
   const previousResult = previousVersion.match(/<a name="([\w.-]+?)"><\/a>/)
   return previousResult[1]
 }
