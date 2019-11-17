@@ -192,12 +192,14 @@ async function handleUnexpectedErrors(options, projectInfo, repository, e) {
 
   const compileTemplate = handlebars.compile(template)
   const makeMarkdownTable = (columns, obj) => {
+    if (!obj) return null
     return table([
       columns,
       ...Object.entries(obj),
     ])
   }
 
+  console.log('[HERE]', { options, projectInfo, repository })
   const issueBody = compileTemplate({
     environment: envInfo,
     stack: e.stack,
@@ -213,9 +215,9 @@ async function handleUnexpectedErrors(options, projectInfo, repository, e) {
   })
   if (copyToClipboard) {
     clipboardy.writeSync(issueBody)
-    logger.error(`Whoops, something went wrong, please click on the following link to create an issue \n${url}. A bug report has been copied into your clipboard.`)
+    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue \n${url}. A bug report has been copied into your clipboard.`)
   } else {
-    logger.error(`Whoops, something went wrong, please click on the following link to create an issue \n${url}. Add the following bug report into the issue to give use some context.\n\n${issueBody}`)
+    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue \n${url}. Add the following bug report into the issue to give use some context.\n\n${issueBody}`)
   }
 }
 
