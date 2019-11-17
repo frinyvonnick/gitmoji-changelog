@@ -7,6 +7,9 @@ const semver = require('semver')
 const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
+const prompts = require('prompts')
+const pkgUp = require('pkg-up')
+const Configstore = require('configstore')
 const { executeInteractiveMode } = require('./interactiveMode')
 
 const getRepositoryInfo = require('./repository')
@@ -48,6 +51,27 @@ async function main(options = {}) {
     logger.error(e)
     // Force quit if the requested preset doesn't exist
     return process.exit(0)
+  }
+
+  const config = new Configstore(projectInfo.name)
+
+  const answer = config.get('answers.adding_script')
+
+  if (answer === undefined) {
+    const response = await prompts({
+      type: 'confirm',
+      name: 'value',
+      message: 'Would you like a add a script in your package.json to update your changelog?',
+    })
+
+    config.set('answers.adding_script', response.value)
+
+    if (response.value) {
+      const targetPkgPath = await pkgUp()
+      const targetPkg = JSON.parse(fs.readFileSync(targetPkgPath))
+      targetPkg.scripts.changelog = 'gitmoji-changelog'
+      fs.writeFileSync(targetPkgPath, JSON.stringify(targetPkg, undefined, 2))
+    }
   }
 
   if (options.groupSimilarCommits) {
