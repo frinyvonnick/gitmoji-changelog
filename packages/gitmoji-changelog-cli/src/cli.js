@@ -8,7 +8,6 @@ const semverCompare = require('semver-compare')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 const prompts = require('prompts')
-const pkgUp = require('pkg-up')
 const Configstore = require('configstore')
 const { executeInteractiveMode } = require('./interactiveMode')
 
@@ -45,7 +44,7 @@ async function main(options = {}) {
       throw Error(`The preset ${options.preset} doesn't exist`)
     }
     // eslint-disable-next-line global-require
-    const loadProjectInfo = require(`./presets/${options.preset}.js`)
+    const { loadProjectInfo } = require(`./presets/${options.preset}.js`)
     projectInfo = await loadProjectInfo()
   } catch (e) {
     logger.error(e)
@@ -55,22 +54,24 @@ async function main(options = {}) {
 
   const config = new Configstore(projectInfo.name)
 
-  const answer = config.get('answers.adding_script')
+  // eslint-disable-next-line global-require
+  const { addChangelogScript } = require(`./presets/${options.preset}.js`)
 
-  if (answer === undefined) {
-    const response = await prompts({
-      type: 'confirm',
-      name: 'value',
-      message: 'Would you like a add a script in your package.json to update your changelog?',
-    })
+  if (addChangelogScript) {
+    const answer = config.get('answers.adding_script')
 
-    config.set('answers.adding_script', response.value)
+    if (answer === undefined) {
+      const response = await prompts({
+        type: 'confirm',
+        name: 'value',
+        message: 'Would you like a add a script in your package.json to update your changelog?',
+      })
 
-    if (response.value) {
-      const targetPkgPath = await pkgUp()
-      const targetPkg = JSON.parse(fs.readFileSync(targetPkgPath))
-      targetPkg.scripts.changelog = 'gitmoji-changelog'
-      fs.writeFileSync(targetPkgPath, JSON.stringify(targetPkg, undefined, 2))
+      config.set('answers.adding_script', response.value)
+
+      if (response.value) {
+        await addChangelogScript()
+      }
     }
   }
 
