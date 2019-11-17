@@ -159,10 +159,11 @@ function logMetaData(changelog) {
 }
 
 async function handleUnexpectedErrors(options, projectInfo, repository, e) {
-  const envInfo = await envinfo.run(
+  const environment = await envinfo.run(
     {
-      System: ['OS'],
+      System: ['OS', 'Shell'],
       Binaries: ['Node', 'Yarn', 'npm'],
+      Utilities: ['Git'],
     },
     { markdown: true }
   )
@@ -199,9 +200,8 @@ async function handleUnexpectedErrors(options, projectInfo, repository, e) {
     ])
   }
 
-  console.log('[HERE]', { options, projectInfo, repository })
   const issueBody = compileTemplate({
-    environment: envInfo,
+    environment,
     stack: e.stack,
     options: makeMarkdownTable(['Option', 'Value'], options),
     project: makeMarkdownTable(['Key', 'Value'], projectInfo),
@@ -211,13 +211,15 @@ async function handleUnexpectedErrors(options, projectInfo, repository, e) {
   const url = newGithubIssueUrl({
     user: 'frinyvonnick',
     repo: 'gitmoji-changelog',
+    labels: ['bug'],
     body: 'Thank you for reporting your issue :+1:\n\nThe bug report is in your clipboard, please paste it here.',
   })
+
   if (copyToClipboard) {
     clipboardy.writeSync(issueBody)
-    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue \n${url}. A bug report has been copied into your clipboard.`)
+    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue ${url}.\nA bug report has been copied into your clipboard.`)
   } else {
-    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue \n${url}. Add the following bug report into the issue to give use some context.\n\n${issueBody}`)
+    logger.error(`Error: Whoops, something went wrong, please click on the following link to create an issue ${url}.\nAdd the following bug report into the issue to give use some context.\n\n${issueBody}`)
   }
 }
 
