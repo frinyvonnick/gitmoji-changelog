@@ -70,10 +70,16 @@ async function main(options = {}) {
         const lastVersion = await getLatestVersion(options.output)
         const newOptions = set(options, 'meta.lastVersion', lastVersion)
 
+        // Handle the case where changelog file exist but there isn't a previous version
+        if (options.mode === 'update' && !lastVersion) {
+          newOptions.mode = 'init'
+
+          fs.unlinkSync(options.output)
+        }
+
         const changelog = await getChangelog(newOptions, projectInfo)
 
         logMetaData(changelog)
-
         await buildMarkdownFile(changelog, newOptions)
       }
     }
@@ -100,7 +106,6 @@ async function getChangelog(options, projectInfo) {
     release,
   }
 
-  // let changelog = await generateChangelog(enhancedOptions)
   let changelog
   if (options.mode === 'init') {
     changelog = await generateChangelog('', release, enhancedOptions)
