@@ -34,7 +34,7 @@ yargs
     const output = getOutputFile(argv)
     const existsOuput = fs.existsSync(output)
     const mode = existsOuput ? 'update' : 'init'
-    execute(mode)(argv)
+    execute(mode)({ ...argv })
   })
 
   .command('init', 'Initialize changelog from tags', noop, execute('init'))
@@ -48,6 +48,7 @@ yargs
 
   .option('format', { default: 'markdown', desc: 'changelog format (markdown, json)' })
   .option('preset', { default: 'node', desc: 'define preset mode (node only for now)' })
+  .option('ci', { default: false || !process.stdout.isTTY, desc: 'desactivate user interactions' })
   .option('output', { desc: 'output changelog file' })
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
   .option('author', { default: false, desc: 'add the author in changelog lines' })

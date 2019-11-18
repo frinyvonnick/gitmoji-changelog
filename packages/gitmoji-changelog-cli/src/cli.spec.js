@@ -4,7 +4,7 @@ const { main } = require('./cli')
 
 describe('cli', () => {
   const realExitFunction = process.exit
-  const options = { preset: 'node' }
+  const options = { preset: 'node', ci: true }
   beforeEach(() => {
     process.exit = jest.fn(() => {})
     jest.clearAllMocks()

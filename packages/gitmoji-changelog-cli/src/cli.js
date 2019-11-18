@@ -57,7 +57,7 @@ async function main(options = {}) {
   // eslint-disable-next-line global-require
   const { addChangelogScript } = require(`./presets/${options.preset}.js`)
 
-  if (process.stdout.isTTY && addChangelogScript) {
+  if (!options.ci && addChangelogScript) {
     const answer = config.get('answers.adding_script')
 
     if (answer === undefined) {

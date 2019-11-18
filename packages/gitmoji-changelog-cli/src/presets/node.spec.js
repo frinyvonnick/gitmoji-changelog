@@ -1,6 +1,6 @@
 const readPkgUp = require('read-pkg-up')
 
-const loadProjectInfo = require('./node.js')
+const { loadProjectInfo } = require('./node.js')
 
 describe('getPackageInfo', () => {
   it('should extract github repo info from package.json', async () => {
