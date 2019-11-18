@@ -64,7 +64,7 @@ async function main(options = {}) {
       const response = await prompts({
         type: 'confirm',
         name: 'value',
-        message: 'Would you like a add a script in your package.json to update your changelog?',
+        message: 'Do you want to add a script in your package.json to update your changelog?',
       })
 
       config.set('answers.adding_script', response.value)
