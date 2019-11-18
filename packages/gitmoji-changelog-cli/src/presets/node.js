@@ -21,7 +21,7 @@ module.exports = {
   addChangelogScript: async () => {
     const targetPkgPath = await pkgUp()
     const targetPkg = JSON.parse(fs.readFileSync(targetPkgPath))
-    targetPkg.scripts.changelog = 'gitmoji-changelog'
+    targetPkg.scripts.changelog = 'npx gitmoji-changelog'
     fs.writeFileSync(targetPkgPath, JSON.stringify(targetPkg, undefined, 2))
   },
 }
