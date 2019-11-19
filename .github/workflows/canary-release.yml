@@ -24,6 +24,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Publish Canary version
-        run: npx lerna publish --canary --yes
+        run: npx lerna publish --canary --yes --exact
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
