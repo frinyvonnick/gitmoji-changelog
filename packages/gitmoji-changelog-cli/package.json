@@ -1,6 +1,6 @@
 {
   "name": "gitmoji-changelog",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "gitmoji",
     "generate",
@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "dependencies": {
-    "@gitmoji-changelog/core": "^2.0.0",
-    "@gitmoji-changelog/markdown": "^2.0.0",
+    "@gitmoji-changelog/core": "^2.0.1",
+    "@gitmoji-changelog/markdown": "^2.0.1",
     "hosted-git-info": "^3.0.2",
     "immutadot": "^1.0.0",
     "inquirer": "^6.3.1",

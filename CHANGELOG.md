@@ -1,5 +1,18 @@
 # Changelog
 
+<a name="0.0.1"></a>
+## 0.0.1 (2019-11-19)
+
+### Added
+
+- 👷‍♂️ Add exact option to canary version ([#147](https://github.com/frinyvonnick/gitmoji-changelog/issues/147)) [[84c7086](https://github.com/frinyvonnick/gitmoji-changelog/commit/84c7086b94190d9259749262e997be8617e10345)] (by Benjamin Petetot)
+- 👷‍♂️ Publish Canary version on master push ([#141](https://github.com/frinyvonnick/gitmoji-changelog/issues/141)) [[84ab6f1](https://github.com/frinyvonnick/gitmoji-changelog/commit/84ab6f17a40831ca780f3ce60420ac3268624918)] (by Benjamin Petetot)
+- 👷‍♂️ Setup GitHub CI ([#140](https://github.com/frinyvonnick/gitmoji-changelog/issues/140)) [[a7f1228](https://github.com/frinyvonnick/gitmoji-changelog/commit/a7f1228ed313bbd507686e6cdcac5d9a5a8be46b)] (by Benjamin Petetot)
+
+### Fixed
+
+- 🐛 Fix bug preventing generating changelog when previous version doesn&#x27;t exist ([#145](https://github.com/frinyvonnick/gitmoji-changelog/issues/145)) [[4f04f45](https://github.com/frinyvonnick/gitmoji-changelog/commit/4f04f453af9c3fd82b388b082aa59b9a6f1d5374)] (by Yvonnick FRIN)
+
 <a name="2.0.0"></a>
 ## 2.0.0 (2019-10-31)
 
