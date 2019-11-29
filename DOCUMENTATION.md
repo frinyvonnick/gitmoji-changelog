@@ -84,7 +84,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 
 - node (default preset)
 
-You didn't the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/presets) folder in the `cli` package.
+You didn't the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
 ### Add a preset
 
