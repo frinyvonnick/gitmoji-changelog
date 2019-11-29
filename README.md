@@ -102,6 +102,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://christopherkade.com"><img src="https://avatars3.githubusercontent.com/u/15229355?v=4" width="100px;" alt="Christopher Kade"/><br /><sub><b>Christopher Kade</b></sub></a><br /><a href="#blog-christopherkade" title="Blogposts">📝</a></td>
+    <td align="center"><a href="http://numcom.herokuapp.com/"><img src="https://avatars0.githubusercontent.com/u/863788?v=4" width="100px;" alt="Rodion Martynov"/><br /><sub><b>Rodion Martynov</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=rudym" title="Documentation">📖</a></td>
   </tr>
 </table>
 
