@@ -144,6 +144,15 @@
       "contributions": [
         "blog"
       ]
+    },
+    {
+      "login": "rudym",
+      "name": "Rodion Martynov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/863788?v=4",
+      "profile": "http://numcom.herokuapp.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
