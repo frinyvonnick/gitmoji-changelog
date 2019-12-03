@@ -74,7 +74,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 4. You can freely edit the new release in the changelog file, it will not be overwrite with the next generation
 5. Commit `package.json` and `CHANGELOG.md` file
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
-7. Push to the remote `git push`
+7. Push to the remote `git push origin <tagname>`
 
 _This workflow is related to the `node` preset but can be adapted to your own technology._
 
