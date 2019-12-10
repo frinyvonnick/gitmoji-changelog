@@ -26,17 +26,18 @@ function parseSubject(subject) {
   }
 }
 
-function getCommitGroup(emojiCode) {
-  const group = groupMapping.find(({ emojis }) => emojis.includes(emojiCode))
+function getCommitGroup(emojiCode, customGroupMapping) {
+  const group = (customGroupMapping || groupMapping)
+    .find(({ emojis }) => emojis.includes(emojiCode))
   if (!group) return 'misc'
   return group.group
 }
 
-function parseCommit(commit) {
+function parseCommit(commit, customGroupMapping) {
   const lines = splitLines(commit)
   const [hash, author, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, emojiCode, message } = parseSubject(subject)
-  const group = getCommitGroup(emojiCode)
+  const group = getCommitGroup(emojiCode, customGroupMapping)
 
   return {
     hash,
