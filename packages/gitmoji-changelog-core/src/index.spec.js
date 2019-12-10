@@ -105,6 +105,39 @@ describe('changelog', () => {
     ])
   })
 
+  it('should generate changelog using custom commit mapping', async () => {
+    mockGroup([sparklesCommit, lipstickCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const customConfiguration = {
+      commitMapping: [
+        { group: 'added', label: 'Added', emojis: ['sparkles'] },
+        { group: 'style', label: 'Style', emojis: ['lipstick'] },
+      ],
+    }
+
+    const { changes } = await generateChangelog(TAIL, 'next', { customConfiguration })
+
+    expect(changes).toEqual([
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
+          },
+          {
+            group: 'style',
+            label: 'Style',
+            commits: expect.arrayContaining([expect.objectContaining({ ...lipstickCommit, group: 'style' })]),
+          },
+        ],
+      },
+    ])
+  })
+
   it('should generate changelog for next release', async () => {
     mockGroup([sparklesCommit])
 

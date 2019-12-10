@@ -79,4 +79,23 @@ describe('commits parser', () => {
 
     expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'added' }))
   })
+
+  it('should handle custom commit mapping', () => {
+    const {
+      hash,
+      author,
+      date,
+      subject,
+      body,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
+    const customCommitMapping = [
+      {
+        group: 'custom',
+        emojis: ['sparkles'],
+      },
+    ]
+
+    expect(parseCommit(commit, customCommitMapping)).toEqual(expect.objectContaining({ group: 'custom' }))
+  })
 })

@@ -71,7 +71,7 @@ async function generateVersion(options) {
     to,
     version,
     groupSimilarCommits,
-    customConfiguration,
+    customConfiguration = {},
   } = options
   let commits = filterCommits(await getCommits(from, to, customConfiguration))
 
