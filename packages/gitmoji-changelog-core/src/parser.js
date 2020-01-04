@@ -26,8 +26,31 @@ function parseSubject(subject) {
   }
 }
 
+function getMergedGroupMapping(customGroupMapping) {
+  if (!customGroupMapping) return groupMapping
+  const newCategories = customGroupMapping.filter(cg => {
+    return !groupMapping.some(g => g.group === cg.group)
+  })
+
+  const overridedCategories = groupMapping.map(group => {
+    const customGroup = customGroupMapping.find(cg => cg.group === group.group)
+    return customGroup || group
+  })
+
+  const miscellaneousIndex = overridedCategories.findIndex(g => g.group === 'misc')
+  const miscellaneousCategory = overridedCategories[miscellaneousIndex]
+
+  overridedCategories.splice(miscellaneousIndex, 1)
+
+  return [
+    ...overridedCategories,
+    ...newCategories,
+    miscellaneousCategory,
+  ]
+}
+
 function getCommitGroup(emojiCode, customGroupMapping) {
-  const group = (customGroupMapping || groupMapping)
+  const group = getMergedGroupMapping(customGroupMapping)
     .find(({ emojis }) => emojis.includes(emojiCode))
   if (!group) return 'misc'
   return group.group
@@ -56,4 +79,5 @@ function parseCommit(commit, customGroupMapping) {
 module.exports = {
   parseCommit,
   getCommitGroup,
+  getMergedGroupMapping,
 }

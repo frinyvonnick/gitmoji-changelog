@@ -18,6 +18,19 @@ const uselessCommit = {
   message: 'Bump version to 1.9.2',
 }
 
+const lockCommit = {
+  hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd9',
+  author: 'John Doe',
+  date: '2018-09-14T22:00:18+02:00',
+  subject: ':lock: Improve security',
+  body: 'Yes!',
+  emoji: '🔒',
+  emojiCode: 'lock',
+  group: 'security',
+  message: 'Improve security',
+  siblings: [],
+}
+
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
   author: 'John Doe',
@@ -106,7 +119,7 @@ describe('changelog', () => {
   })
 
   it('should generate changelog using custom commit mapping', async () => {
-    mockGroup([sparklesCommit, lipstickCommit])
+    mockGroup([sparklesCommit, lipstickCommit, lockCommit])
 
     gitSemverTags.mockImplementation(cb => cb(null, []))
 
@@ -114,6 +127,7 @@ describe('changelog', () => {
       commitMapping: [
         { group: 'added', label: 'Added', emojis: ['sparkles'] },
         { group: 'style', label: 'Style', emojis: ['lipstick'] },
+        { group: 'changed', label: 'Changed', emojis: [] },
       ],
     }
 
@@ -127,6 +141,11 @@ describe('changelog', () => {
             group: 'added',
             label: 'Added',
             commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
+          },
+          {
+            group: 'security',
+            label: 'Security',
+            commits: expect.arrayContaining([expect.objectContaining(lockCommit)]),
           },
           {
             group: 'style',

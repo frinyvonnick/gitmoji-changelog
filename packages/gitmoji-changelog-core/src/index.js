@@ -7,7 +7,7 @@ const concat = require('concat-stream')
 const { isEmpty } = require('lodash')
 const { promisify } = require('util')
 
-const { parseCommit } = require('./parser')
+const { parseCommit, getMergedGroupMapping } = require('./parser')
 const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
@@ -32,11 +32,11 @@ function getCommits(from, to, customConfiguration) {
   })
 }
 
-function makeGroups(commits, customCommitMapping) {
+function makeGroups(commits, customGroupMapping) {
   if (isEmpty(commits)) return []
 
-  const mapCommits = (arr) => {
-    return arr
+  const mapCommits = groups => {
+    return groups
       .map(({ group, label }) => ({
         group,
         label,
@@ -47,8 +47,10 @@ function makeGroups(commits, customCommitMapping) {
       .filter(group => group.commits.length)
   }
 
-  if (customCommitMapping) {
-    return mapCommits(customCommitMapping)
+  if (customGroupMapping) {
+    const mergedCommitMapping = getMergedGroupMapping(customGroupMapping)
+
+    return mapCommits(mergedCommitMapping)
   }
   return mapCommits(groupMapping)
 }
