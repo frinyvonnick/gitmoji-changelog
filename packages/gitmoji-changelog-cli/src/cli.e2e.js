@@ -53,6 +53,26 @@ describe('generate changelog', () => {
 
       expect(output.toString('utf8')).includes(["The preset unknown doesn't exist"])
     })
+
+    it('should throw an Error if the preset could not find configuration', () => {
+      fs.unlinkSync(path.join(testDir, 'package.json'))
+
+      const output = gitmojiChangelog()
+
+      expect(output.toString('utf8')).includes(['Cannot retrieve configuration'])
+    })
+
+    it('should throw an Error if the preset did not return a version', () => {
+      const pkg = path.join(testDir, 'package.json')
+      // eslint-disable-next-line global-require
+      const content = JSON.parse(fs.readFileSync(pkg).toString('utf8'))
+      delete content.version
+      fs.writeFileSync(pkg, JSON.stringify(content))
+
+      const output = gitmojiChangelog()
+
+      expect(output.toString('utf8')).includes(['Cannot retrieve the version from your configuration'])
+    })
   })
 
   describe('init', () => {
