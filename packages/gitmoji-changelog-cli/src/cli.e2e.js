@@ -90,6 +90,7 @@ describe('generate changelog', () => {
       makeCustomConfig({
         commitMapping: [
           { group: 'style', label: 'Style', emojis: ['lipstick'] },
+          { group: 'changed', label: 'Changed', emojis: [] },
         ],
       })
       await makeChanges('file1')
@@ -101,7 +102,7 @@ describe('generate changelog', () => {
       await commit(':bookmark: Version 1.0.0')
 
       expect(getChangelog()).includes(['### Style'])
-      expect(getChangelog()).not.includes(['### Added'])
+      expect(getChangelog()).not.includes(['### Changed'])
     })
 
     it("should get a 1.0.0 version while initializing changelog by calling cli with 1.0.0 and having package.json's version set to 0.0.1", async () => {
@@ -161,6 +162,7 @@ describe('generate changelog', () => {
       makeCustomConfig({
         commitMapping: [
           { group: 'style', label: 'Style', emojis: ['lipstick'] },
+          { group: 'changed', label: 'Changed', emojis: [] },
         ],
       })
       await bumpVersion('1.0.0')
@@ -176,7 +178,7 @@ describe('generate changelog', () => {
       gitmojiChangelog()
 
       expect(getChangelog()).includes(['### Style'])
-      expect(getChangelog()).not.includes(['### Added'])
+      expect(getChangelog()).not.includes(['### Changed'])
     })
 
     it("should get two versions 1.0.0 and next while updating changelog by calling cli without arguments and having package.json's version set to 1.0.0", async () => {
