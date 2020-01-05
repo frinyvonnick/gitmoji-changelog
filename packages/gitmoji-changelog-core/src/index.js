@@ -6,10 +6,8 @@ const through = require('through2')
 const concat = require('concat-stream')
 const { isEmpty } = require('lodash')
 const { promisify } = require('util')
-const rc = require('rc')
 
 const { parseCommit, getMergedGroupMapping } = require('./parser')
-const groupMapping = require('./groupMapping')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
 
