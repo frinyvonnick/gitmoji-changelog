@@ -6,6 +6,7 @@ const through = require('through2')
 const concat = require('concat-stream')
 const { isEmpty } = require('lodash')
 const { promisify } = require('util')
+const rc = require('rc')
 
 const { parseCommit, getMergedGroupMapping } = require('./parser')
 const groupMapping = require('./groupMapping')
@@ -18,21 +19,21 @@ const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 const HEAD = ''
 const TAIL = ''
 
-function getCommits(from, to, customConfiguration) {
+function getCommits(from, to) {
   return new Promise((resolve) => {
     gitRawCommits({
       format: COMMIT_FORMAT,
       from,
       to,
     }).pipe(through.obj((data, enc, next) => {
-      next(null, parseCommit(data.toString(), customConfiguration.commitMapping))
+      next(null, parseCommit(data.toString()))
     })).pipe(concat(data => {
       resolve(data)
     }))
   })
 }
 
-function makeGroups(commits, customGroupMapping) {
+function makeGroups(commits) {
   if (isEmpty(commits)) return []
 
   const mapCommits = groups => {
@@ -47,12 +48,8 @@ function makeGroups(commits, customGroupMapping) {
       .filter(group => group.commits.length)
   }
 
-  if (customGroupMapping) {
-    const mergedCommitMapping = getMergedGroupMapping(customGroupMapping)
-
-    return mapCommits(mergedCommitMapping)
-  }
-  return mapCommits(groupMapping)
+  const mergedCommitMapping = getMergedGroupMapping()
+  return mapCommits(mergedCommitMapping)
 }
 
 function sanitizeVersion(version) {
@@ -73,9 +70,8 @@ async function generateVersion(options) {
     to,
     version,
     groupSimilarCommits,
-    customConfiguration = {},
   } = options
-  let commits = filterCommits(await getCommits(from, to, customConfiguration))
+  let commits = filterCommits(await getCommits(from, to))
 
   if (groupSimilarCommits) {
     commits = groupSentencesByDistance(commits.map(commit => commit.message))
@@ -88,7 +84,7 @@ async function generateVersion(options) {
 
   const result = {
     version,
-    groups: makeGroups(commits, customConfiguration.commitMapping),
+    groups: makeGroups(commits),
   }
 
   if (version !== 'next') {
@@ -114,7 +110,6 @@ async function generateVersions({
   hasNext,
   release,
   groupSimilarCommits,
-  customConfiguration,
 }) {
   let nextTag = HEAD
   const targetVersion = hasNext ? 'next' : sanitizeVersion(release)
@@ -124,7 +119,7 @@ async function generateVersions({
     const to = nextTag
     nextTag = tag
     return generateVersion({
-      from, to, version, groupSimilarCommits, customConfiguration,
+      from, to, version, groupSimilarCommits,
     })
   }))
     .then(versions => versions.sort(sortVersions))
@@ -132,7 +127,7 @@ async function generateVersions({
   return changes
 }
 
-async function generateChangelog(from, to, { groupSimilarCommits, customConfiguration } = {}) {
+async function generateChangelog(from, to, { groupSimilarCommits } = {}) {
   const gitTags = await gitSemverTagsAsync()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, to)
@@ -153,7 +148,6 @@ async function generateChangelog(from, to, { groupSimilarCommits, customConfigur
     hasNext,
     release: to,
     groupSimilarCommits,
-    customConfiguration,
   })
 
   if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {

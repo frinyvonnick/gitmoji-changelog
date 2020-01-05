@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
+const rc = require('rc')
 
 const { generateChangelog } = require('./index')
 
@@ -97,6 +98,10 @@ const secondLipstickCommit = {
 }
 
 describe('changelog', () => {
+  beforeEach(() => {
+    rc.mockImplementation(() => ({}))
+  })
+
   it('should generate changelog for next release on init', async () => {
     mockGroup([sparklesCommit])
 
@@ -119,10 +124,6 @@ describe('changelog', () => {
   })
 
   it('should generate changelog using custom commit mapping', async () => {
-    mockGroup([sparklesCommit, lipstickCommit, lockCommit])
-
-    gitSemverTags.mockImplementation(cb => cb(null, []))
-
     const customConfiguration = {
       commitMapping: [
         { group: 'added', label: 'Added', emojis: ['sparkles'] },
@@ -131,7 +132,12 @@ describe('changelog', () => {
       ],
     }
 
-    const { changes } = await generateChangelog(TAIL, 'next', { customConfiguration })
+    rc.mockImplementation(() => customConfiguration)
+    mockGroup([sparklesCommit, lipstickCommit, lockCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog(TAIL, 'next')
 
     expect(changes).toEqual([
       {
@@ -360,6 +366,7 @@ describe('changelog', () => {
 
 jest.mock('git-raw-commits')
 jest.mock('git-semver-tags')
+jest.mock('rc')
 
 function mockGroup(commits) {
   gitRawCommits.mockImplementationOnce(() => {

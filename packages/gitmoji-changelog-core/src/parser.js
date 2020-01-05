@@ -1,6 +1,7 @@
 const splitLines = require('split-lines')
 const nodeEmoji = require('node-emoji')
 const groupMapping = require('./groupMapping')
+const rc = require('rc')
 
 function parseSubject(subject) {
   if (!subject) return {}
@@ -26,7 +27,9 @@ function parseSubject(subject) {
   }
 }
 
-function getMergedGroupMapping(customGroupMapping) {
+function getMergedGroupMapping() {
+  const customConfiguration = rc('gitmoji-changelog')
+  const customGroupMapping = customConfiguration ? customConfiguration.commitMapping : undefined
   if (!customGroupMapping) return groupMapping
   const newCategories = customGroupMapping.filter(cg => {
     return !groupMapping.some(g => g.group === cg.group)
@@ -49,18 +52,18 @@ function getMergedGroupMapping(customGroupMapping) {
   ]
 }
 
-function getCommitGroup(emojiCode, customGroupMapping) {
-  const group = getMergedGroupMapping(customGroupMapping)
+function getCommitGroup(emojiCode) {
+  const group = getMergedGroupMapping()
     .find(({ emojis }) => emojis.includes(emojiCode))
   if (!group) return 'misc'
   return group.group
 }
 
-function parseCommit(commit, customGroupMapping) {
+function parseCommit(commit) {
   const lines = splitLines(commit)
   const [hash, author, date, subject, ...body] = lines.splice(1, lines.length - 2)
   const { emoji, emojiCode, message } = parseSubject(subject)
-  const group = getCommitGroup(emojiCode, customGroupMapping)
+  const group = getCommitGroup(emojiCode)
 
   return {
     hash,

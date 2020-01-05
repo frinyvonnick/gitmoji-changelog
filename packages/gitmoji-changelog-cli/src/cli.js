@@ -27,8 +27,6 @@ async function main(options = {}) {
   logger.start(`gitmoji-changelog v${pkg.version}`)
   logger.info(`${options.mode} ${options.output}`)
 
-  logger.info('Looking for custom configuration')
-
   const customConfiguration = rc('gitmoji-changelog')
   if (customConfiguration.configs) {
     logger.info('Custom configuration found')
@@ -77,7 +75,7 @@ async function main(options = {}) {
   try {
     switch (options.format) {
       case 'json': {
-        const changelog = await getChangelog(options, projectInfo, customConfiguration)
+        const changelog = await getChangelog(options, projectInfo)
 
         logMetaData(changelog)
 
@@ -95,7 +93,7 @@ async function main(options = {}) {
           fs.unlinkSync(options.output)
         }
 
-        const changelog = await getChangelog(newOptions, projectInfo, customConfiguration)
+        const changelog = await getChangelog(newOptions, projectInfo)
 
         logMetaData(changelog)
         await buildMarkdownFile(changelog, newOptions)
@@ -110,7 +108,7 @@ async function main(options = {}) {
   return process.exit(0)
 }
 
-async function getChangelog(options, projectInfo, customConfiguration) {
+async function getChangelog(options, projectInfo) {
   const repository = await getRepositoryInfo()
 
   const release = options.release === 'from-package' ? projectInfo.version : options.release
@@ -122,7 +120,6 @@ async function getChangelog(options, projectInfo, customConfiguration) {
   const enhancedOptions = {
     ...options,
     release,
-    customConfiguration,
   }
 
   let changelog

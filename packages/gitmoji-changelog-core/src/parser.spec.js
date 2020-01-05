@@ -1,4 +1,5 @@
 const { getMergedGroupMapping, parseCommit } = require('./parser.js')
+const rc = require('rc')
 
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
@@ -91,6 +92,13 @@ describe('commits parser', () => {
   })
 
   it('should handle custom commit mapping', () => {
+    const customConfiguration = {
+      commitMapping: [
+        { group: 'added', emojis: [] },
+        { group: 'custom', emojis: ['sparkles'] },
+      ],
+    }
+    rc.mockImplementation(() => customConfiguration)
     const {
       hash,
       author,
@@ -99,11 +107,9 @@ describe('commits parser', () => {
       body,
     } = sparklesCommit
     const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
-    const customCommitMapping = [
-      { group: 'added', emojis: [] },
-      { group: 'custom', emojis: ['sparkles'] },
-    ]
 
-    expect(parseCommit(commit, customCommitMapping)).toEqual(expect.objectContaining({ group: 'custom' }))
+    expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'custom' }))
   })
 })
+
+jest.mock('rc')
