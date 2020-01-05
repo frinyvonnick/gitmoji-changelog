@@ -41,9 +41,7 @@ function getMergedGroupMapping() {
   })
 
   const miscellaneousIndex = overridedCategories.findIndex(g => g.group === 'misc')
-  const miscellaneousCategory = overridedCategories[miscellaneousIndex]
-
-  overridedCategories.splice(miscellaneousIndex, 1)
+  const miscellaneousCategory = overridedCategories.splice(miscellaneousIndex, 1)[0]
 
   return [
     ...overridedCategories,
