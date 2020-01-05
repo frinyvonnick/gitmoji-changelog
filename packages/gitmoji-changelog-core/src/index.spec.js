@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 const gitRawCommits = require('git-raw-commits')
 const gitSemverTags = require('git-semver-tags')
+const rc = require('rc')
 
 const { generateChangelog } = require('./index')
 
@@ -16,6 +17,19 @@ const uselessCommit = {
   emojiCode: 'bookmark',
   group: 'useless',
   message: 'Bump version to 1.9.2',
+}
+
+const lockCommit = {
+  hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd9',
+  author: 'John Doe',
+  date: '2018-09-14T22:00:18+02:00',
+  subject: ':lock: Improve security',
+  body: 'Yes!',
+  emoji: '🔒',
+  emojiCode: 'lock',
+  group: 'security',
+  message: 'Improve security',
+  siblings: [],
 }
 
 const sparklesCommit = {
@@ -84,6 +98,10 @@ const secondLipstickCommit = {
 }
 
 describe('changelog', () => {
+  beforeEach(() => {
+    rc.mockImplementation(() => ({}))
+  })
+
   it('should generate changelog for next release on init', async () => {
     mockGroup([sparklesCommit])
 
@@ -99,6 +117,46 @@ describe('changelog', () => {
             group: 'added',
             label: 'Added',
             commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
+          },
+        ],
+      },
+    ])
+  })
+
+  it('should generate changelog using custom commit mapping', async () => {
+    const customConfiguration = {
+      commitMapping: [
+        { group: 'added', label: 'Added', emojis: ['sparkles'] },
+        { group: 'style', label: 'Style', emojis: ['lipstick'] },
+        { group: 'changed', label: 'Changed', emojis: [] },
+      ],
+    }
+
+    rc.mockImplementation(() => customConfiguration)
+    mockGroup([sparklesCommit, lipstickCommit, lockCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog(TAIL, 'next')
+
+    expect(changes).toEqual([
+      {
+        version: 'next',
+        groups: [
+          {
+            group: 'added',
+            label: 'Added',
+            commits: expect.arrayContaining([expect.objectContaining(sparklesCommit)]),
+          },
+          {
+            group: 'security',
+            label: 'Security',
+            commits: expect.arrayContaining([expect.objectContaining(lockCommit)]),
+          },
+          {
+            group: 'style',
+            label: 'Style',
+            commits: expect.arrayContaining([expect.objectContaining({ ...lipstickCommit, group: 'style' })]),
           },
         ],
       },
@@ -308,6 +366,7 @@ describe('changelog', () => {
 
 jest.mock('git-raw-commits')
 jest.mock('git-semver-tags')
+jest.mock('rc')
 
 function mockGroup(commits) {
   gitRawCommits.mockImplementationOnce(() => {

@@ -86,6 +86,25 @@ describe('generate changelog', () => {
       expect(getChangelog()).includes(['1.0.0'])
     })
 
+    it('should use a custom commit mapping to create commit categories', async () => {
+      makeCustomConfig({
+        commitMapping: [
+          { group: 'style', label: 'Style', emojis: ['lipstick'] },
+          { group: 'changed', label: 'Changed', emojis: [] },
+        ],
+      })
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await makeChanges('file2')
+      await commit(':lipstick: Add some style file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog()
+      await commit(':bookmark: Version 1.0.0')
+
+      expect(getChangelog()).includes(['### Style'])
+      expect(getChangelog()).not.includes(['### Changed'])
+    })
+
     it("should get a 1.0.0 version while initializing changelog by calling cli with 1.0.0 and having package.json's version set to 0.0.1", async () => {
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
@@ -137,6 +156,29 @@ describe('generate changelog', () => {
       gitmojiChangelog()
 
       expect(getChangelog()).includes(['second file'])
+    })
+
+    it('should use a custom commit mapping to create commit categories', async () => {
+      makeCustomConfig({
+        commitMapping: [
+          { group: 'style', label: 'Style', emojis: ['lipstick'] },
+          { group: 'changed', label: 'Changed', emojis: [] },
+        ],
+      })
+      await bumpVersion('1.0.0')
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await makeChanges('file3')
+      await commit(':lipstick: Add some file')
+      gitmojiChangelog()
+      await makeChanges('file2')
+      await commit(':sparkles: Add a second file')
+      await makeChanges('file4')
+      await commit(':lipstick: Add some file')
+      gitmojiChangelog()
+
+      expect(getChangelog()).includes(['### Style'])
+      expect(getChangelog()).not.includes(['### Changed'])
     })
 
     it("should get two versions 1.0.0 and next while updating changelog by calling cli without arguments and having package.json's version set to 1.0.0", async () => {
@@ -384,6 +426,10 @@ describe('generate changelog', () => {
 
   async function makeChanges(fileName) {
     fs.writeFileSync(path.join(testDir, fileName))
+  }
+
+  async function makeCustomConfig(config) {
+    fs.writeFileSync(path.join(testDir, '.gitmoji-changelogrc'), JSON.stringify(config, undefined, 2))
   }
 
   async function commit(message) {

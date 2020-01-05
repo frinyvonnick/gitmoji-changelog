@@ -1,4 +1,5 @@
-const { parseCommit } = require('./parser.js')
+const { getMergedGroupMapping, parseCommit } = require('./parser.js')
+const rc = require('rc')
 
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
@@ -8,6 +9,16 @@ const sparklesCommit = {
   body: 'Waouh this is awesome 2',
 }
 
+describe('group mapping', () => {
+  it('should place miscellaneous category at the end', () => {
+    const mergeGroupMapping = getMergedGroupMapping([
+      { group: 'added', emojis: [] },
+      { group: 'custom', emojis: ['sparkles'] },
+    ])
+
+    expect(mergeGroupMapping.pop()).toEqual(expect.objectContaining({ group: 'misc' }))
+  })
+})
 
 describe('commits parser', () => {
   it('should parse a single commit', () => {
@@ -79,4 +90,26 @@ describe('commits parser', () => {
 
     expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'added' }))
   })
+
+  it('should handle custom commit mapping', () => {
+    const customConfiguration = {
+      commitMapping: [
+        { group: 'added', emojis: [] },
+        { group: 'custom', emojis: ['sparkles'] },
+      ],
+    }
+    rc.mockImplementation(() => customConfiguration)
+    const {
+      hash,
+      author,
+      date,
+      subject,
+      body,
+    } = sparklesCommit
+    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
+
+    expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'custom' }))
+  })
 })
+
+jest.mock('rc')

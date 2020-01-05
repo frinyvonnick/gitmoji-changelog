@@ -5,12 +5,13 @@ const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semver = require('semver')
 const semverCompare = require('semver-compare')
+const rc = require('rc')
+
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
+
 const { executeInteractiveMode } = require('./interactiveMode')
-
 const getRepositoryInfo = require('./repository')
-
 const pkg = require('../package.json')
 
 async function getGitmojiChangelogLatestVersion() {
@@ -25,6 +26,13 @@ async function getGitmojiChangelogLatestVersion() {
 async function main(options = {}) {
   logger.start(`gitmoji-changelog v${pkg.version}`)
   logger.info(`${options.mode} ${options.output}`)
+
+  const customConfiguration = rc('gitmoji-changelog')
+  if (customConfiguration.configs) {
+    logger.info('Custom configuration found')
+  } else {
+    logger.info('No custom configuration found')
+  }
 
   try {
     const latestVersion = await getGitmojiChangelogLatestVersion()
