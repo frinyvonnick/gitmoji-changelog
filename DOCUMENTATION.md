@@ -83,6 +83,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 `gitmoji-changelog` use presets to get project meta data useful for its smooth operation. Here is the list of available presets:
 
 - node (default preset)
+- generic
 
 You didn't the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
