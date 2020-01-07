@@ -32,7 +32,7 @@ gitmoji-changelog 2.0 in a nutshell:
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
 
-Run the following command at the root of your project and answer questions.
+Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](/DOCUMENTATION.md#presets) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
 
 with npx:
 ```sh
@@ -45,6 +45,25 @@ npm install -g gitmoji-changelog
 
 cd my-project
 gitmoji-changelog
+```
+
+It exists a generic preset that works for every kind of project. It looks for information in a `.gitmoji-changelogrc` file at the root of your project. This file must contain three mandatory properties: `name`, `description` and `version`.
+
+.gitmoji-changelogrc:
+```json
+{
+  "project": {
+    "name": "gitmoji-changelog",
+    "description": "A changelog generator for gitmoji 😜",
+    "version": "2.0.1"
+  }
+}
+```
+
+You can change the preset used by `gitmoji-changelog` with the preset option.
+
+```sh
+npx gitmoji-changelog --preset generic
 ```
 
 ## 📖 Documentation
