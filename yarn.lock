@@ -3054,10 +3054,10 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-issue-reporter@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/issue-reporter/-/issue-reporter-0.1.0.tgz#575a5a5c9ff0accd70dc561f4fd0a7ee0029092c"
-  integrity sha512-MEOY8Kb5lA3mxCkHJMGu7j0vASw1adCijkM6bEoSWdTXAI/aSSGwj9UnegAVww1GpCAFbsktSYD/9Zb96NomjQ==
+issue-reporter@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/issue-reporter/-/issue-reporter-0.2.0.tgz#0178ecefa5667f35ddb8dfba60369e906ccb7177"
+  integrity sha512-6gisYziy0DTIX9HWafkiFuFKiefdcY2AQ6dCC2j0M8ePxzlPjthVDgDjck1caS0hMxn4GhGgRjyA49zVGQogew==
   dependencies:
     clipboardy "^2.1.0"
     env-ci "^4.5.1"
