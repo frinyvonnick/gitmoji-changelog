@@ -10,6 +10,8 @@ const rc = require('rc')
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 
+const issueReporter = require('issue-reporter')
+
 const { executeInteractiveMode } = require('./interactiveMode')
 const getRepositoryInfo = require('./repository')
 const pkg = require('../package.json')
@@ -101,7 +103,26 @@ async function main(options = {}) {
     }
     logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
-    logger.error(e)
+    const repository = await getRepositoryInfo()
+    await issueReporter({
+      error: e,
+      user: 'frinyvonnick',
+      repo: 'gitmoji-changelog',
+      sections: [
+        {
+          title: 'CLI options',
+          content: options,
+        },
+        {
+          title: 'Project info',
+          content: projectInfo,
+        },
+        {
+          title: 'Repository info',
+          content: repository,
+        },
+      ],
+    })
   }
 
   // force quit (if the latest version request is pending, we don't wait for it)

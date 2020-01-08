@@ -1,6 +1,7 @@
 const { generateChangelog, logger } = require('@gitmoji-changelog/core')
 const { manifest } = require('libnpm')
 const { main } = require('./cli')
+const issueReporter = require('issue-reporter')
 
 describe('cli', () => {
   const realExitFunction = process.exit
@@ -18,7 +19,7 @@ describe('cli', () => {
 
     await main(options)
 
-    expect(logger.error).toHaveBeenCalled()
+    expect(issueReporter).toHaveBeenCalled()
   })
 
   it('should call process.exit explicitly so promises are not waited for', async () => {
@@ -90,3 +91,5 @@ jest.mock('../package.json', () => ({
 jest.mock('libnpm', () => ({
   manifest: jest.fn(),
 }))
+
+jest.mock('issue-reporter')

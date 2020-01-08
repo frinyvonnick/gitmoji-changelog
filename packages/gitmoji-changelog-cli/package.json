@@ -36,6 +36,7 @@
     "hosted-git-info": "^3.0.2",
     "immutadot": "^1.0.0",
     "inquirer": "^6.3.1",
+    "issue-reporter": "^0.2.0",
     "libnpm": "^1.0.0",
     "lodash": "^4.17.11",
     "rc": "^1.2.8",
