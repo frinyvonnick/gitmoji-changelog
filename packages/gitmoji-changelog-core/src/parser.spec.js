@@ -22,42 +22,26 @@ describe('group mapping', () => {
 
 describe('commits parser', () => {
   it('should parse a single commit', () => {
-    const {
-      hash,
-      author,
-      date,
-      subject,
-      body,
-    } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
-
-    expect(parseCommit(commit)).toEqual(expect.objectContaining(sparklesCommit))
+    expect(parseCommit(sparklesCommit)).toEqual(expect.objectContaining(sparklesCommit))
   })
 
   it('should parse a unicode emoji', () => {
-    const {
-      hash,
-      author,
-      date,
-      body,
-    } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n✨ Upgrade brand new feature\n${body}\n`
-    const parsed = parseCommit(commit)
+    const parsed = parseCommit({
+      ...sparklesCommit,
+      subject: '✨ Upgrade brand new feature',
+    })
     expect(parsed.emoji).toEqual('✨')
     expect(parsed.emojiCode).toEqual('sparkles')
     expect(parsed.message).toEqual('Upgrade brand new feature')
   })
 
   it('should parse a single commit without a body', () => {
-    const {
-      hash,
-      author,
-      date,
-      subject,
-    } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n\n`
+    const parsed = parseCommit({
+      ...sparklesCommit,
+      body: '',
+    })
 
-    expect(parseCommit(commit)).toEqual(expect.objectContaining({
+    expect(parseCommit(parsed)).toEqual(expect.objectContaining({
       ...sparklesCommit,
       body: '',
     }))
@@ -69,9 +53,11 @@ describe('commits parser', () => {
       author,
       date,
     } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n\n`
-
-    expect(parseCommit(commit)).toEqual(expect.objectContaining({
+    expect(parseCommit({
+      hash,
+      author,
+      date,
+    })).toEqual(expect.objectContaining({
       ...sparklesCommit,
       subject: '',
       body: '',
@@ -79,16 +65,7 @@ describe('commits parser', () => {
   })
 
   it('should add the group to a commit', () => {
-    const {
-      hash,
-      author,
-      date,
-      subject,
-      body,
-    } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
-
-    expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'added' }))
+    expect(parseCommit(sparklesCommit)).toEqual(expect.objectContaining({ group: 'added' }))
   })
 
   it('should handle custom commit mapping', () => {
@@ -99,16 +76,8 @@ describe('commits parser', () => {
       ],
     }
     rc.mockImplementation(() => customConfiguration)
-    const {
-      hash,
-      author,
-      date,
-      subject,
-      body,
-    } = sparklesCommit
-    const commit = `\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`
 
-    expect(parseCommit(commit)).toEqual(expect.objectContaining({ group: 'custom' }))
+    expect(parseCommit(sparklesCommit)).toEqual(expect.objectContaining({ group: 'custom' }))
   })
 })
 

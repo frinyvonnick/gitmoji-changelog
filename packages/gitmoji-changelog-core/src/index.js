@@ -3,7 +3,7 @@ const semverCompare = require('semver-compare')
 
 const { isEmpty } = require('lodash')
 
-const { getMergedGroupMapping } = require('./parser')
+const { parseCommit, getMergedGroupMapping } = require('./parser')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
 const fromGitFileClient = require('./fromGitFile')
@@ -51,7 +51,9 @@ async function generateVersion(options) {
     client,
   } = options
 
-  let commits = filterCommits(await client.getCommits(from, to))
+  const rawCommits = await client.getCommits(from, to)
+
+  let commits = filterCommits(rawCommits.map(parseCommit))
 
   if (groupSimilarCommits) {
     commits = groupSentencesByDistance(commits.map(commit => commit.message))
@@ -108,7 +110,9 @@ async function generateVersions({
   return changes
 }
 
-async function generateChangelog(from, to, { groupSimilarCommits, client = fromGitFileClient } = {}) {
+async function generateChangelog(from, to, {
+  groupSimilarCommits, client = fromGitFileClient,
+} = {}) {
   const gitTags = await client.getTags()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, to)
