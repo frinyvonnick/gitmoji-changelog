@@ -13,3 +13,4 @@ RUN yarn --frozen-lockfile && yarn cache clean
 RUN ln -s /usr/src/gitmoji-changelog/node_modules/.bin/gitmoji-changelog /usr/bin
 WORKDIR /app
 ENTRYPOINT ["gitmoji-changelog"]
+USER node
