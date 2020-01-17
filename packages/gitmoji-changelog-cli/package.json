@@ -39,6 +39,7 @@
     "issue-reporter": "^0.2.0",
     "libnpm": "^1.0.0",
     "lodash": "^4.17.11",
+    "pom-parser": "^1.2.0",
     "rc": "^1.2.8",
     "semver": "^5.6.0",
     "semver-compare": "^1.0.0",
