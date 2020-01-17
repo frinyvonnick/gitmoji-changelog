@@ -1,15 +1,9 @@
 ![gitmoji-changelog logo](https://raw.githubusercontent.com/frinyvonnick/gitmoji-changelog/master/misc/logo.png)
 
 <p>
-  <img src="https://img.shields.io/npm/v/gitmoji-changelog/alpha.svg" />
-  <a href="https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
-  </a>
+  <img src="https://img.shields.io/npm/v/gitmoji-changelog" />
   <a href="https://gitmoji.carloscuesta.me">
     <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg" alt="Gitmoji">
-  </a>
-  <a href="https://github.com/frinyvonnick/gitmoji-changelog">
-    <img src="https://img.shields.io/badge/Changelog-gitmoji-brightgreen.svg" alt="gitmoji-changelog">
   </a>
   <a href="https://twitter.com/YvonnickFrin">
     <img alt="Twitter: YvonnickFrin" src="https://img.shields.io/twitter/follow/YvonnickFrin.svg?style=social" target="_blank" />
