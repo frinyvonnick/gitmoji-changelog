@@ -1,4 +1,3 @@
-const splitLines = require('split-lines')
 const nodeEmoji = require('node-emoji')
 const groupMapping = require('./groupMapping')
 const rc = require('rc')
@@ -57,9 +56,9 @@ function getCommitGroup(emojiCode) {
   return group.group
 }
 
-function parseCommit(commit) {
-  const lines = splitLines(commit)
-  const [hash, author, date, subject, ...body] = lines.splice(1, lines.length - 2)
+function parseCommit({
+  hash, author, date, subject = '', body = '',
+}) {
   const { emoji, emojiCode, message } = parseSubject(subject)
   const group = getCommitGroup(emojiCode)
 
@@ -73,7 +72,7 @@ function parseCommit(commit) {
     message,
     group,
     siblings: [],
-    body: body.join('\n'),
+    body: Array.isArray(body) ? body.join('\n') : body,
   }
 }
 

@@ -1,35 +1,15 @@
 const semver = require('semver')
-const gitRawCommits = require('git-raw-commits')
-const gitSemverTags = require('git-semver-tags')
 const semverCompare = require('semver-compare')
-const through = require('through2')
-const concat = require('concat-stream')
+
 const { isEmpty } = require('lodash')
-const { promisify } = require('util')
 
 const { parseCommit, getMergedGroupMapping } = require('./parser')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
+const fromGitFileClient = require('./fromGitFile')
 
-const gitSemverTagsAsync = promisify(gitSemverTags)
-
-const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
 const HEAD = ''
 const TAIL = ''
-
-function getCommits(from, to) {
-  return new Promise((resolve) => {
-    gitRawCommits({
-      format: COMMIT_FORMAT,
-      from,
-      to,
-    }).pipe(through.obj((data, enc, next) => {
-      next(null, parseCommit(data.toString()))
-    })).pipe(concat(data => {
-      resolve(data)
-    }))
-  })
-}
 
 function makeGroups(commits) {
   if (isEmpty(commits)) return []
@@ -68,8 +48,12 @@ async function generateVersion(options) {
     to,
     version,
     groupSimilarCommits,
+    client,
   } = options
-  let commits = filterCommits(await getCommits(from, to))
+
+  const rawCommits = await client.getCommits(from, to)
+
+  let commits = filterCommits(rawCommits.map(parseCommit))
 
   if (groupSimilarCommits) {
     commits = groupSentencesByDistance(commits.map(commit => commit.message))
@@ -108,6 +92,7 @@ async function generateVersions({
   hasNext,
   release,
   groupSimilarCommits,
+  client,
 }) {
   let nextTag = HEAD
   const targetVersion = hasNext ? 'next' : sanitizeVersion(release)
@@ -117,7 +102,7 @@ async function generateVersions({
     const to = nextTag
     nextTag = tag
     return generateVersion({
-      from, to, version, groupSimilarCommits,
+      from, to, version, groupSimilarCommits, client,
     })
   }))
     .then(versions => versions.sort(sortVersions))
@@ -125,8 +110,10 @@ async function generateVersions({
   return changes
 }
 
-async function generateChangelog(from, to, { groupSimilarCommits } = {}) {
-  const gitTags = await gitSemverTagsAsync()
+async function generateChangelog(from, to, {
+  groupSimilarCommits, client = fromGitFileClient,
+} = {}) {
+  const gitTags = await client.getTags()
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, to)
 
@@ -146,6 +133,7 @@ async function generateChangelog(from, to, { groupSimilarCommits } = {}) {
     hasNext,
     release: to,
     groupSimilarCommits,
+    client,
   })
 
   if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {
