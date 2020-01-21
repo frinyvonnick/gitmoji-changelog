@@ -71,7 +71,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 1. Make changes and commit: `git commit -m ":sparkles: my awesome feature"`
 2. Bump version (ex: `1.0.0`) in `package.json` using [semver](https://semver.org/) convention
 3. Run `gitmoji-changelog`, then the file `CHANGELOG.md` is created or updated with all changes
-4. You can freely edit the new release in the changelog file, it will not be overwrite with the next generation
+4. You can freely edit the new release in the changelog file, it will not be overwritten with the next generation
 5. Commit `package.json` and `CHANGELOG.md` file
 6. Tag your release: `git tag -a v1.0.0 -m "v1.0.0"` (or create a Github release)
 7. Push to the remote `git push`
@@ -80,19 +80,19 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 
 ## Presets 
 
-`gitmoji-changelog` use presets to get project meta data useful for its smooth operation. Here is the list of available presets:
+`gitmoji-changelog` use presets to get project metadata useful for its smooth operation. Here is the list of available presets:
 
 - node (default preset)
 - generic
 - maven
 
-You didn't the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
+Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
 ### Add a preset
 
 A preset need to export a function. When called this function must return three mandatory information about the project in which the cli has been called. The name of the project, a short description of it and its current version.
 
-Let's dissect the `node` preset to see how it works. First of all the module must export a function. In case something went wrong return `null`. The cli will tell the user a problem occured.
+Let's dissect the `node` preset to see how it works. First of all the module must export a function. In case something went wrong return `null`. The cli will tell the user a problem occurred.
 
 ```js
 module.exports = () => {
@@ -169,7 +169,7 @@ docker container run -it -v $(pwd):/app --rm yvonnick/gitmoji-changelog:dev
 ## 🐥 Canary version
 
 If you want to test the incoming release of gitmoji-changelog, you can use or install the canary version.
-Be aware, it's a development in progress version, feel free to report bug or give feedback.
+Be aware, it's a development in progress version, feel free to report any bugs plus give feedback.
 
 with npx:
 ```sh
