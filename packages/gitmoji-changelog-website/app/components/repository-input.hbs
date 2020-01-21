@@ -1,0 +1,24 @@
+<section aria-label="repository input">
+  <h2>Type your repository's url</h2>
+  <form {{on "submit" this.onSubmit}}>
+    <label for="repository" class="visuallyhidden">Repository's url</label>
+    <input
+      id="repository"
+      name="repository"
+      type="text"
+      value={{this.repositoryUrl}}
+      {{on "keydown" this.updateRepositoryUrl}}
+      placeholder="https://github.com/frinyvonnick/gitmoji-changelog.git"
+    />
+    {{#if this.changelog}}
+      <section aria-label="changelog">
+        {{markdown-to-html this.changelog}}
+      </section>
+    {{/if}}
+    {{#if this.loading}}
+      <section aria-label="changelog">
+        <p>Loading...</p>
+      </section>
+    {{/if}}
+  </form>
+</section>

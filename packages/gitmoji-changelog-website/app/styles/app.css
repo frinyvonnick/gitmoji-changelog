@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+main {
+  max-width: 960px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 6rem;
+  text-align: center;
+}
+
+h1 > span {
+  font-size: 4rem;
+}
+
+section > h2 {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+section[aria-label="changelog"] {
+  margin-top: 3rem;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  max-height: 20rem;
+  overflow-y: scroll;
+  padding: 2rem 2.5rem;
+}
+
+section[aria-label="changelog"] p {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+section[aria-label="usage"] pre {
+  font-size: 1.5rem;
+  background: #ddd;
+  border-radius: .5rem;
+  padding: 2rem 2.5rem;
+}
+
+section[aria-label="repository input"] input {
+  color: #333;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  padding: .5rem 1.5rem;
+  border-radius: .5rem;
+  border: 1px solid #333;
+  width: 100%;
+}
+
+
+section[aria-label="repository input"] input::placeholder {
+  color: #999;
+  font-weight: 300;
+}
+
+.separator {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 4rem 0;
+}
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
