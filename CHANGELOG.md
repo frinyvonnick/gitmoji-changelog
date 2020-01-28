@@ -1,5 +1,32 @@
 # Changelog
 
+<a name="2.1.0"></a>
+## 2.1.0 (2020-01-21)
+
+### Added
+
+- ✨ Add maven preset ([#172](https://github.com/frinyvonnick/gitmoji-changelog/issues/172)) [[1622775](https://github.com/frinyvonnick/gitmoji-changelog/commit/16227751f3c3a60192d6c277434ec85ab2d13b4f)] (by Guillaume Membré)
+- ✨ Generate a bug report when unexpected errors happens ([#137](https://github.com/frinyvonnick/gitmoji-changelog/issues/137)) [[6d68130](https://github.com/frinyvonnick/gitmoji-changelog/commit/6d6813032b735cb4832fd9020ee59527391e41b6)] (by Yvonnick FRIN)
+- ✨ Add a generic preset using configuration file ([#160](https://github.com/frinyvonnick/gitmoji-changelog/issues/160)) [[d41ebc6](https://github.com/frinyvonnick/gitmoji-changelog/commit/d41ebc64bb2ce8b11b4ba4e2f11540a0c48b815f)] (by Yvonnick FRIN)
+- ✨ Add configuration so users can customize commit mapping ([#155](https://github.com/frinyvonnick/gitmoji-changelog/issues/155)) [[be1fca2](https://github.com/frinyvonnick/gitmoji-changelog/commit/be1fca23df30c201956ca488c3bfa7b33a9c4381)] (by Yvonnick FRIN)
+
+### Changed
+
+- ♻️ Make core independent from the git client. ([#171](https://github.com/frinyvonnick/gitmoji-changelog/issues/171)) [[4094bb9](https://github.com/frinyvonnick/gitmoji-changelog/commit/4094bb9abe01a731b0c20e0dcd006c8e08a66dc6)] (by Benjamin Petetot)
+- ♻️ Improve error messages for preset system ([#161](https://github.com/frinyvonnick/gitmoji-changelog/issues/161)) [[a51fee2](https://github.com/frinyvonnick/gitmoji-changelog/commit/a51fee25c633946b6aea9fe31f928e5e415a5171)] (by Yvonnick FRIN)
+
+### Fixed
+
+- ✏️ Fix typo in CHANGELOG [[14662c4](https://github.com/frinyvonnick/gitmoji-changelog/commit/14662c46cc5fb9ad14f9f7350d01a7c00c1e972c)] (by FRIN Yvonnick)
+
+### Miscellaneous
+
+- 📝 Correct sentence structure in documentation ([#173](https://github.com/frinyvonnick/gitmoji-changelog/issues/173)) [[36872a0](https://github.com/frinyvonnick/gitmoji-changelog/commit/36872a0fa8d02b264cab0d629869cb6538c126cb)] (by Daniel Tamkin)
+- 🐳 Upgrade Docker image version ([#167](https://github.com/frinyvonnick/gitmoji-changelog/issues/167)) [[8276d4a](https://github.com/frinyvonnick/gitmoji-changelog/commit/8276d4a9f8c67b6597116ba3a6472d44cdb29508)] (by Charles-Henri GUERIN)
+- 📝 Add documentation about generic preset ([#163](https://github.com/frinyvonnick/gitmoji-changelog/issues/163)) [[c940075](https://github.com/frinyvonnick/gitmoji-changelog/commit/c940075565d89c72c5d0114bc88e00133145f8be)] (by Yvonnick FRIN)
+- 📝 Fix presets path link ([#150](https://github.com/frinyvonnick/gitmoji-changelog/issues/150)) [[a27f818](https://github.com/frinyvonnick/gitmoji-changelog/commit/a27f8180ddc8f2a8280eb8b72acc8999ff66250d)] (by Rodion Martynov)
+
+
 <a name="2.0.1"></a>
 ## 2.0.1 (2019-11-19)
 
