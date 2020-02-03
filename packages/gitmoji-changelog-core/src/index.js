@@ -6,6 +6,7 @@ const { isEmpty } = require('lodash')
 const { parseCommit, getMergedGroupMapping } = require('./parser')
 const logger = require('./logger')
 const { groupSentencesByDistance } = require('./utils')
+const { FunctionalError } = require('./errors')
 const fromGitFileClient = require('./fromGitFile')
 
 const HEAD = ''
@@ -31,10 +32,17 @@ function makeGroups(commits) {
 }
 
 function sanitizeVersion(version) {
-  return semver.valid(version, {
-    loose: false,
-    includePrerelease: true,
-  })
+  try {
+    return semver.valid(version, {
+      loose: false,
+      includePrerelease: true,
+    })
+  } catch (e) {
+    if (e.name === 'TypeError') {
+      throw FunctionalError(e.message)
+    }
+    return null
+  }
 }
 
 function filterCommits(commits) {
@@ -84,7 +92,14 @@ function sortVersions(c1, c2) {
 
 function hasNextVersion(tags, release) {
   if (!release || release === 'next') return true
-  return tags.some(tag => semver.eq(tag, release))
+  try {
+    return tags.some(tag => semver.eq(tag, release))
+  } catch (e) {
+    if (e.name === 'TypeError') {
+      throw FunctionalError(e.message)
+    }
+    return null
+  }
 }
 
 async function generateVersions({
@@ -120,11 +135,17 @@ async function generateChangelog(from, to, {
   if (from === TAIL) {
     tagsToProcess = [...tagsToProcess, TAIL]
   } else {
-    const fromIndex = tagsToProcess.findIndex(tag => semver.eq(tag, from))
-    tagsToProcess.splice(fromIndex + 1)
+    try {
+      const fromIndex = tagsToProcess.findIndex(tag => semver.eq(tag, from))
+      tagsToProcess.splice(fromIndex + 1)
 
-    if (hasNext && isEmpty(tagsToProcess)) {
-      tagsToProcess.push(HEAD)
+      if (hasNext && isEmpty(tagsToProcess)) {
+        tagsToProcess.push(HEAD)
+      }
+    } catch (e) {
+      if (e.name === 'TypeError') {
+        throw FunctionalError(e.message)
+      }
     }
   }
 
@@ -137,7 +158,7 @@ async function generateChangelog(from, to, {
   })
 
   if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {
-    throw new Error('No changes found. You may need to fetch or pull the last changes.')
+    throw new FunctionalError('No changes found. You may need to fetch or pull the last changes.')
   }
 
   return {

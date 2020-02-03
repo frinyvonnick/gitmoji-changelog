@@ -18,11 +18,11 @@ expect.extend({
 })
 
 expect.extend({
-  toDisplayError(str) {
-    const pass = str.includes('Error')
+  toDisplayError(str, message = '') {
+    const pass = str.includes('Error') && str.includes(message)
     return {
       pass,
-      message: () => pass ? 'It passes' : `Expected ${str} to includes Error`,
+      message: () => pass ? 'It passes' : `Expected ${str} to includes Error and "${message}"`,
     }
   },
 })
@@ -342,7 +342,7 @@ describe('generate changelog', () => {
       const output = gitmojiChangelog()
 
       expect(getChangelog()).includes(['1.0.0'])
-      expect(output.toString('utf8')).toDisplayError()
+      expect(output.toString('utf8')).toDisplayError('No changes found.')
     })
 
     it('should get two versions 1.0.0 and next after two generation while updating changelog by calling cli without arguments', async () => {
