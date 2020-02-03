@@ -100,26 +100,30 @@ async function main(options = {}) {
     }
     logger.success(`changelog updated into ${options.output}`)
   } catch (e) {
-    const repository = await getRepositoryInfo()
-    await issueReporter({
-      error: e,
-      user: 'frinyvonnick',
-      repo: 'gitmoji-changelog',
-      sections: [
-        {
-          title: 'CLI options',
-          content: options,
-        },
-        {
-          title: 'Project info',
-          content: projectInfo,
-        },
-        {
-          title: 'Repository info',
-          content: repository,
-        },
-      ],
-    })
+    if (e.name !== 'FunctionalError') {
+      const repository = await getRepositoryInfo()
+      await issueReporter({
+        error: e,
+        user: 'frinyvonnick',
+        repo: 'gitmoji-changelog',
+        sections: [
+          {
+            title: 'CLI options',
+            content: options,
+          },
+          {
+            title: 'Project info',
+            content: projectInfo,
+          },
+          {
+            title: 'Repository info',
+            content: repository,
+          },
+        ],
+      })
+    } else {
+      logger.error(e)
+    }
   }
 
   // force quit (if the latest version request is pending, we don't wait for it)
