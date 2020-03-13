@@ -132,7 +132,7 @@ async function main(options = {}) {
 async function getChangelog(options, projectInfo) {
   const repository = await getRepositoryInfo()
 
-  const release = options.release === 'from-package' ? projectInfo.version : options.release
+  const release = options.release === 'from-package' || !options.release ? projectInfo.version : options.release
 
   if (!semver.valid(release)) {
     throw new Error(`${release} is not a valid semver version.`)
