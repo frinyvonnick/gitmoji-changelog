@@ -78,7 +78,7 @@ Here the recommended workflow to generate your changelog file using `gitmoji-cha
 
 _This workflow is related to the `node` preset but can be adapted to your own technology._
 
-## Presets 
+## Presets
 
 `gitmoji-changelog` use presets to get project metadata useful for its smooth operation. Here is the list of available presets:
 
@@ -86,63 +86,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - generic
 - maven
 
-Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
-
-### Add a preset
-
-A preset need to export a function. When called this function must return three mandatory information about the project in which the cli has been called. The name of the project, a short description of it and its current version.
-
-Let's dissect the `node` preset to see how it works. First of all the module must export a function. In case something went wrong return `null`. The cli will tell the user a problem occurred.
-
-```js
-module.exports = () => {
-  return null
-}
-```
-
-There is a package called `read-pkg-up` to get the first `package.json` in the parent folder structure. It returns its content as a JavaScript object. If we can't find a `package.json` or it is empty we return `null`.
-
-```js
-const readPkgUp = require('read-pkg-up')
-
-module.exports = async () => {
-  try {
-    const packageInfo = await readPkgUp()
-
-    if (!packageInfo.pkg) {
-      throw Error('Empty package.json')
-    }
-  } catch (e) {
-    return null
-  }
-}
-```
-
-If everything went fine we return the three mandatory information (name, description, version).
-
-```js
-const readPkgUp = require('read-pkg-up')
-
-module.exports = async () => {
-  try {
-    const packageInfo = await readPkgUp()
-
-    if (!packageInfo.pkg) {
-      throw Error('Empty package.json')
-    }
-
-    return {
-      name: packageInfo.pkg.name,
-      description: packageInfo.pkg.description,
-      version: packageInfo.pkg.version,
-    }
-  } catch (e) {
-    return null
-  }
-}
-```
-
-That's it. Feel free to open an issue to ask for a new preset or open a pull request to add one.
+Here is the [documentation](/PRESETS.md) about presets (how they works and how to create a new one).
 
 ## 🐳 Using Docker image
 

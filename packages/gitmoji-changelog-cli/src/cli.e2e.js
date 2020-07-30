@@ -48,12 +48,6 @@ describe('generate changelog', () => {
   })
 
   describe('presets', () => {
-    it("should throw an error if the requested preset doesn't exist", () => {
-      const output = gitmojiChangelog(['--preset=unknown'])
-
-      expect(output.toString('utf8')).includes(["The preset unknown doesn't exist"])
-    })
-
     it('should throw an Error if the preset could not find configuration', () => {
       fs.unlinkSync(path.join(testDir, 'package.json'))
 

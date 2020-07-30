@@ -1,6 +1,5 @@
 const fs = require('fs')
 const { get } = require('lodash')
-const path = require('path')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semver = require('semver')
@@ -48,9 +47,7 @@ async function main(options = {}) {
   let projectInfo
   try {
     logger.info(`use preset ${options.preset}`)
-    if (!fs.existsSync(path.join(__dirname, 'presets', `${options.preset}.js`))) {
-      throw Error(`The preset ${options.preset} doesn't exist`)
-    }
+
     // eslint-disable-next-line global-require
     const loadProjectInfo = require(`./presets/${options.preset}.js`)
     projectInfo = await loadProjectInfo()
