@@ -19,7 +19,7 @@
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
 
-Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](/DOCUMENTATION.md#presets) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
+Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](/PRESETS.md) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
 
 with npx:
 ```sh
