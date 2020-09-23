@@ -56,7 +56,7 @@ async function main(options = {}) {
       throw Error(`Cannot retrieve configuration for preset ${options.preset}.`)
     }
 
-    if (!projectInfo.version) {
+    if (!projectInfo.version && options.release === 'from-package') {
       throw Error('Cannot retrieve the version from your configuration. Check it or you can do "gitmoji-changelog <wanted version>".')
     }
   } catch (e) {
