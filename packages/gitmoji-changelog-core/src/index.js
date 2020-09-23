@@ -41,7 +41,7 @@ function sanitizeVersion(version) {
     if (e.name === 'TypeError') {
       throw FunctionalError(e.message)
     }
-    return null
+    throw e
   }
 }
 
@@ -98,7 +98,7 @@ function hasNextVersion(tags, release) {
     if (e.name === 'TypeError') {
       throw FunctionalError(e.message)
     }
-    return null
+    throw e
   }
 }
 
@@ -146,6 +146,7 @@ async function generateChangelog(from, to, {
       if (e.name === 'TypeError') {
         throw FunctionalError(e.message)
       }
+      throw e
     }
   }
 
