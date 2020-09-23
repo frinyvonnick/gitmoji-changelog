@@ -64,6 +64,7 @@ describe('generate changelog', () => {
       fs.writeFileSync(pkg, JSON.stringify(content))
 
       const output = gitmojiChangelog()
+      console.log(output.toString('utf8'))
 
       expect(output.toString('utf8')).includes(['Cannot retrieve the version from your configuration'])
     })
@@ -409,6 +410,19 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).not.includes(['1.1.0'])
       expect(getChangelog()).includes(['1.0.0', '1.2.0'])
+    })
+
+    it('should work by passing release as argument without package.json or configuration file', async () => {
+      const pkg = path.join(testDir, 'package.json')
+      const { version, ...content } = JSON.parse(fs.readFileSync(pkg).toString('utf8'))
+      fs.writeFileSync(pkg, JSON.stringify(content))
+
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      const output = gitmojiChangelog('1.0.0')
+      console.log(output.toString('utf8'))
+
+      expect(getChangelog()).includes(['1.0.0'])
     })
 
     it('should display an error if requested version isn\'t semver', async () => {
