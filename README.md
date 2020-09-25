@@ -55,7 +55,7 @@ npx gitmoji-changelog --preset generic
 
 ## 📖 Documentation
 
-:point_right: The full documentation is available [here](DOCUMENTATION.md).
+:point_right: The full documentation is available [here](packages/gitmoji-changelog-documentation/README.md).
 
 ## ✍ Author
 
