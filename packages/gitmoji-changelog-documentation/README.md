@@ -4,7 +4,7 @@
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
 
-Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](/PRESETS.md) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
+Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](https://docs.gitmoji-changelog.dev/#/?id=%e2%9a%99%ef%b8%8f-presets) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
 
 with npx:
 ```sh
@@ -80,7 +80,7 @@ The CLI will generate all previous changelog based on semver tags of your repo.
 
 _All previous semvers tags remain unchanged_. The CLI will add each tag since the last semver tag found in the `CHANGELOG.md` file.
 
-**By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits: [groupMapping.js](packages/gitmoji-changelog-core/src/groupMapping.js)**
+**By default when you generate your changelog with `gitmoji-changelog`, the following mapping is used to group commits: [groupMapping.js](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-core/src/groupMapping.js)**
 
 ### Workflow
 
@@ -106,7 +106,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - generic
 - maven
 
-Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
+Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
 ### Existing presets
 
