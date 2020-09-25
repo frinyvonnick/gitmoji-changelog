@@ -162,6 +162,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "endormi",
+      "name": "Erno Salo",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/39559256?v=4",
+      "profile": "http://endormi.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
