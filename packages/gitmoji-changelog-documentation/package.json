@@ -1,0 +1,14 @@
+{
+  "private": "true",
+  "name": "@gitmoji-changelog/documentation",
+  "version": "1.0.0",
+  "main": "index.html",
+  "license": "MIT",
+  "scripts": {
+    "start": "docsify serve"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "docsify-cli": "^4.4.1"
+  }
+}
