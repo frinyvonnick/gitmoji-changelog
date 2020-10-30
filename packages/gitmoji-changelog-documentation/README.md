@@ -105,6 +105,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - node (default preset)
 - generic
 - maven
+- dotnet
 
 Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
@@ -146,6 +147,14 @@ The maven preset looks for 4 properties in you `pom.xml`:
 - artifactid
 - version
 - description
+
+#### dotnet
+
+The dotnet preset looks for a `.sln` and selects the first configured project to get the following information
+
+- name (from the defined project name inside the solution)
+- description (from the PropertyGroup description tag inside your `.csproj`)
+- version (from the PropertyGroup description tag inside your `.csproj`)
 
 ### Add a preset
 
