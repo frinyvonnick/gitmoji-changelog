@@ -4,7 +4,7 @@
 
 Make sure you have [npx](https://www.npmjs.com/package/npx) installed (`npx` is shipped by default since npm `5.2.0`)
 
-Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](https://docs.gitmoji-changelog.dev/#/?id=%e2%9a%99%ef%b8%8f-presets) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
+Run the following command at the root of your project and answer questions. `gitmoji-changelog` uses a [preset system](?id=⚙%ef%b8%8f-presets) to handle different type of project. The preset used by default is the Node.js one that look for project's information in the `package.json` file.
 
 with npx:
 ```sh
@@ -260,5 +260,5 @@ npm install -g gitmoji-changelog@canary
 
 ## 📝 License
 
-Copyright © 2019 [Yvonnick FRIN (https://github.com/frinyvonnick)](https://github.com/frinyvonnick).<br />
+Copyright © 2020 [Yvonnick FRIN (https://github.com/frinyvonnick)](https://github.com/frinyvonnick).<br />
 This project is [MIT](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE) licensed.

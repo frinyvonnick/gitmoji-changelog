@@ -123,7 +123,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## 📝 License
 
-Copyright © 2019 [Yvonnick FRIN (https://github.com/frinyvonnick)](https://github.com/frinyvonnick).<br />
+Copyright © 2020 [Yvonnick FRIN (https://github.com/frinyvonnick)](https://github.com/frinyvonnick).<br />
 This project is [MIT](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/LICENSE) licensed.
 
 ***
