@@ -81,6 +81,16 @@ describe('generate changelog', () => {
       expect(getChangelog()).includes(['1.0.0'])
     })
 
+    it("should get a 1.0.0 version while initializing changelog by calling cli with explicit init argument and having package.json's version set to 1.0.0", async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      gitmojiChangelog(['init'])
+      await commit(':bookmark: Version 1.0.0')
+
+      expect(getChangelog()).includes(['1.0.0'])
+    })
+
     it('should use a custom commit mapping to create commit categories', async () => {
       makeCustomConfig({
         commitMapping: [

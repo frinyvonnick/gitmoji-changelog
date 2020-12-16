@@ -37,7 +37,7 @@ yargs
     execute(mode)(argv)
   })
 
-  .command('init', 'Initialize changelog from tags', noop, execute('init'))
+  .command('init', 'Initialize changelog from tags', noop, (argv) => execute('init')({ ...argv, release: 'from-package' }))
 
   .command('update [release]', 'Update changelog with a new version', (command) => {
     command.positional('release', {
