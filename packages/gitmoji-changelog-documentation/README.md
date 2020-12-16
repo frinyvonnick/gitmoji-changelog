@@ -105,6 +105,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - node (default preset)
 - generic
 - maven
+- cargo
 
 Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
@@ -144,6 +145,14 @@ The maven preset looks for 4 properties in you `pom.xml`:
 
 - groupid
 - artifactid
+- version
+- description
+
+#### Cargo
+
+The cargo preset looks for 3 properties in your `Cargo.toml`:
+
+- name
 - version
 - description
 
