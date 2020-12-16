@@ -1,5 +1,29 @@
 # Changelog
 
+<a name="2.2.0"></a>
+## 2.2.0 (2020-12-16)
+
+### Added
+
+- ✨ Add Cargo preset ([#199](https://github.com/frinyvonnick/gitmoji-changelog/issues/199)) [[ceab8dc](https://github.com/frinyvonnick/gitmoji-changelog/commit/ceab8dcd86b3fbb1c91134bfad844a16f6f0f609)]
+
+### Changed
+
+- 📌 Upgrade dependencies ([#191](https://github.com/frinyvonnick/gitmoji-changelog/issues/191)) [[cdf76f9](https://github.com/frinyvonnick/gitmoji-changelog/commit/cdf76f9a5f12a11703216de203f99a144436cfe9)]
+
+### Fixed
+
+- 🐛 Fix init command ([#204](https://github.com/frinyvonnick/gitmoji-changelog/issues/204)) [[a9b1bfe](https://github.com/frinyvonnick/gitmoji-changelog/commit/a9b1bfe1642218de7005c8e6870e8a5cad31a4aa)]
+- 🐛 Fix a bug occuring when version is missing in configuration but passed as argument ([#190](https://github.com/frinyvonnick/gitmoji-changelog/issues/190)) [[20cf369](https://github.com/frinyvonnick/gitmoji-changelog/commit/20cf3690dd0acd0712f3068368c80ade1422cd5b)]
+
+### Miscellaneous
+
+- 📝 Add the documentation site ([#194](https://github.com/frinyvonnick/gitmoji-changelog/issues/194)) [[5e0a971](https://github.com/frinyvonnick/gitmoji-changelog/commit/5e0a971775a7c986b11c7ee4fe9404ac4a2472cd)]
+- 🥅 Handle functional errors [[9a15406](https://github.com/frinyvonnick/gitmoji-changelog/commit/9a154061439a0e1e253e15b20ee5df6ae4b5388a)]
+- 📝 Improve documentation about presets ([#189](https://github.com/frinyvonnick/gitmoji-changelog/issues/189)) [[4e22239](https://github.com/frinyvonnick/gitmoji-changelog/commit/4e22239bd96e4b60eb966297e2e67e2070b03ea0)]
+- 📝 Improve Workflow section ([#152](https://github.com/frinyvonnick/gitmoji-changelog/issues/152)) [[1635963](https://github.com/frinyvonnick/gitmoji-changelog/commit/1635963b25fb6b611a563b918c5d78a5e11a3c16)]
+
+
 <a name="2.1.0"></a>
 ## 2.1.0 (2020-01-21)
 

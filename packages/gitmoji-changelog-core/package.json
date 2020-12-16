@@ -1,6 +1,6 @@
 {
   "name": "@gitmoji-changelog/core",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Core tool that transform raw commits into a nice json structure",
   "main": "src/index.js",
   "engines": {
