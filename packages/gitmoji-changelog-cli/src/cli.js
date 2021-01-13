@@ -25,7 +25,6 @@ async function getGitmojiChangelogLatestVersion() {
 }
 
 async function main(options = {}) {
-  console.log('main packageJson', packageJson)
   logger.start(`gitmoji-changelog v${packageJson.version}`)
   logger.info(`${options.mode} ${options.output}`)
 
