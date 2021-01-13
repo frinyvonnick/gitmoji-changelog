@@ -16,7 +16,9 @@ const getRepositoryInfo = require('./repository')
 const packageJson = require('../package.json')
 
 async function getGitmojiChangelogLatestVersion() {
-  const watchdog = new Promise(resolve => setTimeout(resolve, 500, { version: packageJson.version }))
+  const watchdog = new Promise(resolve => {
+    setTimeout(resolve, 500, { version: packageJson.version })
+  })
   const request = libnpm.manifest('gitmoji-changelog@latest')
 
   const { version } = await Promise.race([watchdog, request])
