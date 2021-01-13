@@ -1,13 +1,5 @@
 # Changelog
 
-<a name="0.0.1"></a>
-## 0.0.1 (2021-01-13)
-
-### Fixed
-
-- 🐛 fix unsupported packageJson name [[9a74886](https://github.com/MarkLyck/gitmoji-changelog/commit/9a74886a037ef7c66aea11d7a2e9abc1117acab6)]
-
-
 <a name="2.2.0"></a>
 ## 2.2.0 (2020-12-16)
 
