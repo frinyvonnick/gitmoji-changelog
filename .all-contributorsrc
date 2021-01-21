@@ -171,6 +171,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "MarkLyck",
+      "name": "Mark Lyck",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6841110?v=4",
+      "profile": "http://markdid.it",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
