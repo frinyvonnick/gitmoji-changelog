@@ -177,7 +177,7 @@ module.exports = async () => {
   try {
     const packageInfo = await readPkgUp()
 
-    if (!packageInfo.pkg) {
+    if (!packageInfo.packageJson) {
       throw Error('Empty package.json')
     }
   } catch (e) {
@@ -195,14 +195,14 @@ module.exports = async () => {
   try {
     const packageInfo = await readPkgUp()
 
-    if (!packageInfo.pkg) {
+    if (!packageInfo.packageJson) {
       throw Error('Empty package.json')
     }
 
     return {
-      name: packageInfo.pkg.name,
-      description: packageInfo.pkg.description,
-      version: packageInfo.pkg.version,
+      name: packageInfo.packageJson.name,
+      description: packageInfo.packageJson.description,
+      version: packageInfo.packageJson.version,
     }
   } catch (e) {
     return null

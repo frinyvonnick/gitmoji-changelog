@@ -13,10 +13,12 @@ const issueReporter = require('issue-reporter')
 
 const { executeInteractiveMode } = require('./interactiveMode')
 const getRepositoryInfo = require('./repository')
-const pkg = require('../package.json')
+const packageJson = require('../package.json')
 
 async function getGitmojiChangelogLatestVersion() {
-  const watchdog = new Promise(resolve => setTimeout(resolve, 500, { version: pkg.version }))
+  const watchdog = new Promise(resolve => {
+    setTimeout(resolve, 500, { version: packageJson.version })
+  })
   const request = libnpm.manifest('gitmoji-changelog@latest')
 
   const { version } = await Promise.race([watchdog, request])
@@ -25,7 +27,7 @@ async function getGitmojiChangelogLatestVersion() {
 }
 
 async function main(options = {}) {
-  logger.start(`gitmoji-changelog v${pkg.version}`)
+  logger.start(`gitmoji-changelog v${packageJson.version}`)
   logger.info(`${options.mode} ${options.output}`)
 
   const customConfiguration = rc('gitmoji-changelog')
@@ -37,8 +39,8 @@ async function main(options = {}) {
 
   try {
     const latestVersion = await getGitmojiChangelogLatestVersion()
-    if (semverCompare(latestVersion, pkg.version) > 0) {
-      logger.warn(`You got an outdated version of gitmoji-changelog, please update! (yours: ${pkg.version}, latest: ${latestVersion})`)
+    if (semverCompare(latestVersion, packageJson.version) > 0) {
+      logger.warn(`You got an outdated version of gitmoji-changelog, please update! (yours: ${packageJson.version}, latest: ${latestVersion})`)
       logger.warn('Just do the following npm command to update it:')
       logger.warn('\t> npm install -g gitmoji-changelog@latest')
     }

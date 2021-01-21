@@ -5,7 +5,7 @@ const loadProjectInfo = require('./node.js')
 describe('getPackageInfo', () => {
   it('should extract github repo info from package.json', async () => {
     readPkgUp.mockImplementationOnce(() => Promise.resolve({
-      pkg: {
+      packageJson: {
         name: 'gitmoji-changelog',
         version: '0.0.1',
         description: 'Gitmoji Changelog CLI',

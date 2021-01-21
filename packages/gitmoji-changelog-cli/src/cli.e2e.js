@@ -57,11 +57,11 @@ describe('generate changelog', () => {
     })
 
     it('should throw an Error if the preset did not return a version', () => {
-      const pkg = path.join(testDir, 'package.json')
+      const packageJson = path.join(testDir, 'package.json')
       // eslint-disable-next-line global-require
-      const content = JSON.parse(fs.readFileSync(pkg).toString('utf8'))
+      const content = JSON.parse(fs.readFileSync(packageJson).toString('utf8'))
       delete content.version
-      fs.writeFileSync(pkg, JSON.stringify(content))
+      fs.writeFileSync(packageJson, JSON.stringify(content))
 
       const output = gitmojiChangelog()
       console.log(output.toString('utf8'))
@@ -423,9 +423,9 @@ describe('generate changelog', () => {
     })
 
     it('should work by passing release as argument without package.json or configuration file', async () => {
-      const pkg = path.join(testDir, 'package.json')
-      const { version, ...content } = JSON.parse(fs.readFileSync(pkg).toString('utf8'))
-      fs.writeFileSync(pkg, JSON.stringify(content))
+      const packageJson = path.join(testDir, 'package.json')
+      const { version, ...content } = JSON.parse(fs.readFileSync(packageJson).toString('utf8'))
+      fs.writeFileSync(packageJson, JSON.stringify(content))
 
       await makeChanges('file1')
       await commit(':sparkles: Add some file')
@@ -472,12 +472,12 @@ describe('generate changelog', () => {
   }
 
   function bumpVersion(to) {
-    const pkg = path.join(testDir, 'package.json')
+    const packageJson = path.join(testDir, 'package.json')
     // eslint-disable-next-line global-require
-    const content = fs.readFileSync(pkg).toString('utf8')
+    const content = fs.readFileSync(packageJson).toString('utf8')
     const { version } = JSON.parse(content)
     const updatedContent = content.replace(version, to)
-    fs.writeFileSync(pkg, updatedContent)
+    fs.writeFileSync(packageJson, updatedContent)
   }
 
   /*
