@@ -24,7 +24,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "jest": "^23.5.0",
-    "lerna": "^2.11.0"
+    "lerna": "^4.0.0"
   },
   "workspaces": [
     "packages/*"
