@@ -1,5 +1,21 @@
 # Changelog
 
+<a name="2.2.1"></a>
+## 2.2.1 (2021-01-21)
+
+### Changed
+
+- 📌 Fix yarn.lock not up to date ([#207](https://github.com/frinyvonnick/gitmoji-changelog/issues/207)) [[54d194f](https://github.com/frinyvonnick/gitmoji-changelog/commit/54d194f08ebb073c14626c80dc5ecfa494e5a3e2)]
+
+### Fixed
+
+- 🐛 Fix unsupported key using read-pkg-up ([#206](https://github.com/frinyvonnick/gitmoji-changelog/issues/206)) [[7a2eb08](https://github.com/frinyvonnick/gitmoji-changelog/commit/7a2eb084c37e05300dd53fb940da1f24206f29f6)]
+
+### Miscellaneous
+
+- 👥 Add MarkLyck as a contributor ([#208](https://github.com/frinyvonnick/gitmoji-changelog/issues/208)) [[134dfb9](https://github.com/frinyvonnick/gitmoji-changelog/commit/134dfb95ea360bd566d272256881443f30829c18)]
+
+
 <a name="2.2.0"></a>
 ## 2.2.0 (2020-12-16)
 
