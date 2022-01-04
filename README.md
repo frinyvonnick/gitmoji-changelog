@@ -113,6 +113,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://danieltamkin.com"><img src="https://avatars1.githubusercontent.com/u/9532762?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Tamkin</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=DanielTamkin" title="Documentation">📖</a></td>
     <td align="center"><a href="http://endormi.io"><img src="https://avatars3.githubusercontent.com/u/39559256?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Erno Salo</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=endormi" title="Documentation">📖</a></td>
     <td align="center"><a href="http://markdid.it"><img src="https://avatars3.githubusercontent.com/u/6841110?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mark Lyck</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=MarkLyck" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/juwit"><img src="https://avatars.githubusercontent.com/u/7531844?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Julien WITTOUCK</b></sub></a><br /><a href="https://github.com/frinyvonnick/gitmoji-changelog/commits?author=juwit" title="Code">💻</a></td>
   </tr>
 </table>
 
