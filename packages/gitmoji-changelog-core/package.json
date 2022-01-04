@@ -19,10 +19,9 @@
   "dependencies": {
     "concat-stream": "^1.6.2",
     "fast-levenshtein": "^2.0.6",
-    "get-pkg-repo": "^2.0.0",
     "git-raw-commits": "^2.0.0",
     "git-remote-origin-url": "^2.0.0",
-    "git-semver-tags": "^2.0.0",
+    "git-semver-tags": "^4.1.1",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
     "normalize-package-data": "^2.4.0",
