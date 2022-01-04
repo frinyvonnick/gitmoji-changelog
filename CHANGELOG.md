@@ -1,5 +1,26 @@
 # Changelog
 
+<a name="2.3.0"></a>
+## 2.3.0 (2022-01-04)
+
+### Added
+
+- ✨ Add Helm preset ([#229](https://github.com/frinyvonnick/gitmoji-changelog/issues/229)) [[8c16f72](https://github.com/frinyvonnick/gitmoji-changelog/commit/8c16f72302d44b20727d6e7b82adb68802afb72e)]
+
+### Changed
+
+- ⬆️ Bump ssri from 6.0.1 to 6.0.2 ([#215](https://github.com/frinyvonnick/gitmoji-changelog/issues/215)) [[ed4a033](https://github.com/frinyvonnick/gitmoji-changelog/commit/ed4a03398242caa5f17dcd5cdda4f8b8815e6cc3)]
+- ⬆️ Bump normalize-url from 4.5.0 to 4.5.1 ([#219](https://github.com/frinyvonnick/gitmoji-changelog/issues/219)) [[9cb9e41](https://github.com/frinyvonnick/gitmoji-changelog/commit/9cb9e41ce0ab9e066616f9d60fa422094c2c1527)]
+- ⬆️ Bump y18n from 3.2.1 to 3.2.2 ([#220](https://github.com/frinyvonnick/gitmoji-changelog/issues/220)) [[0668d86](https://github.com/frinyvonnick/gitmoji-changelog/commit/0668d8604263776117a6052d29b33473b770c196)]
+- ⬆️ Upgrade dependencies using yarn upgrade ([#232](https://github.com/frinyvonnick/gitmoji-changelog/issues/232)) [[14f55bc](https://github.com/frinyvonnick/gitmoji-changelog/commit/14f55bc61cdff0863fc2c73af9086191cab93935)]
+- ⬆️ Upgrade vulnerable packages ([#230](https://github.com/frinyvonnick/gitmoji-changelog/issues/230)) [[27c53bd](https://github.com/frinyvonnick/gitmoji-changelog/commit/27c53bd253f17a94eac1c78b42a0630be3b299e9)]
+
+### Miscellaneous
+
+- 👥 Add horaklukas as a contributor for code ([#234](https://github.com/frinyvonnick/gitmoji-changelog/issues/234)) [[1f94e98](https://github.com/frinyvonnick/gitmoji-changelog/commit/1f94e987d014bb5863eebf9811d5c3f01b71bb9b)]
+- 👥 Add juwit as a contributor for code ([#233](https://github.com/frinyvonnick/gitmoji-changelog/issues/233)) [[b643004](https://github.com/frinyvonnick/gitmoji-changelog/commit/b643004a1e5173d5387026530041b863bf930788)]
+
+
 <a name="2.2.1"></a>
 ## 2.2.1 (2021-01-21)
 
