@@ -86,7 +86,7 @@ module.exports = [
       'poop',
       'beers',
       'bulb',
-      'twisted_rightwards_arrows'
+      'twisted_rightwards_arrows',
     ],
   },
   {
