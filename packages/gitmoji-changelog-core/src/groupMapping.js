@@ -10,6 +10,7 @@ module.exports = [
       'chart_with_upwards_trend',
       'heavy_plus_sign',
       'loud_sound',
+      'package',
     ],
   },
   {
@@ -47,12 +48,19 @@ module.exports = [
   {
     group: 'deprecated',
     label: 'Deprecated',
-    emojis: [],
+    emojis: [
+      'wastebasket',
+    ],
   },
   {
     group: 'removed',
     label: 'Removed',
-    emojis: ['fire', 'heavy_minus_sign', 'mute'],
+    emojis: [
+      'fire',
+      'heavy_minus_sign',
+      'mute',
+      'coffin',
+    ],
   },
   {
     group: 'fixed',
@@ -60,30 +68,34 @@ module.exports = [
     emojis: [
       'bug',
       'ambulance',
-      'apple',
-      'penguin',
-      'checkered_flag',
-      'robot',
-      'green_apple',
       'green_heart',
+      'adhesive_bandage',
       'pencil2',
     ],
   },
   {
     group: 'security',
     label: 'Security',
-    emojis: ['lock'],
+    emojis: ['lock', 'passport_control', 'see_no_evil'],
   },
   {
     group: 'useless',
     label: 'Useless',
     emojis: [
       'bookmark',
+      'poop',
+      'beers',
+      'bulb',
+      'twisted_rightwards_arrows'
     ],
   },
   {
     group: 'misc',
     label: 'Miscellaneous',
-    emojis: [],
+    emojis: [
+      'clown_face',
+      'bricks',
+      'busts_in_silhouette',
+    ],
   },
 ]
