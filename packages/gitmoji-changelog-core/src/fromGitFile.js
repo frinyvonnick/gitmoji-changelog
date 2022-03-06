@@ -18,12 +18,13 @@ function parseCommit(commit) {
   }
 }
 
-function getCommits(from, to) {
+function getCommits(from, to, path = '.') {
   return new Promise(resolve => {
     gitRawCommits({
       format: COMMIT_FORMAT,
       from,
       to,
+      path,
     })
       .pipe(
         through.obj((data, enc, next) => {
