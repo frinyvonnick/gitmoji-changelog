@@ -57,9 +57,10 @@ async function generateVersion(options) {
     version,
     groupSimilarCommits,
     client,
+    path,
   } = options
 
-  const rawCommits = await client.getCommits(from, to)
+  const rawCommits = await client.getCommits(from, to, path)
 
   let commits = filterCommits(rawCommits.map(parseCommit))
 
@@ -108,6 +109,7 @@ async function generateVersions({
   release,
   groupSimilarCommits,
   client,
+  path,
 }) {
   let nextTag = HEAD
   const targetVersion = hasNext ? 'next' : sanitizeVersion(release)
@@ -117,7 +119,7 @@ async function generateVersions({
     const to = nextTag
     nextTag = tag
     return generateVersion({
-      from, to, version, groupSimilarCommits, client,
+      from, to, version, groupSimilarCommits, client, path,
     })
   }))
     .then(versions => versions.sort(sortVersions))
@@ -126,7 +128,7 @@ async function generateVersions({
 }
 
 async function generateChangelog(from, to, {
-  groupSimilarCommits, client = fromGitFileClient,
+  groupSimilarCommits, client = fromGitFileClient, path,
 } = {}) {
   const gitTags = await client.getTags()
   let tagsToProcess = [...gitTags]
@@ -156,6 +158,7 @@ async function generateChangelog(from, to, {
     release: to,
     groupSimilarCommits,
     client,
+    path,
   })
 
   if (from !== TAIL && changes.length === 1 && isEmpty(changes[0].groups)) {
