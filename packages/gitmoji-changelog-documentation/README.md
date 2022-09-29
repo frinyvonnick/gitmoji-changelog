@@ -106,6 +106,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - generic
 - maven
 - cargo
+- helm
 
 Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
