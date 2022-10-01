@@ -6,7 +6,7 @@ const semver = require('semver')
 const semverCompare = require('semver-compare')
 const rc = require('rc')
 
-const { generateChangelog, logger } = require('@gitmoji-changelog/core')
+const { generateChangelog, logger, FunctionalError } = require('@gitmoji-changelog/core')
 const { buildMarkdownFile, getLatestVersion } = require('@gitmoji-changelog/markdown')
 
 const issueReporter = require('issue-reporter')
@@ -138,7 +138,7 @@ async function getChangelog(options, projectInfo) {
   const release = options.release === 'from-package' ? projectInfo.version : options.release
 
   if (!semver.valid(release)) {
-    throw new Error(`${release} is not a valid semver version.`)
+    throw new FunctionalError(`${release} is not a valid semver version.`)
   }
 
   const enhancedOptions = {

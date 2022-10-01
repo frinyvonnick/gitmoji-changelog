@@ -187,4 +187,5 @@ function getLastCommitDate(commits) {
 module.exports = {
   generateChangelog,
   logger,
+  FunctionalError,
 }
