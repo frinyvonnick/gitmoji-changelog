@@ -9,6 +9,26 @@ const sparklesCommit = {
   body: 'Waouh this is awesome 2',
 }
 
+const sparklesCommitSkipClInSubject = {
+  ...sparklesCommit,
+  subject: ':sparkles: Upgrade brand new feature [skip cl]',
+}
+
+const sparklesCommitSkipClInBody = {
+  ...sparklesCommit,
+  body: 'Waouh this is awesome 2 [skip cl]',
+}
+
+const sparklesCommitSkipChangelogInSubject = {
+  ...sparklesCommit,
+  subject: ':sparkles: Upgrade brand new feature [skip changelog]',
+}
+
+const sparklesCommitSkipChangelogInBody = {
+  ...sparklesCommit,
+  body: 'Waouh this is awesome 2 [skip changelog]',
+}
+
 describe('group mapping', () => {
   it('should place miscellaneous category at the end', () => {
     const mergeGroupMapping = getMergedGroupMapping([
@@ -78,6 +98,51 @@ describe('commits parser', () => {
     rc.mockImplementation(() => customConfiguration)
 
     expect(parseCommit(sparklesCommit)).toEqual(expect.objectContaining({ group: 'custom' }))
+  })
+
+  it('should handle skip cl in subject', () => {
+    const customConfiguration = {
+      useSkipChangelog: true,
+    }
+    rc.mockImplementation(() => customConfiguration)
+
+    expect(parseCommit(sparklesCommitSkipClInSubject)).toEqual(expect.objectContaining({ group: 'useless' }))
+  })
+
+  it('should handle skip cl in body', () => {
+    const customConfiguration = {
+      useSkipChangelog: true,
+    }
+    rc.mockImplementation(() => customConfiguration)
+
+    expect(parseCommit(sparklesCommitSkipClInBody)).toEqual(expect.objectContaining({ group: 'useless' }))
+  })
+
+  it('should handle skip changelog in subject', () => {
+    const customConfiguration = {
+      useSkipChangelog: true,
+    }
+    rc.mockImplementation(() => customConfiguration)
+
+    expect(parseCommit(sparklesCommitSkipChangelogInSubject)).toEqual(expect.objectContaining({ group: 'useless' }))
+  })
+
+  it('should handle skip changelog in body', () => {
+    const customConfiguration = {
+      useSkipChangelog: true,
+    }
+    rc.mockImplementation(() => customConfiguration)
+
+    expect(parseCommit(sparklesCommitSkipChangelogInBody)).toEqual(expect.objectContaining({ group: 'useless' }))
+  })
+
+  it('should handle disable skip changelog', () => {
+    const customConfiguration = {
+      useSkipChangelog: false,
+    }
+    rc.mockImplementation(() => customConfiguration)
+
+    expect(parseCommit(sparklesCommitSkipChangelogInBody)).toEqual(expect.objectContaining({ group: 'added' }))
   })
 })
 

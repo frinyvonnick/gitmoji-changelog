@@ -61,6 +61,11 @@ function parseCommit({
 }) {
   const { emoji, emojiCode, message } = parseSubject(subject)
   const group = getCommitGroup(emojiCode)
+  const bodyString = Array.isArray(body) ? body.join('\n') : body
+
+  const customConfiguration = rc('gitmoji-changelog')
+  const useSkipChangelog = customConfiguration ? customConfiguration.useSkipChangelog : undefined
+  const skipMatches = (message ? message.match(/\[skip cl]|\[skip changelog]/g) : null) != null || (bodyString ? bodyString.match(/\[skip cl]|\[skip changelog]/g) : null) != null
 
   return {
     hash,
@@ -70,9 +75,9 @@ function parseCommit({
     emojiCode,
     emoji,
     message,
-    group,
+    group: (useSkipChangelog === true && skipMatches === true) ? 'useless' : group,
     siblings: [],
-    body: Array.isArray(body) ? body.join('\n') : body,
+    body: bodyString,
   }
 }
 
