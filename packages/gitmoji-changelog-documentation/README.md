@@ -165,6 +165,14 @@ The helm preset looks for 3 properties in your `Chart.yaml`:
 - version
 - description
 
+#### Poetry
+
+The poetry preset looks for 3 properties in your `pyproject.toml`
+
+- name
+- version
+- description
+
 ### Add a preset
 
 A preset need to export a function. When called this function must return three mandatory information about the project in which the cli has been called. The name of the project, a short description of it and its current version.
