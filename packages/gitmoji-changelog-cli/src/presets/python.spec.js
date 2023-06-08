@@ -22,7 +22,7 @@ describe('getPackageInfo', () => {
   })
 
   it('should extract metadata from the PEP621 example pyproject.toml', async () =>{
-    // [project] is the usual TOML section for the metadata 
+    // [project] is the usual TOML section for the metadata
     fs.readFileSync.mockReturnValue(`
       [project]
       name = "spam"
@@ -101,7 +101,7 @@ describe('getPackageInfo', () => {
   })
 
   it('should use the first metadata value found from the top', async () =>{
-    // Only the first occurance of the expected key names are taken. 
+    // Only the first occurance of the expected key names are taken.
     fs.readFileSync.mockReturnValue(`
       [other.section]
       somebody = "once told me the"
