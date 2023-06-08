@@ -14,7 +14,17 @@ module.exports = async () => {
     const projectFile = await pyprojectPromise
     const name = recursiveKeySearch("name", projectFile)[0]
     const version = recursiveKeySearch("version", projectFile)[0]
-    const description = recursiveKeySearch("description", projectFile)[0]
+    let description = recursiveKeySearch("description", projectFile)[0]
+
+    if (!name){
+      throw new Error("Could not find name metadata in pyproject.toml")
+    }
+    if (!version){
+      throw new Error("Could not find version metadata in pyproject.toml")
+    }
+    if (!description){
+      description = ""
+    }
 
     return {
       name,

@@ -173,6 +173,8 @@ The python preset looks for 3 properties in your `pyproject.toml`:
 - version
 - description
 
+(The value taken is the first one found in your `pyproject.toml` that matches the expected key name given above.)
+
 ### Add a preset
 
 A preset need to export a function. When called this function must return three mandatory information about the project in which the cli has been called. The name of the project, a short description of it and its current version.

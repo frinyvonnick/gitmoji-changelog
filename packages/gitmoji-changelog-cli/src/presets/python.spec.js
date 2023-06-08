@@ -3,7 +3,7 @@ const fs = require('fs')
 const loadProjectInfo = require('./python.js')
 
 describe('getPackageInfo', () => {
-  it('should extract info from a pyproject.toml made by poetry', async () =>{
+  it('should extract metadata from a pyproject.toml made by poetry', async () =>{
     // Note the TOML section is distinct for poetry
     fs.readFileSync.mockReturnValue(`
       [tool.poetry]
@@ -21,7 +21,7 @@ describe('getPackageInfo', () => {
     })
   })
 
-  it('should extract info from the PEP621 example pyproject.toml', async () =>{
+  it('should extract metadata from the PEP621 example pyproject.toml', async () =>{
     // [project] is the usual TOML section for the metadata 
     fs.readFileSync.mockReturnValue(`
       [project]
@@ -79,6 +79,56 @@ describe('getPackageInfo', () => {
       name: 'spam',
       version: '2020.0.0',
       description: 'Lovely Spam! Wonderful Spam!',
+    })
+  })
+
+  it('should extract metadata despite a missing description', async () =>{
+    // The description metadata is optional.
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "no-description"
+      version = "0.0.1"
+      readme = "README.rst"
+    `)
+
+    const result = await loadProjectInfo()
+
+    expect(result).toEqual({
+      name: 'no-description',
+      version: '0.0.1',
+      description: '',
+    })
+  })
+
+  it('should use the first metadata value found from the top', async () =>{
+    // Only the first occurance of the expected key names are taken. 
+    fs.readFileSync.mockReturnValue(`
+      [other.section]
+      somebody = "once told me the"
+      world = "is gonna roll me"
+
+      [project]
+      name = "project-1"
+      version = "0.0.1"
+      description = "Project 1 Description"
+
+      [tool.poetry]
+      name = "project-2"
+      version = "0.0.2"
+      description = "Project 2 Description"
+
+      [tool.something.else]
+      name = "project-3"
+      version = "0.0.3"
+      description = "Project 3 Description"
+    `)
+
+    const result = await loadProjectInfo()
+
+    expect(result).toEqual({
+      name: 'project-1',
+      version: '0.0.1',
+      description: 'Project 1 Description',
     })
   })
 })
