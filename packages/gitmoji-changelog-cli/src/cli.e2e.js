@@ -443,7 +443,7 @@ describe('generate changelog', () => {
   })
 
   async function makeChanges(fileName) {
-    fs.writeFileSync(path.join(testDir, fileName))
+    fs.writeFileSync(path.join(testDir, fileName), '')
   }
 
   async function makeCustomConfig(config) {
