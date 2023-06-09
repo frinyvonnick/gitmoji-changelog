@@ -39,7 +39,7 @@ function sanitizeVersion(version) {
     })
   } catch (e) {
     if (e.name === 'TypeError') {
-      throw FunctionalError(e.message)
+      throw new FunctionalError(e.message)
     }
     throw e
   }
@@ -96,7 +96,7 @@ function hasNextVersion(tags, release) {
     return tags.some(tag => semver.eq(tag, release))
   } catch (e) {
     if (e.name === 'TypeError') {
-      throw FunctionalError(e.message)
+      throw new FunctionalError(e.message)
     }
     throw e
   }
@@ -144,7 +144,7 @@ async function generateChangelog(from, to, {
       }
     } catch (e) {
       if (e.name === 'TypeError') {
-        throw FunctionalError(e.message)
+        throw new FunctionalError(e.message)
       }
       throw e
     }
