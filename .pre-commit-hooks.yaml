@@ -1,0 +1,9 @@
+---
+- id: gitmoji-changelog
+  name: gitmoji-changelog
+  description: >
+    Generate changelog for repositories using gitmoji commits convention.
+  language: node
+  entry: gitmoji-changelog
+  always_run: true
+  pass_filenames: false
