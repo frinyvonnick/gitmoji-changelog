@@ -44,7 +44,7 @@
     "read-pkg-up": "^7.0.1",
     "semver": "^5.6.0",
     "semver-compare": "^1.0.0",
-    "simple-git": "^1.113.0",
+    "simple-git": "^3.16.0",
     "toml": "^3.0.0",
     "yaml": "^1.10.2",
     "yargs": "^17.3.1"
