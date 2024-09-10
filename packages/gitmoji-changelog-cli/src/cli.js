@@ -3,7 +3,7 @@ const { get } = require('lodash')
 const { set } = require('immutadot')
 const libnpm = require('libnpm')
 const semver = require('semver')
-const semverCompare = require('semver-compare')
+const { compareVersions: semverCompare } = require('compare-versions')
 const rc = require('rc')
 
 const { generateChangelog, logger, FunctionalError } = require('@gitmoji-changelog/core')

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/frinyvonnick/gitmoji-changelog#readme",
   "dependencies": {
+    "compare-versions": "^6.1.1",
     "concat-stream": "^1.6.2",
     "fast-levenshtein": "^2.0.6",
     "git-raw-commits": "^2.0.0",
@@ -27,7 +28,6 @@
     "normalize-package-data": "^2.4.0",
     "read-pkg-up": "^7.0.1",
     "semver": "^5.6.0",
-    "semver-compare": "^1.0.0",
     "signale": "^1.3.0",
     "split-lines": "^2.0.0",
     "through2": "^2.0.3"

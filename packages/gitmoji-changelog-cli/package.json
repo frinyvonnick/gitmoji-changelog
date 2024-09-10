@@ -33,6 +33,7 @@
   "dependencies": {
     "@gitmoji-changelog/core": "^2.2.0",
     "@gitmoji-changelog/markdown": "^2.2.0",
+    "compare-versions": "^6.1.1",
     "hosted-git-info": "^3.0.2",
     "immutadot": "^1.0.0",
     "inquirer": "^6.3.1",
@@ -43,7 +44,6 @@
     "rc": "^1.2.8",
     "read-pkg-up": "^7.0.1",
     "semver": "^5.6.0",
-    "semver-compare": "^1.0.0",
     "simple-git": "^1.113.0",
     "toml": "^3.0.0",
     "yaml": "^1.10.2",
