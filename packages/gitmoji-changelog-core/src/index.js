@@ -1,5 +1,5 @@
 const semver = require('semver')
-const semverCompare = require('semver-compare')
+const { compareVersions: semverCompare } = require('compare-versions')
 
 const { isEmpty } = require('lodash')
 

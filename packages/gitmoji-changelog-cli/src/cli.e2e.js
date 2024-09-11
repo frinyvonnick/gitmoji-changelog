@@ -148,6 +148,32 @@ describe('generate changelog', () => {
 
       expect(getChangelog()).includes(['1.0.0', '2.0.0'])
     })
+    it('should get three versions 1.0.0 and 1.0.1-alpha.1 and 1.0.1-alpha.2 in the right order while initializing changelog', async () => {
+      await makeChanges('file1')
+      await commit(':sparkles: Add some file')
+      await bumpVersion('1.0.0')
+      await commit(':bookmark: Version 1.0.0')
+      await tag('1.0.0')
+
+      await makeChanges('file2')
+      await commit(':sparkles: Add another file')
+      await bumpVersion('1.0.1-alpha.1')
+      await commit(':bookmark: Version 1.0.1-alpha.1')
+      await tag('1.0.1-alpha.1')
+
+      await makeChanges('file3')
+      await commit(':sparkles: Add one more file')
+      await bumpVersion('1.0.1-alpha.2')
+      await commit(':bookmark: Version 1.0.1-alpha.2')
+      await tag('1.0.1-alpha.2')
+
+      gitmojiChangelog()
+
+      const tags = /name="([^"]+)"/g
+      const foundTags = [...getChangelog().matchAll(tags)].flatMap(entry => entry[1])
+
+      expect([...foundTags]).toEqual(['1.0.1-alpha.2', '1.0.1-alpha.1', '1.0.0'])
+    })
   })
 
   describe('update', () => {
