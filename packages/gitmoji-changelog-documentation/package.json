@@ -1,5 +1,4 @@
 {
-  "private": "true",
   "name": "@gitmoji-changelog/documentation",
   "version": "2.2.0",
   "main": "index.html",

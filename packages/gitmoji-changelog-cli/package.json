@@ -17,9 +17,7 @@
   "engines": {
     "node": ">=10"
   },
-  "bin": {
-    "gitmoji-changelog": "./src/index.js"
-  },
+  "bin": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/gitmoji-changelog.git"
