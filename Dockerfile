@@ -1,16 +1,24 @@
-FROM node:12.14.1-alpine3.11
-ENV NODE_ENV=production
+# syntax=docker/dockerfile:1
+# FROM node:lts-slim (Version: 20.17.0)
+FROM node@sha256:9fb20391a0320aed25636d8312f4332f9be734c5acef4c94722048c2bed5a87d AS gitmoji-changelog-base
 
-# install dependencies
-RUN apk add --no-cache git=2.24.1-r0
+RUN apt-get update && apt-get install -y git \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* \
+&& git config --global --add safe.directory /app
 
-# build gitmoji-changelog from source
+# copy gitmoji-changelog into the image
 WORKDIR /usr/src/gitmoji-changelog
 COPY . .
-RUN yarn --frozen-lockfile && yarn cache clean
 
-# run gitmoji-changelog on container startup
-RUN ln -s /usr/src/gitmoji-changelog/node_modules/.bin/gitmoji-changelog /usr/bin
+# install dependencies
+RUN yarn install \
+&& yarn cache clean
+
+# make gitmoji-changelog availabel as command
+WORKDIR /usr/src/gitmoji-changelog/packages/gitmoji-changelog-cli
+RUN npm link
+
 WORKDIR /app
+
 ENTRYPOINT ["gitmoji-changelog"]
-USER node
