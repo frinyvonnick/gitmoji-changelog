@@ -82,7 +82,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
+- ♻️ Upgrade brand new feature [[&#x60;c40ee86&#x60;](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>
@@ -90,7 +90,7 @@ describe('Markdown converter', () => {
 
 ### Added
 
-- ✨ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f)]
+- ✨ Upgrade brand new feature [[&#x60;c40ee86&#x60;](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f)]
 
 
 `)
@@ -146,7 +146,7 @@ describe('Markdown converter', () => {
 
 ### Changed
 
-- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
+- ♻️ Upgrade brand new feature [[&#x60;c40ee86&#x60;](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)] (by John Doe)
 
 
 `)
@@ -230,7 +230,7 @@ I am the last version
 
 ### Changed
 
-- ♻️ Upgrade brand new feature [[c40ee86](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
+- ♻️ Upgrade brand new feature [[&#x60;c40ee86&#x60;](https://github.com/frinyvonnick/gitmoji-changelog/commit/c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c)]
 
 
 <a name="1.0.0"></a>
@@ -255,7 +255,7 @@ describe('getHashUrl', () => {
     const result = getShortHash('xxxxxxxxxxxxxxxxx', {
       url: 'https://github.com/frinyvonnick/gitmoji-changelog',
     })
-    expect(result).toBe('[xxxxxxx](https://github.com/frinyvonnick/gitmoji-changelog/commit/xxxxxxxxxxxxxxxxx)')
+    expect(result).toBe('[`xxxxxxx`](https://github.com/frinyvonnick/gitmoji-changelog/commit/xxxxxxxxxxxxxxxxx)')
   })
 })
 
@@ -279,14 +279,14 @@ describe('autolink', () => {
     const result = autolink(':bug: fix issue #123', {
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
-    expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)')
+    expect(result).toBe(':bug: fix issue [`#123`](https://github.com/frinyvonnick/gitmoji-changelog/issues/123)')
   })
 
   it('should autolink with markdown severals hashtag issues in message', () => {
     const result = autolink(':bug: fix issue #123 and #456', {
       bugsUrl: 'https://github.com/frinyvonnick/gitmoji-changelog/issues',
     })
-    expect(result).toBe(':bug: fix issue [#123](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [#456](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
+    expect(result).toBe(':bug: fix issue [`#123`](https://github.com/frinyvonnick/gitmoji-changelog/issues/123) and [`#456`](https://github.com/frinyvonnick/gitmoji-changelog/issues/456)')
   })
 })
 

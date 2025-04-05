@@ -140,7 +140,7 @@ function getShortHash(hash, repository) {
 
   if (isEmpty(repository) || !repository.url) return shortHash
 
-  return `[${shortHash}](${repository.url}/commit/${hash})`
+  return `[\`${shortHash}\`](${repository.url}/commit/${hash})`
 }
 
 const ISSUE_REGEXP = /#{1}(\d+)/gm
@@ -153,7 +153,7 @@ function autolink(message, repository) {
   const matches = message.match(ISSUE_REGEXP)
   if (!matches) return message
 
-  return message.replace(ISSUE_REGEXP, `[#$1](${repository.bugsUrl}/$1)`)
+  return message.replace(ISSUE_REGEXP, `[\`#$1\`](${repository.bugsUrl}/$1)`)
 }
 
 module.exports = {
