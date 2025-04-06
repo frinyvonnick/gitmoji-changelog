@@ -52,6 +52,7 @@ yargs
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
   .option('author', { default: false, desc: 'add the author in changelog lines' })
   .option('interactive', { default: false, desc: 'select commits manually', alias: 'i' })
+  .option('only-stable', { default: false, desc: 'Include only stable versions when generating the changelog', type: 'boolean' })
 
   .help('help')
   .epilog(`For more information visit: ${homepage}`)

@@ -362,6 +362,32 @@ describe('changelog', () => {
         { date: '2019-02-01T00:00:00+00:00', body: '9' },
       ])
   })
+
+  it('should include unstable commits', async () => {
+    mockGroup([recycleCommit])
+    mockGroup([lipstickCommit])
+    mockGroup([sparklesCommit])
+    mockGroup([lockCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', 'v1.0.0-dev.1', 'v1.0.1']))
+
+    const { changes } = await generateChangelog(TAIL, HEAD, { onlyStable: false })
+
+    expect(changes).toHaveLength(4)
+  })
+
+  it('should exclude unstable commits', async () => {
+    mockGroup([recycleCommit])
+    mockGroup([lipstickCommit])
+    mockGroup([sparklesCommit])
+    mockGroup([lockCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, ['v1.0.0', 'v1.0.0-dev.1', 'v1.0.1']))
+
+    const { changes } = await generateChangelog(TAIL, HEAD, { onlyStable: true })
+
+    expect(changes).toHaveLength(3)
+  })
 })
 
 jest.mock('git-raw-commits')

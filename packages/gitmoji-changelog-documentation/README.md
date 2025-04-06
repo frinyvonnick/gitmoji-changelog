@@ -62,6 +62,7 @@ The first command listed above is the idiomatic usage of `gitmoji-changelog` (re
 | --group-similar-commits | [⚗️,- beta] try to group similar commits | false                              |
 | --author                | add the author in changelog lines       | false                              |
 | --interactive -i        | select commits manually                 | false                              |
+| --only-stable           | Include only stable versions when generating the changelog | false           |
 | --help                  | display help                            |                                    |
 
 ### Example

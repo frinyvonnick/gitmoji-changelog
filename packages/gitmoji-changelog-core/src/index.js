@@ -126,9 +126,13 @@ async function generateVersions({
 }
 
 async function generateChangelog(from, to, {
-  groupSimilarCommits, client = fromGitFileClient,
+  groupSimilarCommits, onlyStable, client = fromGitFileClient,
 } = {}) {
-  const gitTags = await client.getTags()
+  let gitTags = await client.getTags()
+  if (onlyStable) {
+    gitTags = gitTags.filter((tag) => !/(dev|rc|alpha|beta)/i.test(tag))
+  }
+
   let tagsToProcess = [...gitTags]
   const hasNext = hasNextVersion(gitTags, to)
 
