@@ -57,13 +57,14 @@ function getCommitGroup(emojiCode) {
 }
 
 function parseCommit({
-  hash, author, date, subject = '', body = '',
+  hash, parents, author, date, subject = '', body = '',
 }) {
   const { emoji, emojiCode, message } = parseSubject(subject)
   const group = getCommitGroup(emojiCode)
 
   return {
     hash,
+    parents,
     author,
     date,
     subject,

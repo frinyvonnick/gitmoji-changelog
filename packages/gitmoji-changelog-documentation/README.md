@@ -60,6 +60,7 @@ The first command listed above is the idiomatic usage of `gitmoji-changelog` (re
 | --preset                | define preset mode                      | node                               |
 | --output                | output file path                        | ./CHANGELOG.md or ./CHANGELOG.json |
 | --group-similar-commits | [⚗️,- beta] try to group similar commits | false                              |
+| --skip-merge            | Skip merge commits when generating the changelog | false                     |
 | --author                | add the author in changelog lines       | false                              |
 | --interactive -i        | select commits manually                 | false                              |
 | --help                  | display help                            |                                    |

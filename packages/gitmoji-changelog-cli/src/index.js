@@ -50,6 +50,7 @@ yargs
   .option('preset', { default: 'node', desc: 'define preset mode', choices: ['node', 'generic', 'maven', 'cargo', 'helm', 'python'] })
   .option('output', { desc: 'output changelog file' })
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
+  .option('skip-merge', { desc: 'Skip merge commits when generating the changelog', default: false, type: 'boolean' })
   .option('author', { default: false, desc: 'add the author in changelog lines' })
   .option('interactive', { default: false, desc: 'select commits manually', alias: 'i' })
 

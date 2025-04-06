@@ -5,16 +5,16 @@ const gitSemverTags = require('git-semver-tags')
 const through = require('through2')
 const concat = require('concat-stream')
 
-const COMMIT_FORMAT = '%n%H%n%an%n%cI%n%s%n%b'
+const COMMIT_FORMAT = '%n%H%n%p%n%an%n%cI%n%s%n%b'
 
 function parseCommit(commit) {
   const lines = splitLines(commit)
-  const [hash, author, date, subject, ...body] = lines.splice(
+  const [hash, parents, author, date, subject, ...body] = lines.splice(
     1,
     lines.length - 2
   )
   return {
-    hash, author, date, subject, body,
+    hash, parents: parents.split(' '), author, date, subject, body,
   }
 }
 

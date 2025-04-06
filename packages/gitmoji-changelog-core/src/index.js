@@ -45,9 +45,15 @@ function sanitizeVersion(version) {
   }
 }
 
-function filterCommits(commits) {
+function filterCommits(commits, skipMerge) {
   return commits
-    .filter(commit => commit.group !== 'useless')
+    .filter(commit => {
+      if (skipMerge && commit.parents.length > 1) {
+        return false
+      }
+
+      return commit.group !== 'useless'
+    })
 }
 
 async function generateVersion(options) {
@@ -56,12 +62,13 @@ async function generateVersion(options) {
     to,
     version,
     groupSimilarCommits,
+    skipMerge,
     client,
   } = options
 
   const rawCommits = await client.getCommits(from, to)
 
-  let commits = filterCommits(rawCommits.map(parseCommit))
+  let commits = filterCommits(rawCommits.map(parseCommit), skipMerge)
 
   if (groupSimilarCommits) {
     commits = groupSentencesByDistance(commits.map(commit => commit.message))
@@ -107,6 +114,7 @@ async function generateVersions({
   hasNext,
   release,
   groupSimilarCommits,
+  skipMerge,
   client,
 }) {
   let nextTag = HEAD
@@ -117,7 +125,7 @@ async function generateVersions({
     const to = nextTag
     nextTag = tag
     return generateVersion({
-      from, to, version, groupSimilarCommits, client,
+      from, to, version, groupSimilarCommits, skipMerge, client,
     })
   }))
     .then(versions => versions.sort(sortVersions))
@@ -126,7 +134,7 @@ async function generateVersions({
 }
 
 async function generateChangelog(from, to, {
-  groupSimilarCommits, client = fromGitFileClient,
+  groupSimilarCommits, skipMerge, client = fromGitFileClient,
 } = {}) {
   const gitTags = await client.getTags()
   let tagsToProcess = [...gitTags]
@@ -155,6 +163,7 @@ async function generateChangelog(from, to, {
     hasNext,
     release: to,
     groupSimilarCommits,
+    skipMerge,
     client,
   })
 

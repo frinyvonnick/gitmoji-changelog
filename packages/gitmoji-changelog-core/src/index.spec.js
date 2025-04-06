@@ -10,6 +10,7 @@ const HEAD = ''
 
 const uselessCommit = {
   hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd3',
+  parents: ['9665162'],
   date: '2018-09-14T21:00:18+02:00',
   subject: ':bookmark: Bump version to 1.9.2',
   body: 'Yes!',
@@ -19,8 +20,51 @@ const uselessCommit = {
   message: 'Bump version to 1.9.2',
 }
 
+const mergePRCommit = {
+  hash: 'b334c1c381cf9863edc83e8a549b8b712fd16e81',
+  parents: ['9665162', '73bc24c', '3ce8c20'],
+  author: 'Dmitry Dobrynin',
+  date: '2024-04-09T23:33:45+02:00',
+  subject: 'Merge pull request #123 from space',
+  body: '#123\n',
+  emoji: undefined,
+  emojiCode: undefined,
+  group: 'misc',
+  message: 'Merge pull request #123 from space',
+  siblings: [],
+}
+
+const mergeTagCommit = {
+  hash: 'b334c1c381cf9863edc83e8a549b8b712fd16e82',
+  parents: ['9665162', '73bc24c'],
+  author: 'Dmitry Dobrynin',
+  date: '2024-04-08T23:33:45+02:00',
+  subject: 'Merge tag \'tag\' into space',
+  body: 'tag\n',
+  emoji: undefined,
+  emojiCode: undefined,
+  group: 'misc',
+  message: 'Merge tag \'tag\' into space',
+  siblings: [],
+}
+
+const mergeBranchCommit = {
+  hash: 'b334c1c381cf9863edc83e8a549b8b712fd16e83',
+  parents: ['9665162', '73bc24c'],
+  author: 'Dmitry Dobrynin',
+  date: '2024-04-07T23:33:45+02:00',
+  subject: 'Merge branch \'feature\'',
+  body: 'feature\n',
+  emoji: undefined,
+  emojiCode: undefined,
+  group: 'misc',
+  message: 'Merge branch \'feature\'',
+  siblings: [],
+}
+
 const lockCommit = {
   hash: '460b79497ae7e791bc8ba8475bda8f0b93630dd9',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-09-14T22:00:18+02:00',
   subject: ':lock: Improve security',
@@ -34,6 +78,7 @@ const lockCommit = {
 
 const sparklesCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23a',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-08-28T10:06:00+02:00',
   subject: ':sparkles: Add a brand new feature',
@@ -47,6 +92,7 @@ const sparklesCommit = {
 
 const recycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23c',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-08-01T10:07:00+02:00',
   subject: ':recycle: Make some reworking on code',
@@ -60,6 +106,7 @@ const recycleCommit = {
 
 const secondRecycleCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23d',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-08-30T10:07:00+02:00',
   subject: ':recycle: Upgrade another brand new feature',
@@ -73,6 +120,7 @@ const secondRecycleCommit = {
 
 const lipstickCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23e',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-08-10T10:07:00+02:00',
   subject: ':lipstick: Change graphics for a feature',
@@ -86,6 +134,7 @@ const lipstickCommit = {
 
 const secondLipstickCommit = {
   hash: 'c40ee8669ba7ea5151adc2942fa8a7fc98d9e23f',
+  parents: ['9665162'],
   author: 'John Doe',
   date: '2018-08-18T10:07:00+02:00',
   subject: ':lipstick: Change more graphics for a feature',
@@ -287,6 +336,47 @@ describe('changelog', () => {
     ])
   })
 
+  it('should not filter merge request', async () => {
+    gitRawCommits.mockReset()
+    mockGroup([lipstickCommit, mergePRCommit, mergeTagCommit, mergeBranchCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog(TAIL, HEAD, { skipMerge: false })
+
+    expect(changes).toEqual([
+      expect.objectContaining({
+        groups: [
+          expect.objectContaining({
+            commits: [lipstickCommit],
+          }),
+          expect.objectContaining({
+            commits: [mergePRCommit, mergeTagCommit, mergeBranchCommit],
+          }),
+        ],
+      }),
+    ])
+  })
+
+  it('should filter merge request', async () => {
+    gitRawCommits.mockReset()
+    mockGroup([lipstickCommit, mergePRCommit, mergeTagCommit, mergeBranchCommit])
+
+    gitSemverTags.mockImplementation(cb => cb(null, []))
+
+    const { changes } = await generateChangelog(TAIL, HEAD, { skipMerge: true })
+
+    expect(changes).toEqual([
+      expect.objectContaining({
+        groups: [
+          expect.objectContaining({
+            commits: [lipstickCommit],
+          }),
+        ],
+      }),
+    ])
+  })
+
   it('should throw an error if no commits', async () => {
     mockNoCommits()
 
@@ -374,9 +464,9 @@ function mockGroup(commits) {
     const readable = new stream.Readable()
     commits.forEach(commit => {
       const {
-        hash, author, date, subject, body,
+        hash, parents, author, date, subject, body,
       } = commit
-      readable.push(`\n${hash}\n${author}\n${date}\n${subject}\n${body}\n`)
+      readable.push(`\n${hash}\n${parents ? parents.join(' ') : ''}\n${author}\n${date}\n${subject}\n${body}\n`)
     })
     readable.push(null)
     readable.emit('close')
