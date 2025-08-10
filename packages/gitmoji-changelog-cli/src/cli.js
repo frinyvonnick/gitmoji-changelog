@@ -52,7 +52,9 @@ async function main(options = {}) {
 
     // eslint-disable-next-line global-require
     const loadProjectInfo = require(`./presets/${options.preset}.js`)
-    projectInfo = await loadProjectInfo()
+    projectInfo = await loadProjectInfo({
+      versionCommand: options.versionCommand,
+    })
 
     if (!projectInfo) {
       throw Error(`Cannot retrieve configuration for preset ${options.preset}.`)

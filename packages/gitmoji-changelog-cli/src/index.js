@@ -52,6 +52,7 @@ yargs
   .option('group-similar-commits', { desc: '[⚗️  - beta] try to group similar commits', default: false })
   .option('author', { default: false, desc: 'add the author in changelog lines' })
   .option('interactive', { default: false, desc: 'select commits manually', alias: 'i' })
+  .option('version-command', { desc: 'Command used to determine the package version (for Python packages with dynamic versioning)' })
 
   .help('help')
   .epilog(`For more information visit: ${homepage}`)

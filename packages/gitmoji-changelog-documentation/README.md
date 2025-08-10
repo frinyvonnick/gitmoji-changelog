@@ -62,6 +62,7 @@ The first command listed above is the idiomatic usage of `gitmoji-changelog` (re
 | --group-similar-commits | [⚗️,- beta] try to group similar commits | false                              |
 | --author                | add the author in changelog lines       | false                              |
 | --interactive -i        | select commits manually                 | false                              |
+| --version-command       | command to retrieve the version for Python packages with dynamic versioning |                                    |
 | --help                  | display help                            |                                    |
 
 ### Example
@@ -107,6 +108,7 @@ _This workflow is related to the `node` preset but can be adapted to your own te
 - maven
 - cargo
 - helm
+- python
 
 Didn't see the preset you need in the list? Consider adding it. Presets are stored in a [presets](https://github.com/frinyvonnick/gitmoji-changelog/blob/master/packages/gitmoji-changelog-cli/src/presets) folder in the `cli` package.
 
@@ -174,6 +176,15 @@ The python preset looks for 3 properties in your `pyproject.toml`:
 - description
 
 (The value taken is the first one found in your `pyproject.toml` that matches the expected key name given above.)
+
+If your project uses dynamic versioning (i.e., `dynamic = ["version"]` is set in `pyproject.toml`), you can use the `--version-command` option to provide a command that returns the version, for example:
+
+```sh
+gitmoji-changelog --preset python --version-command "hatch version"
+```
+
+If your project uses a dynamic description (i.e., `dynamic = ["description"]` is set), the parser will take the first line from your README file as the description.
+
 
 ### Add a preset
 

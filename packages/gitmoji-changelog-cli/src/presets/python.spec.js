@@ -1,8 +1,15 @@
 const fs = require('fs')
+const ChildProcess = require('child_process')
 
 const loadProjectInfo = require('./python.js')
 
-describe('getPackageInfo', () => {
+describe('getPackageInfo | python', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    fs.readFileSync.mockReset()
+    fs.readFileSync.mockClear()
+  })
+
   it('should extract metadata from a pyproject.toml made by poetry', async () =>{
     // Note the TOML section is distinct for poetry
     fs.readFileSync.mockReturnValue(`
@@ -130,6 +137,198 @@ describe('getPackageInfo', () => {
       version: '0.0.1',
       description: 'Project 1 Description',
     })
+  })
+})
+
+describe('getPackageInfo | python | dynamic version', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    fs.readFileSync.mockReset()
+    fs.readFileSync.mockClear()
+  })
+
+  it('should extract version using the provided command', async () => {
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "dynamic_version"
+      description = "Description of the project with dynamic version"
+      dynamic = ["version"]
+    `)
+    jest.spyOn(ChildProcess, 'execSync').mockReturnValue('0.0.1\n')
+
+    const result = await loadProjectInfo({ versionCommand: 'get_project_version' })
+
+    expect(result.version).toEqual('0.0.1')
+  })
+
+  it('should throw error when the external command fails', async () => {
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "fail_dynamic_version_command"
+      description = "Description of the project with dynamic version and failing command"
+      dynamic = ["version"]
+    `)
+    jest.spyOn(ChildProcess, 'execSync').mockImplementation(() => {
+      throw new Error('Command failed')
+    })
+
+    const result = loadProjectInfo({ versionCommand: 'invalid_command' })
+
+    await expect(result).rejects.toThrow(`Failed to retrieve package version with external command
+   cmd      : invalid_command
+   exit code: unknown`)
+  })
+
+  it('should returns undefined version when the command outputs an empty string', async () => {
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "dynamic_version_command_return_empty"
+      description = "Description of the project with dynamic version and command returns empty"
+      dynamic = ["version"]
+    `)
+    jest.spyOn(ChildProcess, 'execSync').mockReturnValue('\n')
+
+    const result = loadProjectInfo({ versionCommand: 'get_emptry_string' })
+
+    await expect(result.version).toEqual(undefined)
+  })
+
+  it('should throws error when no command is supplied for a dynamic version', async () => {
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "dynamic_version_missing_command"
+      description = "Description of the project with dynamic version but no command"
+      dynamic = ["version"]
+    `)
+
+    await expect(loadProjectInfo()).rejects.toThrow(
+      'Dynamic version detected. Please supply a command to obtain it, e.g.: \'gitmoji-changelog --preset python --version-command "python setup.py --version\'"'
+    )
+  })
+
+  it('should does not execute an external command when the version is static', async () => {
+    fs.readFileSync.mockReturnValue(`
+      [project]
+      name = "static_version_project"
+      description = "Description of the project with static version"
+      version = "0.0.4"
+    `)
+    const execSpy = jest.spyOn(ChildProcess, 'execSync')
+
+    const result = await loadProjectInfo({ versionCommand: 'get_project_version' })
+
+    expect(result.version).toEqual('0.0.4')
+    expect(execSpy).not.toHaveBeenCalled()
+  })
+})
+
+describe('getPackageInfo | python | dynamic description', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    fs.readFileSync.mockReset()
+    fs.readFileSync.mockClear()
+  })
+
+  it('should extract description from README.md (string path)', async () => {
+    fs.readFileSync.mockImplementation((filePath) => {
+      if (filePath === 'pyproject.toml') {
+        return `
+          [project]
+          name = "my-lib"
+          version = "1.0.0"
+          dynamic = ["description"]
+          readme = "README.md"
+        `
+      }
+
+      if (filePath === 'README.md') {
+        return `
+# My Awesome Library
+
+This is a longer description.
+        `
+      }
+
+      return ''
+    })
+    fs.existsSync.mockReturnValue(true)
+
+    const result = await loadProjectInfo()
+    expect(result.description).toBe('My Awesome Library')
+  })
+
+  it('should extract description from readme.file object path', async () => {
+    fs.readFileSync.mockImplementation((filePath) => {
+      if (filePath === 'pyproject.toml') {
+        return `
+          [project]
+          name = "obj-readme"
+          version = "1.0.0"
+          dynamic = ["description"]
+
+          [project.readme]
+          file = "README.rst"
+        `
+      }
+
+      if (filePath === 'README.rst') {
+        return `
+# Title from rst
+
+More details follow...
+        `
+      }
+
+      return ''
+    })
+    fs.existsSync.mockReturnValue(true)
+
+    const result = await loadProjectInfo()
+    expect(result.description).toBe('Title from rst')
+  })
+
+  it('should return empty description if README is empty', async () => {
+    fs.readFileSync.mockImplementation((filePath) => {
+      if (filePath === 'pyproject.toml') {
+        return `
+          [project]
+          name = "empty-readme"
+          version = "1.0.0"
+          dynamic = ["description"]
+          readme = "README.md"
+        `
+      }
+
+      if (filePath === 'README.md') {
+        return ''
+      }
+
+      return ''
+    })
+    fs.existsSync.mockReturnValue(true)
+
+    const result = await loadProjectInfo()
+    expect(result.description).toBe('')
+  })
+
+  it('should fallback to empty description if README file not found', async () => {
+    fs.readFileSync.mockImplementation((filePath) => {
+      if (filePath === 'pyproject.toml') {
+        return `
+          [project]
+          name = "no-readme"
+          version = "1.0.0"
+          dynamic = ["description"]
+          readme = "README.md"
+        `
+      }
+
+      return ''
+    })
+    fs.existsSync.mockReturnValue(false)
+
+    const result = await loadProjectInfo()
+    expect(result.description).toBe('')
   })
 })
 
